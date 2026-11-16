@@ -6,7 +6,9 @@ echo ========================================================
 echo.
 
 set "PYTHONPATH=%~dp0;%PYTHONPATH%"
-if exist "C:\Users\ibral\anaconda3\python.exe" (
+if exist "C:\Python313\python.exe" (
+    set "CODEVISION_PYTHON=C:\Python313\python.exe"
+) else if exist "C:\Users\ibral\anaconda3\python.exe" (
     set "CODEVISION_PYTHON=C:\Users\ibral\anaconda3\python.exe"
 )
 
