@@ -1,0 +1,144 @@
+<ContentDialog
+    x:Class="CodeVision.Desktop.Views.AddVideoDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="⚡ مهمة استخراج جديدة · New CodeVision Task"
+    PrimaryButtonText="بدء الاستخراج الآن (Start)"
+    SecondaryButtonText="إضافة إلى المكتبة فقط (Queue)"
+    CloseButtonText="إلغاء (Cancel)"
+    DefaultButton="Primary"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    CornerRadius="16"
+    Background="{ThemeResource HalvoCardGlassBrush}"
+    BorderBrush="{ThemeResource HalvoCardBorderBrush}"
+    BorderThickness="1"
+    FlowDirection="RightToLeft">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="620">
+        <StackPanel Spacing="16" Width="520" Margin="0,10,0,0">
+
+            <!-- Mode Selector: Single Video vs Batch Videos -->
+            <Border Background="{ThemeResource HalvoHeaderGlassBrush}" Padding="10,6" CornerRadius="12" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                <RadioButtons x:Name="ModeSelector" SelectionChanged="ModeSelector_SelectionChanged" SelectedIndex="0" MaxColumns="2" HorizontalAlignment="Center">
+                    <RadioButton Content="📹 فيديو فردي (Single Video)" Margin="0,0,16,0"/>
+                    <RadioButton Content="📁 حزمة فيديوهات / مجلد كامل (Batch Folder)"/>
+                </RadioButtons>
+            </Border>
+
+            <!-- Mode 1: Single Video Panel -->
+            <StackPanel x:Name="SingleVideoPanel" Spacing="12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="VideoPathBox" Header="مسار ملف الفيديو التعليمي (.mp4, .mkv, .mov, .webm, .avi)" PlaceholderText="اختر أو الصق مسار ملف الفيديو…" Margin="0,0,8,0"/>
+                    <Button Content="استعراض (Browse)…" VerticalAlignment="Bottom" Height="36" Grid.Column="1" Click="BrowseVideo_Click" CornerRadius="8"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- Mode 2: Batch Videos Panel -->
+            <StackPanel x:Name="BatchVideoPanel" Spacing="12" Visibility="Collapsed">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="BatchFolderPathBox" Header="مجلد الفيديوهات أو اختيار ملفات متعددة" PlaceholderText="اختر مجلد يحتوي على دروس الفيديو…" Margin="0,0,8,0"/>
+                    <Button Content="مجلد (Folder)…" VerticalAlignment="Bottom" Height="36" Grid.Column="1" Click="BrowseFolder_Click" CornerRadius="8" Margin="0,0,6,0"/>
+                    <Button Content="ملفات متعددة…" VerticalAlignment="Bottom" Height="36" Grid.Column="2" Click="BrowseMultiFiles_Click" CornerRadius="8"/>
+                </Grid>
+
+                <!-- Scanned Batch Summary -->
+                <Border Background="{ThemeResource HalvoHeaderGlassBrush}" Padding="12" CornerRadius="8" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="BatchCountSummary" Text="لم يتم اختيار ملفات بعد (اختر مجلداً أو ملفات متعددة)." FontSize="12" Foreground="{ThemeResource HalvoCyanBrush}" VerticalAlignment="Center"/>
+                        <Button x:Name="ClearBatchBtn" Grid.Column="1" Content="مسح القائمة" FontSize="11" Click="ClearBatchBtn_Click" CornerRadius="6" Visibility="Collapsed"/>
+                    </Grid>
+                </Border>
+
+                <!-- Batch Discovered List -->
+                <ListView x:Name="BatchListView" MaxHeight="130" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}" CornerRadius="8" Padding="4">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE8B9;" FontSize="13" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                                <TextBlock Text="{Binding}" FontSize="11" TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+
+            <!-- Separator -->
+            <MenuFlyoutSeparator Margin="0,4"/>
+
+            <!-- Shared Processing Configuration -->
+            <TextBlock Text="⚙ إعدادات الاستخراج واللغة البرمجية المستهدفة" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoCyanBrush}"/>
+
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox x:Name="LanguageCombo" Header="اللغة البرمجية المستهدفة" SelectedIndex="0" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="C# (.NET 9 / WinUI / WPF)"/>
+                    <ComboBoxItem Content="Python 3 (AI / FastAPI / Data)"/>
+                    <ComboBoxItem Content="Dart / Flutter (Mobile &amp; Web)"/>
+                    <ComboBoxItem Content="TypeScript / JavaScript"/>
+                    <ComboBoxItem Content="C++ / Systems"/>
+                    <ComboBoxItem Content="Rust"/>
+                    <ComboBoxItem Content="اكتشاف تلقائي (Auto-Detect)"/>
+                </ComboBox>
+
+                <ComboBox x:Name="OcrEngineCombo" Header="محرك الاستخراج والرؤية" SelectedIndex="0" HorizontalAlignment="Stretch" Grid.Column="1">
+                    <ComboBoxItem Content="CodeVision Hybrid (Whisper + Scene + OCR)"/>
+                    <ComboBoxItem Content="Tesseract OCR Studio"/>
+                    <ComboBoxItem Content="Whisper Audio + Frame Alignment"/>
+                    <ComboBoxItem Content="Deep Neural Vision Engine"/>
+                </ComboBox>
+            </Grid>
+
+            <!-- Output Directory -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="SavePathBox" Header="مجلد إخراج المشاريع المستعادة (Reconstructed Project Output)" Margin="0,0,8,0"/>
+                <Button Content="تغيير…" VerticalAlignment="Bottom" Height="36" Grid.Column="1" Click="BrowseSavePath_Click" CornerRadius="8"/>
+            </Grid>
+
+            <!-- Sampling Density & Confidence Threshold -->
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox x:Name="SamplingCombo" Header="معدل أخذ العينات (Sampling Rate)" SelectedIndex="1" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="سريع (إطار كل 4 ثوانٍ - Turbo)"/>
+                    <ComboBoxItem Content="متوازن (إطار كل ثانيتين - Balanced)"/>
+                    <ComboBoxItem Content="عالي الدقة (إطار كل ثانية - High Precision)"/>
+                </ComboBox>
+
+                <ComboBox x:Name="ConfidenceFilterCombo" Header="حد أدنى للثقة (Confidence Threshold)" SelectedIndex="1" HorizontalAlignment="Stretch" Grid.Column="1">
+                    <ComboBoxItem Content="شامل لجميع المقاطع (> 60%)"/>
+                    <ComboBoxItem Content="متوازن وموصى به (> 75%)"/>
+                    <ComboBoxItem Content="صارم للشيفرات المؤكدة فقط (> 90%)"/>
+                </ComboBox>
+            </Grid>
+
+            <!-- Start immediately toggle -->
+            <ToggleSwitch x:Name="StartImmediatelySwitch" Header="بدء الاستخراج والمعالجة فور إغلاق النافذة" IsOn="True"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

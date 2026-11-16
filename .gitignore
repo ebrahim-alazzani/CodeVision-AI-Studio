@@ -1,0 +1,58 @@
+# Visual Studio / .NET
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.pdb
+
+# WinUI / Windows App SDK Generated
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkg/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# CodeVision Heavy Media & Local Outputs
+output/
+Output/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wav
+*.flac
+*.mp3
+
+# Tesseract / OCR temp
+*.tmp
+*.temp
+OCR/
+CandidateFrames/
+Frames/
+keyframes/

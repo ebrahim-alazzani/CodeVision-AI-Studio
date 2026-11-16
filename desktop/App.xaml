@@ -1,0 +1,95 @@
+<Application
+    x:Class="CodeVision.Desktop.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- HALVO DESIGN SYSTEM - Specular Glassmorphism Colors & Tokens (PAFWRS Alignment) -->
+            <Color x:Key="HalvoCyan">#5FD8C4</Color>
+            <Color x:Key="HalvoAmber">#F2AE4B</Color>
+            <Color x:Key="HalvoEmerald">#77D6A0</Color>
+            <Color x:Key="HalvoBlue">#38BDF8</Color>
+            <Color x:Key="HalvoPurple">#A855F7</Color>
+            <Color x:Key="HalvoRose">#F43F5E</Color>
+
+            <SolidColorBrush x:Key="HalvoCyanBrush" Color="#5FD8C4"/>
+            <SolidColorBrush x:Key="HalvoAmberBrush" Color="#F2AE4B"/>
+            <SolidColorBrush x:Key="HalvoEmeraldBrush" Color="#77D6A0"/>
+            <SolidColorBrush x:Key="HalvoBlueBrush" Color="#38BDF8"/>
+            <SolidColorBrush x:Key="HalvoPurpleBrush" Color="#A855F7"/>
+            <SolidColorBrush x:Key="HalvoRoseBrush" Color="#F43F5E"/>
+
+            <!-- Backwards-compatible Cyber Brushes -->
+            <SolidColorBrush x:Key="CyberPrimaryBrush" Color="#5FD8C4"/>
+            <SolidColorBrush x:Key="CyberSecondaryBrush" Color="#38BDF8"/>
+            <SolidColorBrush x:Key="CyberAccentGlowBrush" Color="#5FD8C4"/>
+            <SolidColorBrush x:Key="CyberSuccessBrush" Color="#77D6A0"/>
+            <SolidColorBrush x:Key="CyberWarningBrush" Color="#F2AE4B"/>
+            <SolidColorBrush x:Key="CyberErrorBrush" Color="#F43F5E"/>
+
+            <!-- Linear Gradients for Buttons and Badges -->
+            <LinearGradientBrush x:Key="HalvoGradientCyanBlue" StartPoint="0,0.5" EndPoint="1,0.5">
+                <GradientStop Color="#5FD8C4" Offset="0.0"/>
+                <GradientStop Color="#38BDF8" Offset="1.0"/>
+            </LinearGradientBrush>
+
+            <LinearGradientBrush x:Key="HalvoGradientPurpleBlue" StartPoint="0,0.5" EndPoint="1,0.5">
+                <GradientStop Color="#38BDF8" Offset="0.0"/>
+                <GradientStop Color="#A855F7" Offset="1.0"/>
+            </LinearGradientBrush>
+
+            <LinearGradientBrush x:Key="CyberProgressBarBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+                <GradientStop Color="#5FD8C4" Offset="0.0"/>
+                <GradientStop Color="#38BDF8" Offset="1.0"/>
+            </LinearGradientBrush>
+
+            <LinearGradientBrush x:Key="CyberBadgeBrush" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#5FD8C4" Offset="0.0"/>
+                <GradientStop Color="#38BDF8" Offset="1.0"/>
+            </LinearGradientBrush>
+
+            <!-- Theme-Specific Specular Glass Dictionaries -->
+            <ResourceDictionary.ThemeDictionaries>
+                <!-- DARK THEME (Obsidian & Ambient Cyan/Blue Glow) -->
+                <ResourceDictionary x:Key="Default">
+                    <SolidColorBrush x:Key="HalvoWindowBackground" Color="#0B0F15"/>
+                    <SolidColorBrush x:Key="HalvoOverlayBrush" Color="#C00B0F15"/>
+                    <SolidColorBrush x:Key="HalvoCardGlassBrush" Color="#B310151C"/>
+                    <SolidColorBrush x:Key="HalvoCardBorderBrush" Color="#2E5FD8C4"/>
+                    <SolidColorBrush x:Key="HalvoCardHoverBorderBrush" Color="#805FD8C4"/>
+                    <SolidColorBrush x:Key="HalvoHeaderGlassBrush" Color="#CC0B0F15"/>
+                    <SolidColorBrush x:Key="HalvoNavGlassBrush" Color="#B80E141D"/>
+                    <SolidColorBrush x:Key="HalvoTextPrimaryBrush" Color="#F1EFEA"/>
+                    <SolidColorBrush x:Key="HalvoTextSecondaryBrush" Color="#94A3B8"/>
+                    <SolidColorBrush x:Key="CyberCardGlassBrush" Color="#B310151C"/>
+                    <LinearGradientBrush x:Key="CyberHeaderGradient" StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#335FD8C4" Offset="0.0"/>
+                        <GradientStop Color="#2238BDF8" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </ResourceDictionary>
+
+                <!-- LIGHT THEME (Specular White Glass & Pure Blue Shimmer) -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="HalvoWindowBackground" Color="#F4F7FB"/>
+                    <SolidColorBrush x:Key="HalvoOverlayBrush" Color="#99F4F7FB"/>
+                    <SolidColorBrush x:Key="HalvoCardGlassBrush" Color="#E6FFFFFF"/>
+                    <SolidColorBrush x:Key="HalvoCardBorderBrush" Color="#4D38BDF8"/>
+                    <SolidColorBrush x:Key="HalvoCardHoverBorderBrush" Color="#B30EA5E9"/>
+                    <SolidColorBrush x:Key="HalvoHeaderGlassBrush" Color="#F0F8FAFC"/>
+                    <SolidColorBrush x:Key="HalvoNavGlassBrush" Color="#EBFFFFFF"/>
+                    <SolidColorBrush x:Key="HalvoTextPrimaryBrush" Color="#0F172A"/>
+                    <SolidColorBrush x:Key="HalvoTextSecondaryBrush" Color="#64748B"/>
+                    <SolidColorBrush x:Key="CyberCardGlassBrush" Color="#E6FFFFFF"/>
+                    <LinearGradientBrush x:Key="CyberHeaderGradient" StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#260EA5E9" Offset="0.0"/>
+                        <GradientStop Color="#265FD8C4" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

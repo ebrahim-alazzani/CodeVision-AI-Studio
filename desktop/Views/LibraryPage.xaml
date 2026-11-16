@@ -1,0 +1,209 @@
+<Page
+    x:Class="CodeVision.Desktop.Views.LibraryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    FlowDirection="RightToLeft">
+
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <!-- Header & Actions -->
+            <RowDefinition Height="Auto"/>
+            <!-- Batch Processing Live Status Banner -->
+            <RowDefinition Height="Auto"/>
+            <!-- Main Video List -->
+            <RowDefinition Height="*"/>
+            <!-- Bottom Footer Bar -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Actions Bar with Halvo Specular Glass -->
+        <Border Grid.Row="0"
+                Background="{ThemeResource HalvoCardGlassBrush}"
+                Padding="16"
+                CornerRadius="16"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <AutoSuggestBox x:Name="SearchInput" Width="280" PlaceholderText="البحث في قائمة الفيديوهات…" QueryIcon="Find" QuerySubmitted="SearchInput_QuerySubmitted"/>
+                    
+                    <!-- Single & Batch Import Buttons -->
+                    <Button x:Name="AddVideosBtn"
+                            Click="AddVideosBtn_Click"
+                            Background="{ThemeResource HalvoGradientCyanBlue}"
+                            Foreground="#0B0F15"
+                            CornerRadius="8"
+                            Padding="14,6">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE710;" FontSize="12"/>
+                            <TextBlock Text="➕ استيراد فيديو أو حزمة" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="ImportFolderBtn"
+                            Click="ImportFolderBtn_Click"
+                            CornerRadius="8"
+                            Padding="12,6"
+                            ToolTipService.ToolTip="استيراد مجلد يحتوي على دروس فيديو متعددة دفعة واحدة">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xED25;" FontSize="13" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                            <TextBlock Text="📁 استيراد مجلد كامل"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Border Width="1" Height="20" Background="{ThemeResource HalvoCardBorderBrush}" Margin="4,0"/>
+
+                    <Button x:Name="ExtractSelectedBtn"
+                            Click="ExtractSelectedBtn_Click"
+                            CornerRadius="8"
+                            Padding="12,6">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE768;" FontSize="13" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                            <TextBlock Text="▶ استخراج المحدد"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="ExtractAllBtn"
+                            Click="ExtractAllBtn_Click"
+                            CornerRadius="8"
+                            Padding="12,6"
+                            ToolTipService.ToolTip="معالجة جميع فيديوهات القائمة في حزمة واحدة">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE9D9;" FontSize="13" Foreground="{ThemeResource HalvoPurpleBrush}"/>
+                            <TextBlock Text="⚡ استخراج الحزمة بالكامل"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <Button x:Name="SelectAllBtn" Content="تحديد الكل" Click="SelectAllBtn_Click" CornerRadius="8" FontSize="12"/>
+                    <Button x:Name="DeselectAllBtn" Content="إلغاء التحديد" Click="DeselectAllBtn_Click" CornerRadius="8" FontSize="12"/>
+                    <Button x:Name="DeleteVideoBtn" Content="🗑 إزالة" Click="DeleteVideoBtn_Click" CornerRadius="8" Foreground="{ThemeResource HalvoRoseBrush}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Batch Processing Banner (Visible during batch execution) -->
+        <Border x:Name="BatchStatusBanner"
+                Grid.Row="1"
+                Background="{ThemeResource HalvoHeaderGlassBrush}"
+                Padding="16"
+                CornerRadius="12"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource HalvoCyanBrush}"
+                Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ProgressRing x:Name="BatchRing" Width="28" Height="28" IsActive="True" Foreground="{ThemeResource HalvoCyanBrush}" Margin="0,0,14,0"/>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                    <TextBlock x:Name="BatchTitleText" Text="جاري معالجة حزمة الفيديوهات دفعة واحدة…" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                    <ProgressBar x:Name="BatchTotalProgress" Maximum="100" Value="0" Height="6" CornerRadius="3" Foreground="{ThemeResource HalvoGradientCyanBlue}"/>
+                </StackPanel>
+
+                <TextBlock x:Name="BatchPercentText" Grid.Column="2" Text="0%" FontWeight="Bold" FontSize="16" Foreground="{ThemeResource HalvoCyanBrush}" VerticalAlignment="Center" Margin="16,0,0,0"/>
+            </Grid>
+        </Border>
+
+        <!-- Video Cards List with Halvo Specular Tiles -->
+        <Border Grid.Row="2"
+                Background="{ThemeResource HalvoCardGlassBrush}"
+                Padding="16"
+                CornerRadius="16"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+            <ListView x:Name="VideosListView" SelectionChanged="VideosListView_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="16,12"
+                                Margin="0,4"
+                                Background="{ThemeResource HalvoHeaderGlassBrush}"
+                                CornerRadius="12"
+                                BorderThickness="1"
+                                BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Multi-selection Checkbox -->
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+
+                                <!-- Video Icon with Specular Glow -->
+                                <Border Grid.Column="1" Width="44" Height="44" Background="#265FD8C4" CornerRadius="10" VerticalAlignment="Center" Margin="0,0,14,0">
+                                    <FontIcon Glyph="&#xE8B9;" FontSize="20" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+
+                                <!-- Title and Path -->
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center" Spacing="3">
+                                    <TextBlock Text="{Binding FileName}" FontWeight="Bold" FontSize="14" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                    <TextBlock Text="{Binding FilePath}" Opacity="0.65" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+
+                                <!-- Badges: Language & Duration -->
+                                <StackPanel Grid.Column="3" VerticalAlignment="Center" Margin="16,0" Orientation="Horizontal" Spacing="8">
+                                    <Border Background="#2638BDF8" Padding="10,4" CornerRadius="8" BorderThickness="1" BorderBrush="{ThemeResource HalvoBlueBrush}">
+                                        <TextBlock Text="{Binding DetectedLanguage}" Foreground="{ThemeResource HalvoBlueBrush}" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                    <Border Background="#26A855F7" Padding="10,4" CornerRadius="8" BorderThickness="1" BorderBrush="{ThemeResource HalvoPurpleBrush}">
+                                        <TextBlock Text="{Binding DurationString}" Foreground="{ThemeResource HalvoPurpleBrush}" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <!-- Progress and Status -->
+                                <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch" Spacing="6">
+                                    <TextBlock Text="{Binding Status}" FontWeight="SemiBold" FontSize="11" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Right"/>
+                                    <ProgressBar Value="{Binding ProgressPercentage}" Minimum="0" Maximum="100" Height="6" CornerRadius="3" Foreground="{ThemeResource HalvoGradientCyanBlue}"/>
+                                </StackPanel>
+
+                                <!-- Action Button: Open in Studio -->
+                                <Button Grid.Column="5"
+                                        Click="OpenInStudioBtn_Click"
+                                        Tag="{Binding}"
+                                        Background="{ThemeResource HalvoGradientCyanBlue}"
+                                        Foreground="#0B0F15"
+                                        CornerRadius="8"
+                                        Padding="10,6"
+                                        Margin="12,0,0,0"
+                                        VerticalAlignment="Center"
+                                        ToolTipService.ToolTip="فتح الفيديو في استوديو المحاكاة اللحظي ومتابعة خوارزميات OpenCV">
+                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                        <FontIcon Glyph="&#xE768;" FontSize="11"/>
+                                        <TextBlock Text="الاستوديو" FontSize="11" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
+
+        <!-- Bottom Status Footer -->
+        <Border Grid.Row="3" Background="{ThemeResource HalvoHeaderGlassBrush}" Padding="12,8" CornerRadius="10" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="StatusLabel" Text="المكتبة جاهزة." Foreground="{ThemeResource HalvoTextSecondaryBrush}" FontSize="12" VerticalAlignment="Center"/>
+                <TextBlock x:Name="CountLabel" Grid.Column="1" Text="0 فيديوهات في القائمة" Foreground="{ThemeResource HalvoCyanBrush}" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

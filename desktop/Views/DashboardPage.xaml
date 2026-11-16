@@ -1,0 +1,541 @@
+<Page
+    x:Class="CodeVision.Desktop.Views.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    FlowDirection="RightToLeft">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28">
+        <StackPanel Spacing="22">
+
+            <!-- 1. WinUI 3 Hero Banner (Inspried by WinUI 3 Gallery Header) -->
+            <Border Background="{ThemeResource HalvoCardGlassBrush}"
+                    CornerRadius="16"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource HalvoCardBorderBrush}"
+                    Padding="26,22">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Banner Title & Actions -->
+                    <StackPanel Spacing="8" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Border Background="#265FD8C4" Padding="8,4" CornerRadius="6" BorderThickness="1" BorderBrush="{ThemeResource HalvoCyanBrush}">
+                                <TextBlock Text="Windows App SDK · WinUI 3 · Cyber Edition" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                            </Border>
+                            <Border Background="#2638BDF8" Padding="8,4" CornerRadius="6" BorderThickness="1" BorderBrush="{ThemeResource HalvoBlueBrush}">
+                                <TextBlock Text="OpenCV 4.10 + Faster-Whisper + Tesseract" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <TextBlock Text="منظومة استخراج واستعادة الأكواد البرمجية من الفيديوهات"
+                                   FontSize="24"
+                                   FontWeight="Black"
+                                   Foreground="{ThemeResource HalvoCyanBrush}"/>
+
+                        <TextBlock Text="تحليل مباشر لإطارات الفيديو، عزل منطقة المحرر الذكية عبر OpenCV، تتبع متزامن مع الصوت، وإعادة بناء كاملة للمشروع البرمجي."
+                                   FontSize="12"
+                                   Foreground="{ThemeResource HalvoTextSecondaryBrush}"
+                                   MaxWidth="750"
+                                   HorizontalAlignment="Left"/>
+
+                        <!-- Action Buttons Row -->
+                        <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+                            <Button Click="BtnNewSingleVideo_Click" CornerRadius="8" Padding="14,7">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <FontIcon Glyph="&#xE710;" FontSize="13" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                                    <TextBlock Text="استخراج فيديو منفرد" FontWeight="Bold" FontSize="12"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Click="BtnNewBatchVideos_Click" Background="{ThemeResource HalvoGradientCyanBlue}" Foreground="#0B0F15" CornerRadius="8" Padding="16,7">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <FontIcon Glyph="&#xED25;" FontSize="13" Foreground="#0B0F15"/>
+                                    <TextBlock Text="استخراج حزمة فيديوهات دفعة واحدة" FontWeight="Black" FontSize="12"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Click="BtnLogs_Click" ToolTipService.ToolTip="عرض سجل التشخيص والمحرك الحي" CornerRadius="8" Padding="12,7">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <FontIcon Glyph="&#xE9D9;" FontSize="13" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                                    <TextBlock Text="سجلات المحرك (Live Logs)" FontWeight="SemiBold" FontSize="12"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Banner Right Graphic -->
+                    <Border Grid.Column="1" Width="100" Height="100" CornerRadius="20" Background="#1A5FD8C4" BorderThickness="1" BorderBrush="{ThemeResource HalvoCyanBrush}" Margin="20,0,0,0" VerticalAlignment="Center">
+                        <FontIcon Glyph="&#xE943;" FontSize="48" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- 2. Key Metric Specular Glass Tiles -->
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Tile 1: Processing Speed / FPS -->
+                <Border Grid.Column="0" Padding="16" Background="{ThemeResource HalvoCardGlassBrush}" CornerRadius="14" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                    <StackPanel Spacing="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="سرعة المعالجة اللحظية" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                            <Border Grid.Column="1" Width="28" Height="28" Background="#265FD8C4" CornerRadius="7">
+                                <FontIcon Glyph="&#xE896;" FontSize="14" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock Text="52.4 FPS · Turbo" FontSize="20" FontWeight="Black" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                        <ProgressBar Value="85" Maximum="100" Height="4" CornerRadius="2" Foreground="{ThemeResource HalvoGradientCyanBlue}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Tile 2: Detected Scenes -->
+                <Border Grid.Column="1" Padding="16" Background="{ThemeResource HalvoCardGlassBrush}" CornerRadius="14" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                    <StackPanel Spacing="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="مشاهد الشيفرات المكتشفة" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                            <Border Grid.Column="1" Width="28" Height="28" Background="#2638BDF8" CornerRadius="7">
+                                <FontIcon Glyph="&#xE8B9;" FontSize="14" Foreground="{ThemeResource HalvoBlueBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock x:Name="ScenesCountMetric" Text="24 مشهد برمجـي" FontSize="20" FontWeight="Black" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                        <ProgressBar Value="65" Maximum="100" Height="4" CornerRadius="2" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Tile 3: Reconstructed Files -->
+                <Border Grid.Column="2" Padding="16" Background="{ThemeResource HalvoCardGlassBrush}" CornerRadius="14" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                    <StackPanel Spacing="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="الملفات المستعادة" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                            <Border Grid.Column="1" Width="28" Height="28" Background="#2677D6A0" CornerRadius="7">
+                                <FontIcon Glyph="&#xE73E;" FontSize="14" Foreground="{ThemeResource HalvoEmeraldBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock x:Name="FilesCountMetric" Text="38 ملف كـود" FontSize="20" FontWeight="Black" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                        <ProgressBar Value="90" Maximum="100" Height="4" CornerRadius="2" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Tile 4: OCR Accuracy -->
+                <Border Grid.Column="3" Padding="16" Background="{ThemeResource HalvoCardGlassBrush}" CornerRadius="14" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                    <StackPanel Spacing="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="متوسط دقة OCR" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                            <Border Grid.Column="1" Width="28" Height="28" Background="#26F2AE4B" CornerRadius="7">
+                                <FontIcon Glyph="&#xE8B7;" FontSize="14" Foreground="{ThemeResource HalvoAmberBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock x:Name="ConfidenceMetric" Text="94.8% دقة عالية" FontSize="20" FontWeight="Black" Foreground="{ThemeResource HalvoAmberBrush}"/>
+                        <ProgressBar Value="94" Maximum="100" Height="4" CornerRadius="2" Foreground="{ThemeResource HalvoAmberBrush}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- 3. WinUI 3 Controls Gallery Style: Quick Feature Cards (عناصر التحكم والوظائف الأساسية) -->
+            <StackPanel Spacing="12">
+                <TextBlock Text="أقسام ومنظومة العمل · Workflows &amp; Studio Modules"
+                           FontWeight="Bold"
+                           FontSize="14"
+                           Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+
+                <Grid ColumnSpacing="12" RowSpacing="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Card 1: Live Studio -->
+                    <Border Grid.Row="0" Grid.Column="0"
+                            Background="{ThemeResource HalvoCardGlassBrush}"
+                            CornerRadius="12"
+                            BorderThickness="1"
+                            BorderBrush="{ThemeResource HalvoCardBorderBrush}"
+                            Padding="16,14"
+                            PointerPressed="CardStudio_PointerPressed">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Width="40" Height="40" Background="#265FD8C4" CornerRadius="10" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <FontIcon Glyph="&#xE768;" FontSize="18" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock Text="استوديو المحاكاة اللحظي" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="تتبع OpenCV وتحديد منطقة الكود مع تحكم بالسرعة 0.5x" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <!-- WinUI 3 Gallery Accent Dot -->
+                            <Ellipse Grid.Column="2" Width="8" Height="8" Fill="{ThemeResource HalvoCyanBrush}" VerticalAlignment="Top"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Card 2: Video Library -->
+                    <Border Grid.Row="0" Grid.Column="1"
+                            Background="{ThemeResource HalvoCardGlassBrush}"
+                            CornerRadius="12"
+                            BorderThickness="1"
+                            BorderBrush="{ThemeResource HalvoCardBorderBrush}"
+                            Padding="16,14"
+                            PointerPressed="CardLibrary_PointerPressed">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Width="40" Height="40" Background="#2638BDF8" CornerRadius="10" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <FontIcon Glyph="&#xE8B9;" FontSize="18" Foreground="{ThemeResource HalvoBlueBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock Text="مكتبة الفيديوهات والاستخراج" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="سجل دائم للفيديوهات السابقة وإدارة المعالجة الجماعية" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Ellipse Grid.Column="2" Width="8" Height="8" Fill="{ThemeResource HalvoBlueBrush}" VerticalAlignment="Top"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Card 3: Code Editor -->
+                    <Border Grid.Row="0" Grid.Column="2"
+                            Background="{ThemeResource HalvoCardGlassBrush}"
+                            CornerRadius="12"
+                            BorderThickness="1"
+                            BorderBrush="{ThemeResource HalvoCardBorderBrush}"
+                            Padding="16,14"
+                            PointerPressed="CardEditor_PointerPressed">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Width="40" Height="40" Background="#26A855F7" CornerRadius="10" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <FontIcon Glyph="&#xE943;" FontSize="18" Foreground="{ThemeResource HalvoPurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock Text="محرر الشيفرات الذكي" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="مراجعة الكود المستخرج وتصحيحه مع فحص أخطاء AST" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Ellipse Grid.Column="2" Width="8" Height="8" Fill="{ThemeResource HalvoPurpleBrush}" VerticalAlignment="Top"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Card 4: Project Reconstruction -->
+                    <Border Grid.Row="1" Grid.Column="0"
+                            Background="{ThemeResource HalvoCardGlassBrush}"
+                            CornerRadius="12"
+                            BorderThickness="1"
+                            BorderBrush="{ThemeResource HalvoCardBorderBrush}"
+                            Padding="16,14"
+                            PointerPressed="CardReconstruct_PointerPressed">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Width="40" Height="40" Background="#2677D6A0" CornerRadius="10" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <FontIcon Glyph="&#xE774;" FontSize="18" Foreground="{ThemeResource HalvoEmeraldBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock Text="إعادة بناء المشروع البرمجي" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="تجميع الملفات المستعادة وتصدير حل كامل جاهز للتشغيل" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Ellipse Grid.Column="2" Width="8" Height="8" Fill="{ThemeResource HalvoEmeraldBrush}" VerticalAlignment="Top"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Card 5: Training & OCR Fine-Tuning -->
+                    <Border Grid.Row="1" Grid.Column="1"
+                            Background="{ThemeResource HalvoCardGlassBrush}"
+                            CornerRadius="12"
+                            BorderThickness="1"
+                            BorderBrush="{ThemeResource HalvoCardBorderBrush}"
+                            Padding="16,14"
+                            PointerPressed="CardTraining_PointerPressed">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Width="40" Height="40" Background="#26F2AE4B" CornerRadius="10" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <FontIcon Glyph="&#xE9D9;" FontSize="18" Foreground="{ThemeResource HalvoAmberBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock Text="مختبر التدريب والمعايرة" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="ضبط عتبات التباين والفلاتر وتدريب نماذج التعرف البصري" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Ellipse Grid.Column="2" Width="8" Height="8" Fill="{ThemeResource HalvoAmberBrush}" VerticalAlignment="Top"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Card 6: AI Models & Engines -->
+                    <Border Grid.Row="1" Grid.Column="2"
+                            Background="{ThemeResource HalvoCardGlassBrush}"
+                            CornerRadius="12"
+                            BorderThickness="1"
+                            BorderBrush="{ThemeResource HalvoCardBorderBrush}"
+                            Padding="16,14"
+                            PointerPressed="CardModels_PointerPressed">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Width="40" Height="40" Background="#26FF5E7E" CornerRadius="10" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <FontIcon Glyph="&#xE713;" FontSize="18" Foreground="{ThemeResource HalvoRoseBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock Text="إدارة محركات ونماذج الذكاء" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="إعداد مسارات Python وOpenCV وتحديث محركات Whisper" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Ellipse Grid.Column="2" Width="8" Height="8" Fill="{ThemeResource HalvoRoseBrush}" VerticalAlignment="Top"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </StackPanel>
+
+            <!-- 4. Smart Processing Pipeline Flowchart -->
+            <Border Padding="20" Background="{ThemeResource HalvoCardGlassBrush}" CornerRadius="16" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                <StackPanel Spacing="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE81E;" FontSize="16" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                            <TextBlock Text="مخطط خط سير المعالجة والاستخراج الذكي · AI Pipeline Architecture" FontWeight="Black" FontSize="14" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Interactive Visual Stage Nodes Flow -->
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Node 1: Video Input -->
+                        <Border Grid.Column="0" Padding="14,12" Background="{ThemeResource HalvoHeaderGlassBrush}" CornerRadius="12" BorderThickness="1" BorderBrush="{ThemeResource HalvoCyanBrush}">
+                            <StackPanel Spacing="6" HorizontalAlignment="Center">
+                                <FontIcon Glyph="&#xE714;" FontSize="20" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                                <TextBlock Text="مدخلات الفيديو" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="فردي / حزمة مجلد" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <FontIcon Grid.Column="1" Glyph="&#xE76C;" FontSize="14" Foreground="{ThemeResource HalvoCyanBrush}" VerticalAlignment="Center"/>
+
+                        <!-- Node 2: Audio & Whisper -->
+                        <Border Grid.Column="2" Padding="14,12" Background="{ThemeResource HalvoHeaderGlassBrush}" CornerRadius="12" BorderThickness="1" BorderBrush="{ThemeResource HalvoBlueBrush}">
+                            <StackPanel Spacing="6" HorizontalAlignment="Center">
+                                <FontIcon Glyph="&#xE8D6;" FontSize="20" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                                <TextBlock Text="التفريغ الصوتي (Whisper)" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="مزامنة مع الشرح" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <FontIcon Grid.Column="3" Glyph="&#xE76C;" FontSize="14" Foreground="{ThemeResource HalvoBlueBrush}" VerticalAlignment="Center"/>
+
+                        <!-- Node 3: Scene Detection -->
+                        <Border Grid.Column="4" Padding="14,12" Background="{ThemeResource HalvoHeaderGlassBrush}" CornerRadius="12" BorderThickness="1" BorderBrush="{ThemeResource HalvoPurpleBrush}">
+                            <StackPanel Spacing="6" HorizontalAlignment="Center">
+                                <FontIcon Glyph="&#xE8B9;" FontSize="20" Foreground="{ThemeResource HalvoPurpleBrush}"/>
+                                <TextBlock Text="كشف المشاهد البصرية" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="عزل إطارات الكود" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <FontIcon Grid.Column="5" Glyph="&#xE76C;" FontSize="14" Foreground="{ThemeResource HalvoPurpleBrush}" VerticalAlignment="Center"/>
+
+                        <!-- Node 4: OCR & Bounding Box -->
+                        <Border Grid.Column="6" Padding="14,12" Background="{ThemeResource HalvoHeaderGlassBrush}" CornerRadius="12" BorderThickness="1" BorderBrush="{ThemeResource HalvoAmberBrush}">
+                            <StackPanel Spacing="6" HorizontalAlignment="Center">
+                                <FontIcon Glyph="&#xE943;" FontSize="20" Foreground="{ThemeResource HalvoAmberBrush}"/>
+                                <TextBlock Text="استخراج OCR الذكي" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="قراءة الشيفرة وAST" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <FontIcon Grid.Column="7" Glyph="&#xE76C;" FontSize="14" Foreground="{ThemeResource HalvoAmberBrush}" VerticalAlignment="Center"/>
+
+                        <!-- Node 5: Reconstruction -->
+                        <Border Grid.Column="8" Padding="14,12" Background="{ThemeResource HalvoHeaderGlassBrush}" CornerRadius="12" BorderThickness="1" BorderBrush="{ThemeResource HalvoEmeraldBrush}">
+                            <StackPanel Spacing="6" HorizontalAlignment="Center">
+                                <FontIcon Glyph="&#xE774;" FontSize="20" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                                <TextBlock Text="إعادة بناء المشروع" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                <TextBlock Text="تصدير شجرة ملفات" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 5. Charts Grid (Confidence Distribution & Language Yield) -->
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Chart Card 1: Confidence Distribution Visual Columns -->
+                <Border Grid.Column="0" Padding="20" Background="{ThemeResource HalvoCardGlassBrush}" CornerRadius="16" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE9D2;" FontSize="16" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                            <TextBlock Text="مخطط توزيع مستويات الثقة (Confidence Distribution)" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                        </StackPanel>
+
+                        <StackPanel Spacing="10" Margin="0,6,0,0">
+                            <!-- High Confidence Tier -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="ثقة فائقة (> 90%)" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                                <ProgressBar Grid.Column="1" Value="74" Maximum="100" Height="10" CornerRadius="5" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                                <TextBlock Grid.Column="2" Text="74%" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoEmeraldBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- Balanced Tier -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="ثقة جيدة (75% - 90%)" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                                <ProgressBar Grid.Column="1" Value="18" Maximum="100" Height="10" CornerRadius="5" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                                <TextBlock Grid.Column="2" Text="18%" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- Review Needed Tier -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="تحتاج مراجعة (60% - 75%)" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                                <ProgressBar Grid.Column="1" Value="6" Maximum="100" Height="10" CornerRadius="5" Foreground="{ThemeResource HalvoAmberBrush}"/>
+                                <TextBlock Grid.Column="2" Text="6%" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoAmberBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- Low Tier -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="ثقة منخفضة (&lt; 60%)" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                                <ProgressBar Grid.Column="1" Value="2" Maximum="100" Height="10" CornerRadius="5" Foreground="{ThemeResource HalvoRoseBrush}"/>
+                                <TextBlock Grid.Column="2" Text="2%" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoRoseBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Chart Card 2: Programming Languages Yield -->
+                <Border Grid.Column="1" Padding="20" Background="{ThemeResource HalvoCardGlassBrush}" CornerRadius="16" BorderThickness="1" BorderBrush="{ThemeResource HalvoCardBorderBrush}">
+                    <StackPanel Spacing="14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE943;" FontSize="16" Foreground="{ThemeResource HalvoPurpleBrush}"/>
+                            <TextBlock Text="مخطط إنتاجية اللغات المستخرجة (Languages Yield)" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                        </StackPanel>
+
+                        <StackPanel Spacing="10" Margin="0,6,0,0">
+                            <!-- C# -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="C# (.NET 9 / XAML)" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                                <ProgressBar Grid.Column="1" Value="48" Maximum="100" Height="10" CornerRadius="5" Foreground="{ThemeResource HalvoPurpleBrush}"/>
+                                <TextBlock Grid.Column="2" Text="48%" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoPurpleBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- Python -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Python (FastAPI / AI)" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                                <ProgressBar Grid.Column="1" Value="32" Maximum="100" Height="10" CornerRadius="5" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                                <TextBlock Grid.Column="2" Text="32%" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoBlueBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- TypeScript / JS -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="TypeScript / Web" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                                <ProgressBar Grid.Column="1" Value="14" Maximum="100" Height="10" CornerRadius="5" Foreground="{ThemeResource HalvoAmberBrush}"/>
+                                <TextBlock Grid.Column="2" Text="14%" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoAmberBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- Others -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Dart / C++ / Rust" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                                <ProgressBar Grid.Column="1" Value="6" Maximum="100" Height="10" CornerRadius="5" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                                <TextBlock Grid.Column="2" Text="6%" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>
