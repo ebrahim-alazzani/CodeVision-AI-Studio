@@ -153,6 +153,227 @@
                 </Border>
             </Grid>
 
+            <!-- 2.5 Multi-LM Tuner Style: Hardware Resource Monitor & Real-Time Telemetry HUD -->
+            <Border Background="{ThemeResource HalvoCardGlassBrush}"
+                    CornerRadius="16"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource HalvoCardBorderBrush}"
+                    Padding="20,18">
+                <StackPanel Spacing="16">
+                    <!-- Section Title & Interval Dropdown -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <Border Width="10" Height="10" CornerRadius="5" Background="{ThemeResource HalvoEmeraldBrush}"/>
+                            <TextBlock Text="مراقبة الموارد الحاسوبية والتدريب الحي (Hardware Telemetry HUD)" FontWeight="Black" FontSize="14" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                            <Border Background="#1A5FD8C4" Padding="6,2" CornerRadius="4">
+                                <TextBlock Text="Live Telemetry · 1s" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                            <Border Background="#1A1E293B" Padding="8,4" CornerRadius="6" BorderThickness="1" BorderBrush="#334155">
+                                <TextBlock Text="GPU Temperature: 41°C" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource HalvoAmberBrush}"/>
+                            </Border>
+                            <Border Background="#1A1E293B" Padding="8,4" CornerRadius="6" BorderThickness="1" BorderBrush="#334155">
+                                <TextBlock Text="DirectML Acceleration: Active" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Main (Current) Circular Gauges Row -->
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Dial 1: SSD / NVMe Storage Dial -->
+                        <Border Grid.Column="0" Background="#0A0E17" Padding="18" CornerRadius="14" BorderThickness="1" BorderBrush="#1E293B">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Circular Gauge Simulation -->
+                                <Border Width="82" Height="82" CornerRadius="41" BorderThickness="4" BorderBrush="#38BDF8" Background="#0F38BDF8" Margin="0,0,16,0">
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBlock Text="SSD" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoBlueBrush}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="5.4%" FontSize="16" FontWeight="Black" Foreground="{ThemeResource HalvoBlueBrush}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                    <TextBlock Text="NVMe Primary Storage (M.2)" FontSize="12" FontWeight="Bold" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                    <TextBlock Text="المستخدم / الإجمالي: 49.2 / 915.8 GB" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,2,0,0">
+                                        <TextBlock Text="الحرارة: 41°C" FontSize="10" Foreground="{ThemeResource HalvoAmberBrush}"/>
+                                        <TextBlock Text="· سرعة القراءة: 3,450 MB/s" FontSize="10" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                                    </StackPanel>
+                                    <ProgressBar Value="5.4" Maximum="100" Height="4" CornerRadius="2" Foreground="{ThemeResource HalvoBlueBrush}" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Dial 2: GPU #1 Dedicated Accelerator Dial -->
+                        <Border Grid.Column="1" Background="#0A0E17" Padding="18" CornerRadius="14" BorderThickness="1" BorderBrush="#1E293B">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Circular Gauge Simulation -->
+                                <Border Width="82" Height="82" CornerRadius="41" BorderThickness="4" BorderBrush="#5FD8C4" Background="#0F5FD8C4" Margin="0,0,16,0">
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBlock Text="GPU #1" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="51%" FontSize="16" FontWeight="Black" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                    <TextBlock Text="معالج الرسومات (NVIDIA GeForce RTX 3070 Ti)" FontSize="12" FontWeight="Bold" Foreground="{ThemeResource HalvoTextPrimaryBrush}"/>
+                                    <TextBlock Text="التردد اللحظي: 2947 MHz · استهلاك الطاقة: 145W" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,2,0,0">
+                                        <TextBlock Text="الحرارة: 41°C" FontSize="10" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                                        <TextBlock Text="· VRAM: 3.8 / 8.0 GB" FontSize="10" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                                    </StackPanel>
+                                    <ProgressBar Value="51" Maximum="100" Height="4" CornerRadius="2" Foreground="{ThemeResource HalvoCyanBrush}" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <!-- Telemetry Line Waveforms (Others State) -->
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Card 1: CPU Usage -->
+                        <Border Grid.Column="0" Background="#070B12" Padding="12" CornerRadius="10" BorderThickness="1" BorderBrush="#1E293B">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="CPU Usage" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <Border Height="36" Background="#05080E" CornerRadius="6" Padding="4">
+                                    <ProgressBar Value="28" Maximum="100" Height="6" VerticalAlignment="Center" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                                </Border>
+                                <TextBlock Text="11th Gen Core i7" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="6.4% · 3.8 GHz" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 2: GPU Frequency -->
+                        <Border Grid.Column="1" Background="#070B12" Padding="12" CornerRadius="10" BorderThickness="1" BorderBrush="#1E293B">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="GPU Frequency" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <Border Height="36" Background="#05080E" CornerRadius="6" Padding="4">
+                                    <ProgressBar Value="85" Maximum="100" Height="6" VerticalAlignment="Center" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                                </Border>
+                                <TextBlock Text="RTX 3070 Ti" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <TextBlock Text="2947 MHz" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 3: GPU Temp -->
+                        <Border Grid.Column="2" Background="#070B12" Padding="12" CornerRadius="10" BorderThickness="1" BorderBrush="#1E293B">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="GPU Temp" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <Border Height="36" Background="#05080E" CornerRadius="6" Padding="4">
+                                    <ProgressBar Value="41" Maximum="100" Height="6" VerticalAlignment="Center" Foreground="{ThemeResource HalvoAmberBrush}"/>
+                                </Border>
+                                <TextBlock Text="Fan Speed: 40%" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <TextBlock Text="41°C (Optimal)" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoAmberBrush}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 4: GPU Usage -->
+                        <Border Grid.Column="3" Background="#070B12" Padding="12" CornerRadius="10" BorderThickness="1" BorderBrush="#1E293B">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="GPU Usage" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <Border Height="36" Background="#05080E" CornerRadius="6" Padding="4">
+                                    <ProgressBar Value="51" Maximum="100" Height="6" VerticalAlignment="Center" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                                </Border>
+                                <TextBlock Text="Inference / OCR" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <TextBlock Text="51.2% Active" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 5: VRAM Usage -->
+                        <Border Grid.Column="4" Background="#070B12" Padding="12" CornerRadius="10" BorderThickness="1" BorderBrush="#1E293B">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="VRAM Usage" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <Border Height="36" Background="#05080E" CornerRadius="6" Padding="4">
+                                    <ProgressBar Value="48" Maximum="100" Height="6" VerticalAlignment="Center" Foreground="{ThemeResource HalvoPurpleBrush}"/>
+                                </Border>
+                                <TextBlock Text="Allocated / Peak" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <TextBlock Text="3.8 / 8.0 GB" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoPurpleBrush}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 6: DRAM Usage -->
+                        <Border Grid.Column="5" Background="#070B12" Padding="12" CornerRadius="10" BorderThickness="1" BorderBrush="#1E293B">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="DRAM Memory" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <Border Height="36" Background="#05080E" CornerRadius="6" Padding="4">
+                                    <ProgressBar Value="40" Maximum="100" Height="6" VerticalAlignment="Center" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                                </Border>
+                                <TextBlock Text="System Memory" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <TextBlock Text="12.8 / 32 GB" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Persistent Bottom Pipeline Status HUD (Multi-LM Tuner Bottom Bar) -->
+                    <Border Background="#05080E" Padding="14,10" CornerRadius="10" BorderThickness="1" BorderBrush="#1E293B">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="0,0,18,0">
+                                <TextBlock Text="المهمة الحالية:" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <TextBlock Text="Unity_MobileGame_Ep01-75" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="0,0,18,0">
+                                <TextBlock Text="البيانات:" FontSize="11" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                <TextBlock Text="Keyframes_DiffAccumulation" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                            </StackPanel>
+
+                            <Border Grid.Column="2" Background="#2600E676" Padding="8,4" CornerRadius="6" BorderThickness="1" BorderBrush="{ThemeResource HalvoEmeraldBrush}" Margin="0,0,18,0" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <Border Width="6" Height="6" CornerRadius="3" Background="{ThemeResource HalvoEmeraldBrush}"/>
+                                    <TextBlock Text="running" FontSize="10" FontWeight="Black" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <StackPanel Grid.Column="3" VerticalAlignment="Center" Margin="0,0,18,0">
+                                <Grid Margin="0,0,0,4">
+                                    <TextBlock Text="التقدم الكلي لمعالجة الحزمة" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
+                                    <TextBlock Text="97% (0d 0h 42m)" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <ProgressBar Value="97" Maximum="100" Height="5" CornerRadius="2.5" Foreground="{ThemeResource HalvoGradientCyanBlue}"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="4" Padding="12,6" CornerRadius="6" Background="#26FF5252" BorderThickness="1" BorderBrush="{ThemeResource HalvoRoseBrush}" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <FontIcon Glyph="&#xE71A;" FontSize="11" Foreground="{ThemeResource HalvoRoseBrush}"/>
+                                    <TextBlock Text="إيقاف مؤقت" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoRoseBrush}"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
             <!-- 3. WinUI 3 Controls Gallery Style: Quick Feature Cards (عناصر التحكم والوظائف الأساسية) -->
             <StackPanel Spacing="12">
                 <TextBlock Text="أقسام ومنظومة العمل · Workflows &amp; Studio Modules"

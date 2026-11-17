@@ -56,3 +56,10 @@ OCR/
 CandidateFrames/
 Frames/
 keyframes/
+
+# Large portable binaries & benchmark outputs
+tools/**/tesseract/
+tools/**/benchmark_test/
+*.dll
+*.exe
+

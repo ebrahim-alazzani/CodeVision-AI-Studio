@@ -1,0 +1,1392 @@
+{
+  "tool_name": "extract_unity_local",
+  "description": "CodeVision Video-to-Code Extractor Engine (Phase 1 local tool copy)",
+  "source_path": "D:\\Programming\\New folder\\Mobile Game Development Tutorial 2025\\extract_unity_local",
+  "migration_timestamp": "2026-11-17 23:30:51 UTC",
+  "file_count": 276,
+  "total_size_bytes": 250133031,
+  "total_size_mb": 238.55,
+  "portable_tesseract_included": true,
+  "files": [
+    {
+      "path": ".gitignore",
+      "size_bytes": 492,
+      "sha256": "d96e59318d60be2b9099335e2a94f8101e2cb42ad63d4d4827d8afb4d93d25a0"
+    },
+    {
+      "path": "APPLY_PHASE1.md",
+      "size_bytes": 493,
+      "sha256": "776bc3b445b6d3a12421cc55d1c237ec1187cee98aff4b097aa101dfcb127fc8"
+    },
+    {
+      "path": "LICENSE",
+      "size_bytes": 1126,
+      "sha256": "a9b142d5fcc697de12b4dc4523586325edd1412d722602b67f9796b3a0f41963"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 6560,
+      "sha256": "69f43f0c981eab9d2977520c5d52f9819354f9a4739ecf6999796d03e400c89d"
+    },
+    {
+      "path": "codevision.py",
+      "size_bytes": 14284,
+      "sha256": "0bfc84319c46f908adea9ad7acef9b768a78a61b057e7c92e12e0b2a6d403b5d"
+    },
+    {
+      "path": "codevision_linkedin_banner.png",
+      "size_bytes": 100066,
+      "sha256": "dc991b75a1aaa33b4fc1f197d25aa29ceefd8045657f65067af087f918cf98d2"
+    },
+    {
+      "path": "codevision_premium_linkedin_card_1787179514183.png",
+      "size_bytes": 100066,
+      "sha256": "dc991b75a1aaa33b4fc1f197d25aa29ceefd8045657f65067af087f918cf98d2"
+    },
+    {
+      "path": "extract_unity_local.ps1",
+      "size_bytes": 8474,
+      "sha256": "d1a8116f330f9883ad851e74719513d9449205cea4399cea447098ad3b3217b5"
+    },
+    {
+      "path": "extract_unity_local_v2.ps1",
+      "size_bytes": 4936,
+      "sha256": "fbca4fd7e59c262f0263f61b42ca4735537c68defdafd7ba4a1c2356bfeaa1e5"
+    },
+    {
+      "path": "rebuild_from_ocr.py",
+      "size_bytes": 3639,
+      "sha256": "8d76f545ab1f1ac7fa4b9d336cc53428073544ad2ba1150f5f57c8ab5cad4107"
+    },
+    {
+      "path": "reconstruct_csharp.py",
+      "size_bytes": 7037,
+      "sha256": "5304ea8a9b86ae344f63b42937a4457da484f66d39981af3e833c0e6d5afc1e5"
+    },
+    {
+      "path": "requirements.txt",
+      "size_bytes": 190,
+      "sha256": "ef78504d5c012e4cba89383d73ceea6e46a24b3d9f49aa44f15df8f8a52f9a83"
+    },
+    {
+      "path": "run.bat",
+      "size_bytes": 83,
+      "sha256": "22b2e7d2e3da77ea58ea0416c4058e299bcbbab48a735d9922f603f98debcba0"
+    },
+    {
+      "path": "run_extract.ps1",
+      "size_bytes": 823,
+      "sha256": "bba942ee01a8f66bc81c8d090bbd3668605485a12832cbf59a105c7705a2b259"
+    },
+    {
+      "path": "setup_tesseract.py",
+      "size_bytes": 1135,
+      "sha256": "7a13629f2d440b5cf891fb274eef18507fc2c9dd2f27d32994a33100985b1ee6"
+    },
+    {
+      "path": "core/__init__.py",
+      "size_bytes": 45,
+      "sha256": "542095540c174ccfad83c00fc1ae12343a59a1ca65f5d69ee94020293e67f392"
+    },
+    {
+      "path": "core/evidence.py",
+      "size_bytes": 4955,
+      "sha256": "6ec5ac561e75282b71139d5a30b5bcf67c86184f6bda7905493e5d3a04f3dcf4"
+    },
+    {
+      "path": "core/exceptions.py",
+      "size_bytes": 2217,
+      "sha256": "5b362caea4322623567d396aac6e0138bd866728ce0a528ac8f28351a56e9058"
+    },
+    {
+      "path": "core/interfaces.py",
+      "size_bytes": 1636,
+      "sha256": "d3ce06b615ed92a7e380b00bcf326ace9610f50a57a90e76cc12a86c96ec866f"
+    },
+    {
+      "path": "core/models.py",
+      "size_bytes": 1717,
+      "sha256": "00d222de42b2eae43e1a5100fe81a247f2e3ca704be1c78f782237bc9e02422a"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/README.md",
+      "size_bytes": 8551,
+      "sha256": "86048577601fbda580790a55d0bf75750298410cd63b04e954274b0591943f79"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/AI/AISpawner.cs",
+      "size_bytes": 1432,
+      "sha256": "a064406959177c65968f56b6ae9979dd1023cd2b68c87ee397de429218b6bc03"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/AI/CarAISpawner.cs",
+      "size_bytes": 1448,
+      "sha256": "b97b08e2249c6629562c698ea0fd076c4d1cf28cf9b7c46dcaf13ec13e69bc91"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/AI/CarNavigatorScript.cs",
+      "size_bytes": 3345,
+      "sha256": "fe662b54ba95a0603b59129cd547f29a1db7371c2f12c9d1f65c922067103960"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/AI/CharacterNavigatorScript.cs",
+      "size_bytes": 3669,
+      "sha256": "0d1bcbdb1014b5893c73bd2e009476425a45db5592caaa0fe36d146c368b7b51"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/AI/Waypoint.cs",
+      "size_bytes": 2249,
+      "sha256": "30ecf5b3cc5cf0c1494ebaacd2f1c813ad2599c65f58c23aed64d769c20a86d9"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/AI/WaypointNavigator.cs",
+      "size_bytes": 2959,
+      "sha256": "a3f78e8a126c3e7fc6dddfc764bc513491a788ddc18e5f59b05fe2cf865bfd06"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Camera/CameraManager.cs",
+      "size_bytes": 6054,
+      "sha256": "e1aee16c76d95ac065abb36b4db8c3166051e7b27ce83e8b8c7c3f4404f9acbe"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Camera/CarCameraController.cs",
+      "size_bytes": 2005,
+      "sha256": "fd4854611600a9b80984f5c58f423d74966098d6191f10ef9e35d3d393859239"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Camera/MiniMapController.cs",
+      "size_bytes": 1507,
+      "sha256": "8299686511b55bbd8b2ed0a4cb028d20313a0ab866005355139b0d0c24056d38"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Data/PlayerData.cs",
+      "size_bytes": 1529,
+      "sha256": "0411ec08773f614f2acf97da4ea2688b4137405e12c357615a2748639db2b832"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Data/SaveSystem.cs",
+      "size_bytes": 1796,
+      "sha256": "67493dc15a9faf9af5da576fb1d0aba54709458a7ee68cc6b0c3378725c52602"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Editor/WaypointEditor.cs",
+      "size_bytes": 3625,
+      "sha256": "e5f0b99e5e54febe7061e5197582a3b8bc0264516bfff9c63bd6ea89de42491c"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Editor/WaypointManagerWindow.cs",
+      "size_bytes": 5560,
+      "sha256": "2571368aeef7ad57711dbd6cbac14eee101510e9def0263e590dc610eeb98ec6"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Missions/Character.cs",
+      "size_bytes": 1109,
+      "sha256": "9ded76f4328075aa660b6163a67b0109c4aca32b1506838ad4b46eb582ac2217"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Missions/Diaz.cs",
+      "size_bytes": 476,
+      "sha256": "9667b83c33497f59f490264d0ec8897da3f748d4dbc47b3929c51e73b479d92c"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Missions/Guard.cs",
+      "size_bytes": 1810,
+      "sha256": "8747fcf3a8b18d64084318eb1f9662de841a6d88f27aaacf8eb3bd79876a74de"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Missions/Lance.cs",
+      "size_bytes": 1133,
+      "sha256": "c4401fb1a303c21ce66efa204d515141943d0b9911e16602434ba27f8cace22c"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Missions/Mission1.cs",
+      "size_bytes": 3678,
+      "sha256": "5159eb65ed314c60a39ca311b3207c99d24c4ad5fcd0a93a1662357e9c819b3a"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Player/AnimatorManager.cs",
+      "size_bytes": 2662,
+      "sha256": "c6c21aacf43ae859f9046eeae6d490be025fc777c79a3f520aca5b0d44b647ec"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Player/InputManager.cs",
+      "size_bytes": 7243,
+      "sha256": "d4f068d64c221f18d84ccec1f458f2dbffe6fa5e433e3e9a102fa5bcef00b853"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Player/PlayerHealth.cs",
+      "size_bytes": 2823,
+      "sha256": "25ff1b90d80b7289916a2f540ac366dc2c3caa685815a72898f005328bf2a2b8"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Player/PlayerManager.cs",
+      "size_bytes": 1924,
+      "sha256": "4e4a2b98d2f270e52a32c2373d804640c0a93bf00839abd6886775c3290dfad5"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Player/PlayerMovement.cs",
+      "size_bytes": 7426,
+      "sha256": "832b973bdf7f8310e4cef5dc22b59f1bfc4a704ed9853d4039db0cb7b41b2b1b"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Player/ResetBool.cs",
+      "size_bytes": 577,
+      "sha256": "243d6c5e7dadc682a9b6b6d352e7f3810064039ca7bcc415b019cca761331496"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Police/PoliceOfficer.cs",
+      "size_bytes": 6230,
+      "sha256": "b7ed946f5b17eb468fb82b4ed21ddefc1c8fe0dc7c1c56a705fa823a9e874757"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Police/PoliceSpawner.cs",
+      "size_bytes": 2151,
+      "sha256": "4127c0e9f166b5e0485ebc2fa54383d177a0a1a468c644f75d1d3d5b93854a4c"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Police/PoliceWaypointNavigator.cs",
+      "size_bytes": 1994,
+      "sha256": "b4246d3581fe0463f15a4646751176e643aad1d3da5ac88fc86ea5bb1957b974"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Police/WantedLevel.cs",
+      "size_bytes": 2290,
+      "sha256": "5f26a9e1ad8215b59d1aab5ca9c248608cae7e0809c13faca0c876a64ed26b77"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Shooting/ShootingController.cs",
+      "size_bytes": 6308,
+      "sha256": "99512d2da663fe8e35c82e57870964d5a1fb6a93325f7b6817fd9170905efe9d"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Shop/ColliderAction.cs",
+      "size_bytes": 1814,
+      "sha256": "04191f8480b9fdeca6da39bcec88c6269c7adc4553f76cf460889b2cf1b0bb5c"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Shop/ShopSystem.cs",
+      "size_bytes": 3358,
+      "sha256": "b9ebb018436c6f2334d01044a5ac9178a4aa7936486c2e532617d3f171ebe68f"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/UI/GameManager.cs",
+      "size_bytes": 3744,
+      "sha256": "fb255239da87b90487a45f7a5046d77744912d2d47da998824d8725d4dc840f0"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/UI/HealthBar.cs",
+      "size_bytes": 1037,
+      "sha256": "db5170f918cd54ce56ed078c6363f74a3ed16d5ae2eeb67b8ccdb0867327726a"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/UI/MainMenuManager.cs",
+      "size_bytes": 2163,
+      "sha256": "58c0328dad2941f7932112929c8877eb6c2544dca90cc2a74e98397e0d9c026d"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/UI/PauseMenu.cs",
+      "size_bytes": 2046,
+      "sha256": "46224f188c24fa699794593a5248383616f9b84684697d0abf81082913c64f7c"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Vehicles/CarController.cs",
+      "size_bytes": 4833,
+      "sha256": "43855192467a57e388ebad1db808b870521c2b62b0bf29d2529d5a68b6e81e9c"
+    },
+    {
+      "path": "Course_Scripts_Clean_Final/Vehicles/CarInteraction.cs",
+      "size_bytes": 4492,
+      "sha256": "fcb2860696ec7a0e8a38ecb545fc174104e195c60d33caf0852b00f44d2335c1"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/AISpawner.cs",
+      "size_bytes": 1094,
+      "sha256": "31ce7b9d29fedb4746548f0bad186492e65dc88fa6c0afea3764d3581eb73d34"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/AISpawner.cs.meta",
+      "size_bytes": 59,
+      "sha256": "17fd811e341131516ae7e99c576e26eec98c118aacddb43ee082bd9c062921dc"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/AnimatorManager.cs",
+      "size_bytes": 2003,
+      "sha256": "f9d195b1f99a3eab94c3db76d821c51b14b8515c9acc8d0883b61a64f9ad36d5"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/AnimatorManager.cs.meta",
+      "size_bytes": 59,
+      "sha256": "4cdec8dc83df27076068442a921a4b9db8b792f8509efd55173c44dba6b6753f"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/CameraManager.cs",
+      "size_bytes": 3017,
+      "sha256": "1e84c536ad0574d7415295046e8fd31b08e9b3ff7229e85b22cd05607cc3b7f3"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/CameraManager.cs.meta",
+      "size_bytes": 59,
+      "sha256": "1343d6b34a7215523d0ce051e65ac46bbac522a215811b9dc42db393acd8b35f"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/CarCameraController.cs",
+      "size_bytes": 1190,
+      "sha256": "b13a8b123a9b65392ad2a4f853888cfbfecbe1bea69119f5d36633b3df89d55a"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/CarCameraController.cs.meta",
+      "size_bytes": 59,
+      "sha256": "2c0424d48b77d998a367275debfbe07af9948afa1ab51e2af7f476d038fc23b7"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/CarController.cs",
+      "size_bytes": 2197,
+      "sha256": "a355ba309246075230b80d3f9850cf15427cc4676003ff76f5ec183b7d1200ff"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/CarController.cs.meta",
+      "size_bytes": 59,
+      "sha256": "7da3e3f5d1629201632dbb0205a93bb2be69ee35f74cf2335b00a9741ffaed7d"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/CharacterNavigatorScript.cs",
+      "size_bytes": 5237,
+      "sha256": "cae3f978c69cd3681592219a04ca799237756d3d8105be42dc29d1e5ade9ffdd"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/CharacterNavigatorScript.cs.meta",
+      "size_bytes": 59,
+      "sha256": "ef86fb6f7dd0fcf91ca8f3b0db2978ae5cc706d66ae34a6772c5290b2d9c7b20"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/Editor.meta",
+      "size_bytes": 172,
+      "sha256": "b89ca8bcdee73e0fdfda6471b496e73aece6e2fb9bf8d08df2d70c8567d9c501"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/InputManager.cs",
+      "size_bytes": 2879,
+      "sha256": "3084a57c00eb94d1bda6676e01ab362ec7741086c0bda255b142a1f9c99a0799"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/InputManager.cs.meta",
+      "size_bytes": 59,
+      "sha256": "02333339bf87b0bad432e81ea3650d6c4e47ec27c3d40d1fd4753efa674cf503"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/MainMenuManager.cs",
+      "size_bytes": 306,
+      "sha256": "d0f91ba843cfc775ec9800614490671319bc1bda849c7654057799b1e911ab43"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/MainMenuManager.cs.meta",
+      "size_bytes": 59,
+      "sha256": "fe33630935d74a9540c3a4cf46eed4cef48cb3969932cc5b0ddb807036b7ffff"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/MiniMapController.cs",
+      "size_bytes": 622,
+      "sha256": "4cfab27c2b04cc05add1d922052e0e044bc5982e70719530329b1e6a09f618cf"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/MiniMapController.cs.meta",
+      "size_bytes": 59,
+      "sha256": "2e74e6a9ceb66aecc25b9fd5509f0b82a01ce1115f01be648a4bbae9ac02d2f0"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PlayerHealth.cs",
+      "size_bytes": 1281,
+      "sha256": "9babeb4591830c78fb93da5f901a07cf6ea32cc840f6e6d538844748b74586f1"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PlayerHealth.cs.meta",
+      "size_bytes": 59,
+      "sha256": "b1c2590259189bccd8e01cd77f6ea25a4a2cd694259afcb8c2bbbaa92cf89aef"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PlayerManager.cs",
+      "size_bytes": 917,
+      "sha256": "145f55a1fbac51e0baa6869f423e18237d63a0a635b7ac1dc1dc657552269711"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PlayerManager.cs.meta",
+      "size_bytes": 59,
+      "sha256": "915662b7e33d5a2c030bde4d0303c446367fab77411d50def35f66e95223042e"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PlayerMovement.cs",
+      "size_bytes": 6216,
+      "sha256": "ddd77a6915321dd4ed70deb0452461b66105640f7c52fc5ec136a9b5269d33b5"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PlayerMovement.cs.meta",
+      "size_bytes": 59,
+      "sha256": "4929bb2df6fea8e46093bc0cabf0797eabdb035b06b50c093385544c6813169e"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PoliceOfficer.cs",
+      "size_bytes": 2178,
+      "sha256": "381bd24d0f42c3a3a9a6e5816a876b9ed74c08afa93b1c07995cdd66227cfb03"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PoliceOfficer.cs.meta",
+      "size_bytes": 59,
+      "sha256": "5bd96ae76cd7449c29d4e8771280ae76b440d405620b9d18c42b03d143f3fc8b"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PoliceSpawner.cs",
+      "size_bytes": 1012,
+      "sha256": "7da300f26eac7fcc09649c9b2f78b244668bd18dc807ba90bdbedd1718bfe500"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/PoliceSpawner.cs.meta",
+      "size_bytes": 59,
+      "sha256": "2486bb22e492c80b8786c408796d6e8bc9c555374bb6fb9ba8a30eb1f88b170a"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/ShootingController.cs",
+      "size_bytes": 1388,
+      "sha256": "4497f4ead4ef30b98477bfd297df2e693afeb31c37c4e75fb187cc9fcae02b6e"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/ShootingController.cs.meta",
+      "size_bytes": 59,
+      "sha256": "0db993343686faecd8af87c4a00576e592cc21dac0848fa6f7bd25a3345f4e6a"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/ShopSystem.cs",
+      "size_bytes": 1090,
+      "sha256": "90656ff1ed3e022d14394ae333728618784b2a191354d046e2498afc761e07ca"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/ShopSystem.cs.meta",
+      "size_bytes": 59,
+      "sha256": "59833833ffd0236231104366fb8d49bc1a7f47f9fa7104bf33202521d818fe9b"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/WantedLevel.cs",
+      "size_bytes": 1171,
+      "sha256": "e74540e0d639c2be597e009332f821fdb4449417bf0d15a781d9079e9e1818cb"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/WantedLevel.cs.meta",
+      "size_bytes": 59,
+      "sha256": "26f80c74ef852afa8801972e9a2ce3a0a6bed53c7c3e8c54459d835922b64429"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/WayPoint.cs",
+      "size_bytes": 1906,
+      "sha256": "2dd3eb33532a9428dda7694bd47901eb4c412ab4b0209bd3e476add72a39a272"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/WayPoint.cs.meta",
+      "size_bytes": 59,
+      "sha256": "9417e7c842bb8a430e911adb78e3f3bc1d3eab52c0262d394417f0481e0a758d"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/WaypointNavigator.cs",
+      "size_bytes": 1737,
+      "sha256": "876582d251044f964ff6fb21396e48c1b7a654760d1019a585902f6e27f52052"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/WaypointNavigator.cs.meta",
+      "size_bytes": 59,
+      "sha256": "36df761ad4beb2e8e52c04fd101b2843e1d49af7574af7c3a03f481148e6ee69"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/Editor/WaypointEditor.cs",
+      "size_bytes": 1807,
+      "sha256": "6ec77262f35e354300bbeceee4e76ce030020a58c76634300f72b6752aea5193"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/Editor/WaypointEditor.cs.meta",
+      "size_bytes": 59,
+      "sha256": "8abef99d8ba14fca3ab13e6a2346f186f033cacf8356ca68a49ab2c3633e964e"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/Editor/WaypointManagerWindow.cs",
+      "size_bytes": 1827,
+      "sha256": "4b67240ee41ffd17707ffe75e559011c211b782c9317403eb0c8d2df8ec80777"
+    },
+    {
+      "path": "Course_Scripts_Extracted_Clean/Editor/WaypointManagerWindow.cs.meta",
+      "size_bytes": 59,
+      "sha256": "f729ba61be6922da5959e9db25ae8b51a729fc775bd52618882e047e4b837cd3"
+    },
+    {
+      "path": "docs/ENGINEERING_ROADMAP.md",
+      "size_bytes": 2917,
+      "sha256": "6d9ade499035db82b0d9c20000549ef1a0c2b49f2e1170b8aa4f666737eab09a"
+    },
+    {
+      "path": "extraction/__init__.py",
+      "size_bytes": 56,
+      "sha256": "b49a959ab8d1d2b15507b3e7740cb897b4500e137e1f9ec87544117355868c91"
+    },
+    {
+      "path": "extraction/editor_visualizer.py",
+      "size_bytes": 3896,
+      "sha256": "354382b85262570c479cf1df606f19d915bfd258161a48db1693812738190596"
+    },
+    {
+      "path": "extraction/ffmpeg_extractor.py",
+      "size_bytes": 3714,
+      "sha256": "eaeb71b66be4af1c0efcbe302c741f8b42b861dd6724baa9ba96839b5f671bbe"
+    },
+    {
+      "path": "languages/__init__.py",
+      "size_bytes": 226,
+      "sha256": "3b15f3a7429516ca488a00105cd6bebd19c6679ced56293a538ce6df5069a322"
+    },
+    {
+      "path": "languages/builtin.py",
+      "size_bytes": 3159,
+      "sha256": "e84485c428cf743ac1ecebb2cb5ae10be0a425afeb7b84697bf80bb1910d768c"
+    },
+    {
+      "path": "languages/models.py",
+      "size_bytes": 741,
+      "sha256": "0bcb147fb31876fba0ce2f03bf79a71a6086bd6c903f9b9b613703d532fe0fec"
+    },
+    {
+      "path": "languages/registry.py",
+      "size_bytes": 3921,
+      "sha256": "3f08ce040c868da5c1e32baaa025db989960f0a3f2b536a7c5e8b0f6b0c8cf38"
+    },
+    {
+      "path": "ocr/__init__.py",
+      "size_bytes": 48,
+      "sha256": "ac70a60e8bda9440e0548a792a1644d43555c124dd52723f54ddb0c15bc8ac17"
+    },
+    {
+      "path": "ocr/noise_filter.py",
+      "size_bytes": 22822,
+      "sha256": "7e9111de21f05bc877cdd4f44ae2f46fff345e8215213189072a7f26bba967ec"
+    },
+    {
+      "path": "ocr/tesseract_engine.py",
+      "size_bytes": 4937,
+      "sha256": "82b69de4f82e3533784929f00cbed7e6d6bee661f8cdd4309be41b8933527f6d"
+    },
+    {
+      "path": "reconstruction/__init__.py",
+      "size_bytes": 53,
+      "sha256": "6720620e63cd9b724a9c19dd939af688c23f0c14ae2ed6b69e2b1378ffe3bb3a"
+    },
+    {
+      "path": "reconstruction/class_detector.py",
+      "size_bytes": 6287,
+      "sha256": "9798414ef3e8e6c7caeb5df1dfb0fb438696660bb77bb723916707474badb8ee"
+    },
+    {
+      "path": "reconstruction/line_merger.py",
+      "size_bytes": 5453,
+      "sha256": "a681bc55f9931703402eab9be8f17f24dce844cb17c1109b436d5948058cd616"
+    },
+    {
+      "path": "reconstruction/script_builder.py",
+      "size_bytes": 11533,
+      "sha256": "3e873cefdaf6f34b6b85039f74968f28cf0f6a136666db42e069aac887fbeb93"
+    },
+    {
+      "path": "reconstruction/script_categorizer.py",
+      "size_bytes": 3069,
+      "sha256": "44fae5faa789d1c837577c0b4414a39e4d54c66a9667f3d6254f6eb4a048597b"
+    },
+    {
+      "path": "reconstruction/syntax_fixer.py",
+      "size_bytes": 4013,
+      "sha256": "949ac0521ced283e9b1660596689a60797f16fba68244a240f0ca4026cda734d"
+    },
+    {
+      "path": "tesseract/ambiguous_words.1.html",
+      "size_bytes": 17823,
+      "sha256": "7361d4c477bd35d5fc66ce8a9bfb5c2b4ae9eab91e42148bed6873067d98997f"
+    },
+    {
+      "path": "tesseract/ambiguous_words.exe",
+      "size_bytes": 1065472,
+      "sha256": "51ceff73074a0c9a233c13bc2f63e45c932df99d6c67b3d8b952810153618d3f"
+    },
+    {
+      "path": "tesseract/classifier_tester.1.html",
+      "size_bytes": 19529,
+      "sha256": "5454792d8f7813aad67795ffb48b6ba3742fbcad5ad7e95b3aa4e73accc032c6"
+    },
+    {
+      "path": "tesseract/classifier_tester.exe",
+      "size_bytes": 4979184,
+      "sha256": "3b49e6756a576c65f3bb172e3eeaf65feb240238b13e429b93ca3499c29b22e5"
+    },
+    {
+      "path": "tesseract/cntraining.1.html",
+      "size_bytes": 18156,
+      "sha256": "73423b3fad7c547e8917b08329dbd603db794eff52a4eeee230e88a5b1d15f0f"
+    },
+    {
+      "path": "tesseract/cntraining.exe",
+      "size_bytes": 4702944,
+      "sha256": "ed32263d82c021677e35f65a5d092302e142c1d938ac41a9a207695a18d63e2e"
+    },
+    {
+      "path": "tesseract/combine_lang_model.1.html",
+      "size_bytes": 21055,
+      "sha256": "0424fbe925abedf763b38cdf36153b9269f11f412ff6d164a922652ecebb602f"
+    },
+    {
+      "path": "tesseract/combine_lang_model.exe",
+      "size_bytes": 3492480,
+      "sha256": "1a5dd6f1050299b7e6c6f34185006a41850223910b487cf484b3cb21735b204a"
+    },
+    {
+      "path": "tesseract/combine_tessdata.1.html",
+      "size_bytes": 27130,
+      "sha256": "07e53161165d55789060cacac9e9e83ba274eeed1d4e6e9ecb486fb1ee982013"
+    },
+    {
+      "path": "tesseract/combine_tessdata.exe",
+      "size_bytes": 1281096,
+      "sha256": "75c8b3bb2a89436bc86504bb3a3980a9f3d9cb2517ad683c05ee64eee084d4a1"
+    },
+    {
+      "path": "tesseract/dawg2wordlist.1.html",
+      "size_bytes": 18336,
+      "sha256": "6541fccd5fdfc938175fd555eec2101bd78e673a3390521f5a7f04ad5fee4fd7"
+    },
+    {
+      "path": "tesseract/dawg2wordlist.exe",
+      "size_bytes": 574520,
+      "sha256": "8e23eb7acecd273772c82755b0c7107c552f92449d1107b1d0113c3fba6ee64e"
+    },
+    {
+      "path": "tesseract/libLerc.dll",
+      "size_bytes": 761261,
+      "sha256": "4ab688c7c5c4afdfee0f519f942759137067a7876a1c1bb825ee575b0a5760b1"
+    },
+    {
+      "path": "tesseract/libarchive-13.dll",
+      "size_bytes": 769154,
+      "sha256": "98b9b7e9259f23eab6749ee25cca2c0643f09df6b23c58229fd43bf6249195e9"
+    },
+    {
+      "path": "tesseract/libb2-1.dll",
+      "size_bytes": 34372,
+      "sha256": "7fb8418a1172042dab5227fcd466b1bf293737f5b5cf35359e851516227f109c"
+    },
+    {
+      "path": "tesseract/libbrotlicommon.dll",
+      "size_bytes": 143397,
+      "sha256": "62f363f6aac0d54ce7b115c0412b19e0fe5480f4e6fc1254f663b0ab6868e46f"
+    },
+    {
+      "path": "tesseract/libbrotlidec.dll",
+      "size_bytes": 60412,
+      "sha256": "7d6c0f954b6f2db1c1c5fd5904886ae055859a02ca31b6dde5f96f6b0259d23f"
+    },
+    {
+      "path": "tesseract/libbz2-1.dll",
+      "size_bytes": 100964,
+      "sha256": "b79cd3a7102e359ef6324e98966a67939e58ec2b651ae2847cae84a4dfa453f7"
+    },
+    {
+      "path": "tesseract/libcairo-2.dll",
+      "size_bytes": 1213715,
+      "sha256": "c531e50be733f641e39419bf62cb799698b20086afb958d73f56677ea0c3f9da"
+    },
+    {
+      "path": "tesseract/libcrypto-3-x64.dll",
+      "size_bytes": 5130880,
+      "sha256": "c0674a225d30f1642ca1da45ac040a9c1885d8f23883532b42987bae458edc4d"
+    },
+    {
+      "path": "tesseract/libdatrie-1.dll",
+      "size_bytes": 34386,
+      "sha256": "f760aef8a31b7c3670484ca4eabab1ab8e95c14052167e191463f6371c3f0850"
+    },
+    {
+      "path": "tesseract/libdeflate.dll",
+      "size_bytes": 91035,
+      "sha256": "b6ee7b31a23605d8e8b9be5eae782a3ddf7adf2b7ca2c8e0041bdfd4fe4659ee"
+    },
+    {
+      "path": "tesseract/libexpat-1.dll",
+      "size_bytes": 188909,
+      "sha256": "d9ea333175b1e995bbe6a062567f38ff362f1b2f369fa8ebdb0eeed21813bdc6"
+    },
+    {
+      "path": "tesseract/libffi-8.dll",
+      "size_bytes": 33708,
+      "sha256": "f1ed51652b3746c1b4bce497b7041e677e5d80c5ab8198efebb8fc6f75329ae8"
+    },
+    {
+      "path": "tesseract/libfontconfig-1.dll",
+      "size_bytes": 350185,
+      "sha256": "d6c70b7e205f24ff96b29a80849b59c84f8701b311434f64f2bf93bd36bdb163"
+    },
+    {
+      "path": "tesseract/libfreetype-6.dll",
+      "size_bytes": 776690,
+      "sha256": "5297f754dfca04abdb0d21705d5afc3c4122aa25c7afbdd87900313cb780c868"
+    },
+    {
+      "path": "tesseract/libfribidi-0.dll",
+      "size_bytes": 144627,
+      "sha256": "449085380e54089871ccc9f32b715f65a2e53eb9f5125793fed900461d29a420"
+    },
+    {
+      "path": "tesseract/libgcc_s_seh-1.dll",
+      "size_bytes": 150707,
+      "sha256": "b22b954397a52703579d92db64b57812af70f2afcafe2e742a009c1640b9ec1a"
+    },
+    {
+      "path": "tesseract/libgif-7.dll",
+      "size_bytes": 41367,
+      "sha256": "a1a179853ae6fad8eb045b8e9f12c55e6fc99929446b02fa345512354cf5e582"
+    },
+    {
+      "path": "tesseract/libgio-2.0-0.dll",
+      "size_bytes": 1814226,
+      "sha256": "07bda2471ca0490598d1e6fbdfc8958cd91926d68effc90d9eda0ea2f9279c7c"
+    },
+    {
+      "path": "tesseract/libglib-2.0-0.dll",
+      "size_bytes": 1456928,
+      "sha256": "12b2f4d609a5d3cf714a8c502074409d32f21082a682373f4e1bca36821f08bc"
+    },
+    {
+      "path": "tesseract/libgmodule-2.0-0.dll",
+      "size_bytes": 26783,
+      "sha256": "8cf9bb9be24c88a66ad478214a55357a9d44702636789dfa436ca509457d781c"
+    },
+    {
+      "path": "tesseract/libgobject-2.0-0.dll",
+      "size_bytes": 359001,
+      "sha256": "4fcf4fb2d5ef234e717b389f3b637f05ee6ff111b698ef59664394f10622aef6"
+    },
+    {
+      "path": "tesseract/libgraphite2.dll",
+      "size_bytes": 152538,
+      "sha256": "f927efecd958f0e54a24ae297f86cd6aed05e7fc20e5da0882050ab9ec464395"
+    },
+    {
+      "path": "tesseract/libharfbuzz-0.dll",
+      "size_bytes": 1329363,
+      "sha256": "c1fa05f089041e348c9fcf18ae115942c989ac5259069d0ae83aa63e9a7c66ea"
+    },
+    {
+      "path": "tesseract/libiconv-2.dll",
+      "size_bytes": 1118202,
+      "sha256": "967189adfbc889fde89aafc867f7a1f02731f8592cf6fd5a4ace1929213e2e13"
+    },
+    {
+      "path": "tesseract/libicudt75.dll",
+      "size_bytes": 30743046,
+      "sha256": "6a60829e1c13fd73043af6f475f85971a42eb5553e88c92f26b8802bde92c2f4"
+    },
+    {
+      "path": "tesseract/libicuin75.dll",
+      "size_bytes": 3381215,
+      "sha256": "9fad2353a168134305e67a62fedff21cd43293055b7f4b9c39ff30cc78f30be0"
+    },
+    {
+      "path": "tesseract/libicuuc75.dll",
+      "size_bytes": 1932464,
+      "sha256": "60e6f91536efd0a8e408b060edb76a2148a7a397399b76ee39e4ed61de0774b0"
+    },
+    {
+      "path": "tesseract/libintl-8.dll",
+      "size_bytes": 188681,
+      "sha256": "42a63cb4c3c28a683d9f6c3510de5ec17849eb18c097fa02cd78aeb800bff202"
+    },
+    {
+      "path": "tesseract/libjbig-0.dll",
+      "size_bytes": 62083,
+      "sha256": "275a827ba6839d47cfdbe059db1b1b403a92ff26e2b76a29362915487868bef2"
+    },
+    {
+      "path": "tesseract/libjpeg-8.dll",
+      "size_bytes": 912746,
+      "sha256": "e44514c4e7753635e79bdb668f1e10315c1a93287f8d044ae74594ed57de619d"
+    },
+    {
+      "path": "tesseract/libleptonica-6.dll",
+      "size_bytes": 2721006,
+      "sha256": "26861baff4d25446a03ed1f6064d2eae7435eddf51bb36af4e634c0eb4eb3af0"
+    },
+    {
+      "path": "tesseract/liblz4.dll",
+      "size_bytes": 147105,
+      "sha256": "1b64d6429ae4aacf9eb35b8158d98556859a5c5e8ee817e155da343e194dd8e3"
+    },
+    {
+      "path": "tesseract/liblzma-5.dll",
+      "size_bytes": 184667,
+      "sha256": "3a599d97ea4dd002166ee7ffdc527c129d2cf8b05e9152ca7cae006c4187977e"
+    },
+    {
+      "path": "tesseract/libopenjp2-7.dll",
+      "size_bytes": 462194,
+      "sha256": "5ff762ff6d672a06ee502819daf1494aa3aa3acf408805f0429303e026705011"
+    },
+    {
+      "path": "tesseract/libpango-1.0-0.dll",
+      "size_bytes": 401912,
+      "sha256": "834caf40403a447634b0e80ff4ea290f1ee361364cf24ffc8bb55b048f9254a9"
+    },
+    {
+      "path": "tesseract/libpangocairo-1.0-0.dll",
+      "size_bytes": 74540,
+      "sha256": "ee706c4561af24de6cbe7ad10b46852fc8b0f328534ea2beb5f1147696e87b55"
+    },
+    {
+      "path": "tesseract/libpangoft2-1.0-0.dll",
+      "size_bytes": 102261,
+      "sha256": "7c80bc1949255a8bc62fe05ab003b777aa844ac8f6c5da1ebc4c49ee35f3b9b8"
+    },
+    {
+      "path": "tesseract/libpangowin32-1.0-0.dll",
+      "size_bytes": 114044,
+      "sha256": "d940a831f2a9be33dd36ff3d8b97488a068b1699fb6b2e874633d4d5564f301c"
+    },
+    {
+      "path": "tesseract/libpcre2-8-0.dll",
+      "size_bytes": 399737,
+      "sha256": "5ffa31709c275120a745f9f714974db1e86c8fd54f8ca6889617530dffbff95b"
+    },
+    {
+      "path": "tesseract/libpixman-1-0.dll",
+      "size_bytes": 714812,
+      "sha256": "8f8b8f09ec8fe9945ba76fadf8a04183056afd2c35aa7be1808e1a1301d87757"
+    },
+    {
+      "path": "tesseract/libpng16-16.dll",
+      "size_bytes": 247380,
+      "sha256": "f1b0a9d6cf3b8809c22fa0e27b5b82d9357e5bca43ab0ce8762f55fb303ed23f"
+    },
+    {
+      "path": "tesseract/libsharpyuv-0.dll",
+      "size_bytes": 57852,
+      "sha256": "60bcc87ac64a834e967e9ec9461be37395dbc090c579f3e23497ef69a5d8323e"
+    },
+    {
+      "path": "tesseract/libstdc++-6.dll",
+      "size_bytes": 2409896,
+      "sha256": "0d9c01ab1771df439c75f144b2d855b4ac400243f006d14d9a043493de628f0d"
+    },
+    {
+      "path": "tesseract/libtesseract-5.dll",
+      "size_bytes": 101471336,
+      "sha256": "279488c41bd341edaa03dcd097faa33604ba330e6254ac97bcaf2229d8d7ac1a"
+    },
+    {
+      "path": "tesseract/libthai-0.dll",
+      "size_bytes": 69739,
+      "sha256": "420e08cedaf9daaabcf8f6c92349d9dadb7b5ad9e4e79d1126bb2a55a7cdbe09"
+    },
+    {
+      "path": "tesseract/libtiff-6.dll",
+      "size_bytes": 576887,
+      "sha256": "e000306d3de299b05ebef443e48c1486d9fa291b0244f6ca6225843b75fdf581"
+    },
+    {
+      "path": "tesseract/libwebp-7.dll",
+      "size_bytes": 743580,
+      "sha256": "687b8859e1f739dad5800fdc293a6ee1fd0dd4b33380ab283681a5a12eb3d4fa"
+    },
+    {
+      "path": "tesseract/libwebpmux-3.dll",
+      "size_bytes": 78730,
+      "sha256": "ad10bacecd37b44c7c2c813da098a8bf6a42a3bf0152f7f33726d216815558f9"
+    },
+    {
+      "path": "tesseract/libwinpthread-1.dll",
+      "size_bytes": 60798,
+      "sha256": "bbcbe5eb8e806f3537585d4c9832b4ee15f86617328a566695d7d3728aa370ee"
+    },
+    {
+      "path": "tesseract/libzstd.dll",
+      "size_bytes": 1179848,
+      "sha256": "f216ea8efb5b3bb9ad3d938fb9ac07e3b8f78c2c92faab03d2c468d0b6798a5a"
+    },
+    {
+      "path": "tesseract/lstmeval.1.html",
+      "size_bytes": 19519,
+      "sha256": "0e6fe86891af3f96e84fd8ee77d2eeba248d837b6187108b2fbff9b5863a249d"
+    },
+    {
+      "path": "tesseract/lstmeval.exe",
+      "size_bytes": 8636976,
+      "sha256": "eb7dbee5d8b33a828a9e6342a1cce6d211b75fd80eef4c912e592d597b9f6ab9"
+    },
+    {
+      "path": "tesseract/lstmtraining.1.html",
+      "size_bytes": 22643,
+      "sha256": "5fecf0b238bf913e5979192140885f71a171a0f47056f6597be0cafa9afaba22"
+    },
+    {
+      "path": "tesseract/lstmtraining.exe",
+      "size_bytes": 9692904,
+      "sha256": "d9018842d367dd827e642da70e7fe7b2700a948bdd10d04b525fb0fe27c1f8e7"
+    },
+    {
+      "path": "tesseract/merge_unicharsets.1.html",
+      "size_bytes": 18944,
+      "sha256": "e8e565350d465ac83d14fa50bd5d35cac18c835fb5c46ebcb8e1f61574956466"
+    },
+    {
+      "path": "tesseract/merge_unicharsets.exe",
+      "size_bytes": 385776,
+      "sha256": "1c06e802d3ad8a1395cb61665f20ec9692a107d33247a067e99b4af6532191d5"
+    },
+    {
+      "path": "tesseract/mftraining.1.html",
+      "size_bytes": 19427,
+      "sha256": "16ac43815d3c5d6ed81a2df55add8466d13e4c918e1aaf0bbaf3758ed0a968c5"
+    },
+    {
+      "path": "tesseract/mftraining.exe",
+      "size_bytes": 5303272,
+      "sha256": "55704d2e329200cbc54015ac1519d58e15e7e8087515848e840144f863806fba"
+    },
+    {
+      "path": "tesseract/set_unicharset_properties.1.html",
+      "size_bytes": 19109,
+      "sha256": "e5848c9eb844d9f4002b1bde9da6a373320e6ef31757e486103aeca64c26c5c1"
+    },
+    {
+      "path": "tesseract/set_unicharset_properties.exe",
+      "size_bytes": 6474512,
+      "sha256": "e9f5ef94daa4f6b202fc46f69895742355b7adcef96e409d8a6e2bc4f49d4c3e"
+    },
+    {
+      "path": "tesseract/shapeclustering.1.html",
+      "size_bytes": 19448,
+      "sha256": "95391fb8bac0f788eeab08038c3cefd17a591c43555356a16a6350add59f48b2"
+    },
+    {
+      "path": "tesseract/shapeclustering.exe",
+      "size_bytes": 4980112,
+      "sha256": "8dfe037114c16bc108194e1d4841c050565ea7d24ca4695eb293e768405260dd"
+    },
+    {
+      "path": "tesseract/tesseract-uninstall.exe",
+      "size_bytes": 151384,
+      "sha256": "7676a30880aa1f064a0cb89421ea78738b4b6bc5ea3e1faf805faae03cbe62d9"
+    },
+    {
+      "path": "tesseract/tesseract.1.html",
+      "size_bytes": 42221,
+      "sha256": "4a6a5ee5ca3ad44a711890071837febbff27621745896cd73e4333038c479382"
+    },
+    {
+      "path": "tesseract/tesseract.exe",
+      "size_bytes": 1585024,
+      "sha256": "babb405f4366b480d02cd8ff2bac8d497170f6c1711ce6f3d5d8bf0fb7fa6ed9"
+    },
+    {
+      "path": "tesseract/text2image.1.html",
+      "size_bytes": 25663,
+      "sha256": "65dd8b72ee345e7ea95aa24c932fd1534d83e764b74f1ab459475f5898876c1a"
+    },
+    {
+      "path": "tesseract/text2image.exe",
+      "size_bytes": 9964680,
+      "sha256": "45ad664aa8daca8f1c6d12b1477673dbd8c0479f30eb6eb86d7ca3bfe708739c"
+    },
+    {
+      "path": "tesseract/unicharambigs.5.html",
+      "size_bytes": 21249,
+      "sha256": "0353dbd91477b479dbe4a38994c0c488d48b86a581dd64cb7804fe131565446d"
+    },
+    {
+      "path": "tesseract/unicharset.5.html",
+      "size_bytes": 23829,
+      "sha256": "b2df74b3abfad11c529ba7e167cc573ec345c66b285f1a688739df95cb2bfbff"
+    },
+    {
+      "path": "tesseract/unicharset_extractor.1.html",
+      "size_bytes": 18811,
+      "sha256": "ad8140c54167f8d46ddc7b42f47963a3a46869ffda3c43fbec2f88124e92ef00"
+    },
+    {
+      "path": "tesseract/unicharset_extractor.exe",
+      "size_bytes": 3761480,
+      "sha256": "39d795a964dbd946fe95b7f8386058c450c77041ab200e446b446b52bce652b0"
+    },
+    {
+      "path": "tesseract/winpath.exe",
+      "size_bytes": 19154,
+      "sha256": "5223e97b220215cc3ec12acb8979a6f41f5344737af63a90f47879051567777d"
+    },
+    {
+      "path": "tesseract/wordlist2dawg.1.html",
+      "size_bytes": 19492,
+      "sha256": "1b9931074dd228953f385a6b703f334fe9ecf8fdbbca8b2f7f957f882c28529d"
+    },
+    {
+      "path": "tesseract/wordlist2dawg.exe",
+      "size_bytes": 1019120,
+      "sha256": "4f409cbfce01bf7ea6382ec843292c97b4feb2a7a2883960141902f226889ff2"
+    },
+    {
+      "path": "tesseract/zlib1.dll",
+      "size_bytes": 120814,
+      "sha256": "cb7ab3788d10940df874acd97b1821bbb5ee4a91f3eec11982bb5bf7a3c96443"
+    },
+    {
+      "path": "tesseract/$PLUGINSDIR/INetC.dll",
+      "size_bytes": 25600,
+      "sha256": "85e03805f90f72257dd41bfdaa186237218bbb0ec410ad3b6576a88ea11dccb9"
+    },
+    {
+      "path": "tesseract/$PLUGINSDIR/LangDLL.dll",
+      "size_bytes": 8704,
+      "sha256": "1f9ef3943d58dd80a774a5a81578b48bc90f494025e71f6e40ef7def3a06ddf2"
+    },
+    {
+      "path": "tesseract/$PLUGINSDIR/StartMenu.dll",
+      "size_bytes": 12288,
+      "sha256": "fe48faafeb1d3bf312d66d60d2207648d0959c7b9263356c81d0d7f626333aa3"
+    },
+    {
+      "path": "tesseract/$PLUGINSDIR/System.dll",
+      "size_bytes": 32256,
+      "sha256": "9d46463e1925bf29cd86c7a56ccf540f1eeef3cb50064a222b84703436cd7e8c"
+    },
+    {
+      "path": "tesseract/$PLUGINSDIR/UserInfo.dll",
+      "size_bytes": 7168,
+      "sha256": "67ae64f52d6d84407820d09304fb12f5808e8caf332f6092bd0a722ec5977894"
+    },
+    {
+      "path": "tesseract/$PLUGINSDIR/modern-header.bmp",
+      "size_bytes": 9744,
+      "sha256": "766a893fe962aefd27c574cb05f25cf895d3fc70a00db5a6fa73d573f571aefc"
+    },
+    {
+      "path": "tesseract/$PLUGINSDIR/modern-wizard.bmp",
+      "size_bytes": 26494,
+      "sha256": "3ad2dc318056d0a2024af1804ea741146cfc18cc404649a44610cbf8b2056cf2"
+    },
+    {
+      "path": "tesseract/$PLUGINSDIR/nsDialogs.dll",
+      "size_bytes": 14336,
+      "sha256": "e9ab864697d454cd4a85abf38ec4236ee56ddd0c59f9422ae1e774b9487f132d"
+    },
+    {
+      "path": "tesseract/doc/AUTHORS",
+      "size_bytes": 787,
+      "sha256": "720862b7253993b348fe15f37ed6e0d4feb0fc8df8324284d75975d54dd29923"
+    },
+    {
+      "path": "tesseract/doc/LICENSE",
+      "size_bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "tesseract/doc/README.md",
+      "size_bytes": 8485,
+      "sha256": "099fb244ec3e34962afc4861a6c8c42d2727c2f834f23071070c6f2d557b164c"
+    },
+    {
+      "path": "tesseract/tessdata/ScrollView.jar",
+      "size_bytes": 26376,
+      "sha256": "9d391f419dc1bbe16d81d9317ccf72bbb98321b23336fa6b045447fd2a16999e"
+    },
+    {
+      "path": "tesseract/tessdata/eng.traineddata",
+      "size_bytes": 4113088,
+      "sha256": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2"
+    },
+    {
+      "path": "tesseract/tessdata/eng.user-patterns",
+      "size_bytes": 33,
+      "sha256": "1970d87625c9c7c0924f97181a7f349ff4935178e3bdb5bb6305c28a3af9824b"
+    },
+    {
+      "path": "tesseract/tessdata/eng.user-words",
+      "size_bytes": 27,
+      "sha256": "63008cdace728eb209dd926a35afe012469c88c8621a57ed9902034396ca4e2b"
+    },
+    {
+      "path": "tesseract/tessdata/jaxb-api-2.3.1.jar",
+      "size_bytes": 128076,
+      "sha256": "88b955a0df57880a26a74708bc34f74dcaf8ebf4e78843a28b50eae945732b06"
+    },
+    {
+      "path": "tesseract/tessdata/osd.traineddata",
+      "size_bytes": 10562727,
+      "sha256": "9cf5d576fcc47564f11265841e5ca839001e7e6f38ff7f7aacf46d15a96b00ff"
+    },
+    {
+      "path": "tesseract/tessdata/pdf.ttf",
+      "size_bytes": 572,
+      "sha256": "c7845420925a23d88ed830a63957b8af85a66a8daf8d9fc90e843673b2ef1a59"
+    },
+    {
+      "path": "tesseract/tessdata/piccolo2d-core-3.0.1.jar",
+      "size_bytes": 125187,
+      "sha256": "9acad723136ddb996e96f5d488b9b046753a1d4c60ea639d5e3f9701deaf60ad"
+    },
+    {
+      "path": "tesseract/tessdata/piccolo2d-extras-3.0.1.jar",
+      "size_bytes": 149558,
+      "sha256": "ba45f343e9ebc06c9b4ce165c8bb539b11cbf59e93d1df48489ab173f74375a8"
+    },
+    {
+      "path": "tesseract/tessdata/configs/alto",
+      "size_bytes": 23,
+      "sha256": "23a038ff290c7471a1a8aa4b5d23e310b0bf49f718480dad6b619a7d06eca330"
+    },
+    {
+      "path": "tesseract/tessdata/configs/ambigs.train",
+      "size_bytes": 146,
+      "sha256": "717e534fd4330ed3f9bdb006f0465aa2633cca866786a8f8d469dbd4b01c10c2"
+    },
+    {
+      "path": "tesseract/tessdata/configs/api_config",
+      "size_bytes": 26,
+      "sha256": "2929bc0f1d2ba77f28cfc230f7b835b2b54038c0f9d2e8e4c5ada43803c999fd"
+    },
+    {
+      "path": "tesseract/tessdata/configs/bigram",
+      "size_bytes": 129,
+      "sha256": "65e6583abc617a34d4091285181f2493d312c296a85629ac3c092d3b93b6e554"
+    },
+    {
+      "path": "tesseract/tessdata/configs/box.train",
+      "size_bytes": 311,
+      "sha256": "a421355e3488bf3fdfc14a1bdcca08c6f6414ec92c53f0eea22317c868c1a623"
+    },
+    {
+      "path": "tesseract/tessdata/configs/box.train.stderr",
+      "size_bytes": 311,
+      "sha256": "3e62cd37d2383abf0c6dfa5ba39fd1187fcff6856c4f4f27ea1554cb4c1874d2"
+    },
+    {
+      "path": "tesseract/tessdata/configs/digits",
+      "size_bytes": 37,
+      "sha256": "e757d95bb1e51444860ea10d7f2c8bb8a0c9c4ccc58a0e8c67e8dc2933a56e2e"
+    },
+    {
+      "path": "tesseract/tessdata/configs/get.images",
+      "size_bytes": 24,
+      "sha256": "28c774c157a2f48d835a1d58f5a35dd70106c136e176572ee43bbf46f3d65c92"
+    },
+    {
+      "path": "tesseract/tessdata/configs/hocr",
+      "size_bytes": 40,
+      "sha256": "d6a7ec7c5143317a59fce2393054f6b7a8261824b934e7426fdd24febc929ad6"
+    },
+    {
+      "path": "tesseract/tessdata/configs/inter",
+      "size_bytes": 59,
+      "sha256": "46303bf83668e446f4966d1ebf7418ad9f0c5e08836bc59d98cae3bbfc3aee9d"
+    },
+    {
+      "path": "tesseract/tessdata/configs/kannada",
+      "size_bytes": 101,
+      "sha256": "7d34fec99283142a3a22d157dc5cc8824b93ee923e576e6bfd1b026039c2e8f0"
+    },
+    {
+      "path": "tesseract/tessdata/configs/linebox",
+      "size_bytes": 70,
+      "sha256": "eb0279527b009a53432a9e1dde85bf42814901393546bc365bb61837f83355c9"
+    },
+    {
+      "path": "tesseract/tessdata/configs/logfile",
+      "size_bytes": 25,
+      "sha256": "5eed5e41e5fbbf0862836c0e4cda7821f8e08441645858ec6821ab41d926e195"
+    },
+    {
+      "path": "tesseract/tessdata/configs/lstm.train",
+      "size_bytes": 282,
+      "sha256": "3d1f8e5ab4e41467fdd938dc4d266eea081b477f8d74ab6b198dd1d854b5301c"
+    },
+    {
+      "path": "tesseract/tessdata/configs/lstmbox",
+      "size_bytes": 26,
+      "sha256": "61255d1b7c9df76b673ff43d2d91cda7f4c3c2e7d7f0643a71b212739833017e"
+    },
+    {
+      "path": "tesseract/tessdata/configs/lstmdebug",
+      "size_bytes": 98,
+      "sha256": "62d40d7a7d80315e10cdca2561d2ddf2981f53dfdbd567513b04d36f3add7f4e"
+    },
+    {
+      "path": "tesseract/tessdata/configs/makebox",
+      "size_bytes": 26,
+      "sha256": "a8fe20a2bc9ff1e9e8ed06d56845336c978627b8e965600abd63f1f412c18ffe"
+    },
+    {
+      "path": "tesseract/tessdata/configs/page",
+      "size_bytes": 67,
+      "sha256": "6e4b43f27a77124e66c87fce8de518ff81e918d3cc36fe71a3d01179c1856a07"
+    },
+    {
+      "path": "tesseract/tessdata/configs/pdf",
+      "size_bytes": 22,
+      "sha256": "54d56e81dfefe289b0d2e4c7bc9bbe662711f5b8255c128b73bcd66efb6bba1a"
+    },
+    {
+      "path": "tesseract/tessdata/configs/quiet",
+      "size_bytes": 21,
+      "sha256": "8a93fad8251f61b5f17b8628203a0e068c71e0907cd63012ab22afb7b560fce3"
+    },
+    {
+      "path": "tesseract/tessdata/configs/rebox",
+      "size_bytes": 65,
+      "sha256": "73ca35d7d71084fb88e2eb9a5c53ad91682754b3aecb918dece7591ec22a0b26"
+    },
+    {
+      "path": "tesseract/tessdata/configs/strokewidth",
+      "size_bytes": 377,
+      "sha256": "ffb140aadd3e26d0d9b3b355d592b50cff8b2c3ce0394b4a6de4fabc1c0942c9"
+    },
+    {
+      "path": "tesseract/tessdata/configs/tsv",
+      "size_bytes": 22,
+      "sha256": "59d079bb75d8b3d7c839a3564580cb559e362c93a9d70f234e421c0c3e767e04"
+    },
+    {
+      "path": "tesseract/tessdata/configs/txt",
+      "size_bytes": 166,
+      "sha256": "9bcbdbe285fd3a024be563cb237751ceb3435d86610e231f08894023321af5d7"
+    },
+    {
+      "path": "tesseract/tessdata/configs/unlv",
+      "size_bytes": 45,
+      "sha256": "1b02e7801de71f0757a26ba6d749e9182a0d9971929966bebb67f99db8733f40"
+    },
+    {
+      "path": "tesseract/tessdata/configs/wordstrbox",
+      "size_bytes": 29,
+      "sha256": "9d1787cdce085ad36dc9d6ba6b2702ac262beaf06a0bb4a0b84355f6458261e5"
+    },
+    {
+      "path": "tesseract/tessdata/tessconfigs/batch",
+      "size_bytes": 49,
+      "sha256": "d91107c3a8c1c311b00c64aee56cbce4d48894c6e5762165f1ec7871c7b7bf4e"
+    },
+    {
+      "path": "tesseract/tessdata/tessconfigs/batch.nochop",
+      "size_bytes": 37,
+      "sha256": "5acabb534cfd4fd8fe111c854955e1ffa9390619ef43775b1a5fbaf5283f68bb"
+    },
+    {
+      "path": "tesseract/tessdata/tessconfigs/matdemo",
+      "size_bytes": 243,
+      "sha256": "d098cdf6ffe691ccc9dfa4490603f6ae33cdd313010cedfa50007ebde3ddd2d0"
+    },
+    {
+      "path": "tesseract/tessdata/tessconfigs/msdemo",
+      "size_bytes": 368,
+      "sha256": "0ed753a05ea60766f4269d81873b6390e937ea2df1758de91c57db7e92429555"
+    },
+    {
+      "path": "tesseract/tessdata/tessconfigs/nobatch",
+      "size_bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "tesseract/tessdata/tessconfigs/segdemo",
+      "size_bytes": 295,
+      "sha256": "7ec19f77f8c76b4dfb33ec8b13e11d7685ae5c9cf6eca4e7333cce0513ddac56"
+    },
+    {
+      "path": "tests/__init__.py",
+      "size_bytes": 34,
+      "sha256": "5fc708023ec7fd1f0e2fe0bfe5167e6551e258140d967f326f6de276db1b4235"
+    },
+    {
+      "path": "tests/test_audio_transcriber.py",
+      "size_bytes": 2400,
+      "sha256": "9633277ed93eef270d70ac198efc4f999a01da6223575cea99e45db38905556a"
+    },
+    {
+      "path": "tests/test_evidence_model.py",
+      "size_bytes": 1844,
+      "sha256": "2a074c8b6ad562d7bd146b132f2dfea0bdd488e5cc5d42f95d039ff5c75c04c2"
+    },
+    {
+      "path": "tests/test_frame_analyzer.py",
+      "size_bytes": 429,
+      "sha256": "a51d15cf8fcad23fd9c2c8723c679142484472cd5e63ad596a98c4ab7eda139a"
+    },
+    {
+      "path": "tests/test_language_registry.py",
+      "size_bytes": 1929,
+      "sha256": "be18c60b1e5e880389e1ebe167433b40f7f6ac3bd4b503f81362f4a02e4bdd93"
+    },
+    {
+      "path": "transcription/audio_transcriber.py",
+      "size_bytes": 5786,
+      "sha256": "5fdb24a12b474ee59fe48bc35d8bb6e13cda7a88c768d3054bc53ff8073eefba"
+    },
+    {
+      "path": "ui/desktop_app.py",
+      "size_bytes": 11826,
+      "sha256": "cf1726be30ff5dd93756ca3e177ad0e10f515bb11c548499c30f6b544c9c868e"
+    },
+    {
+      "path": "ui/index.html",
+      "size_bytes": 14344,
+      "sha256": "b337cd689a278173d03ef1d11ff45375959257b8caaee31f3e2988958822f233"
+    },
+    {
+      "path": "ui/requirements.txt",
+      "size_bytes": 13,
+      "sha256": "1eb8745b764ae1014a48afab62e8ecc6670633caee8191c2fd6882d0a8f00948"
+    },
+    {
+      "path": "ui/run_desktop.bat",
+      "size_bytes": 53,
+      "sha256": "8e3e2ad7be1dae36b61331be4c8cb399cb50579ad4ee8538b48cb8dce796abb2"
+    },
+    {
+      "path": "ui/run_ui.bat",
+      "size_bytes": 73,
+      "sha256": "7445ceebd368349c528df7cb1e55e725ba2711b74ca3a0354d3d681b0a3db399"
+    },
+    {
+      "path": "ui/server.py",
+      "size_bytes": 6274,
+      "sha256": "58ce09edad1d24c6aae12837077d4ebe0bc6b41bc5b3b25c281645be65b56dbf"
+    },
+    {
+      "path": "ui/streamlit_app.py",
+      "size_bytes": 9393,
+      "sha256": "d3bf70f9f17b590fa69ab3c7190c18918428e8ab4c98bfe32d42a6160c3e194b"
+    },
+    {
+      "path": "utils/__init__.py",
+      "size_bytes": 44,
+      "sha256": "ba759d3e10196efe2cf3479770506cb5785c18aaaf774b75029c0102a145a842"
+    },
+    {
+      "path": "utils/banner.py",
+      "size_bytes": 2795,
+      "sha256": "29599df68f74f563fa62a8b1c1bea827e6bedede6d4046311b3d752fed499c81"
+    },
+    {
+      "path": "utils/logger.py",
+      "size_bytes": 1527,
+      "sha256": "b66a46c646552501cb158a227cd7fae3f3fd1afe2077ba0653d383a858247cd8"
+    },
+    {
+      "path": "utils/validator.py",
+      "size_bytes": 2765,
+      "sha256": "8902b0e9596246e37cec32d21a0b0ed539869b6577db977f01b484611b01b122"
+    },
+    {
+      "path": "vision/__init__.py",
+      "size_bytes": 46,
+      "sha256": "fc145c785f8bbce7ad56d04754a7edc88a1e74b089ef718eed0d3a6166d48065"
+    },
+    {
+      "path": "vision/frame_analyzer.py",
+      "size_bytes": 2039,
+      "sha256": "66ae168e40ee49a48aab77f510c6fddcd1e84267f46f825219b8b0b1b15272fd"
+    }
+  ]
+}

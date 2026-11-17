@@ -286,43 +286,22 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
     if ocr_results:
         reconstructed_scripts = script_builder.reconstruct_many(ocr_results, video_name=video_file.stem)
 
-    # If no classes were detected from OCR, create structured script with extracted or candidate code
+    # If no classes were detected from OCR, report cleanly without fabricating synthetic code
     if not reconstructed_scripts:
-        class_name = ClassDetector.clean_class_name(video_file.stem) or "ExtractedController"
-        fallback_lines = [
-            "using System;",
-            "using System.Collections;",
-            "using System.Collections.Generic;",
-            "using UnityEngine;",
-            "",
-            f"public class {class_name} : MonoBehaviour",
-            "{",
-            "    [Header(\"CodeVision Auto-Reconstructed Attributes\")]",
-            "    public bool isInitialized = true;",
-            "    public float executionSpeed = 1.0f;",
-            "",
-            "    void Start()",
-            "    {",
-            f"        Debug.Log(\"{class_name} successfully reconstructed from {video_file.name}\");",
-            "    }",
-            "",
-            "    void Update()",
-            "    {",
-            "        // Real-time loop logic",
-            "    }",
-            "}"
-        ]
+        detector = ClassDetector()
+        class_name = detector.normalize_class_name(video_file.stem) or "ExtractedController"
         if all_candidate_lines:
-            fallback_lines = all_candidate_lines
-
-        reconstructed_scripts = [
-            ReconstructedScript(
-                class_name=class_name,
-                final_lines=fallback_lines,
-                history=[CodeSnapshot(index=1, source_frame="scene_001", lines=fallback_lines)],
-                source_video=video_file.stem
-            )
-        ]
+            reconstructed_scripts = [
+                ReconstructedScript(
+                    class_name=class_name,
+                    final_lines=all_candidate_lines,
+                    history=[CodeSnapshot(index=1, source_frame="scene_001", lines=all_candidate_lines)],
+                    source_video=video_file.stem
+                )
+            ]
+        else:
+            print(f"PROGRESS: 90 | [RECONSTRUCT] لم يتم رصد أسطر شيفرة صالحة للاستخراج في هذا المقطع.", flush=True)
+            reconstructed_scripts = []
 
     # Save reconstructed scripts to Scripts/ and ScriptHistory/
     scripts_map = {}
