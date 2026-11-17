@@ -399,10 +399,17 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="CodeVision Core Video Extraction Pipeline")
-    parser.add_argument("video_path", help="Path to input video file")
-    parser.add_argument("output_dir", help="Path to output directory")
+    parser.add_argument("video_path", nargs="?", default=None, help="Path to input video file")
+    parser.add_argument("output_dir", nargs="?", default=None, help="Path to output directory")
+    parser.add_argument("--video", dest="video_flag", default=None, help="Alternative flag for video path")
+    parser.add_argument("--output-dir", "--output_dir", dest="out_flag", default=None, help="Alternative flag for output directory")
     parser.add_argument("--language", default="C#", help="Target programming language (C#, Python, TypeScript)")
-    parser.add_argument("--sample_sec", type=float, default=2.0, help="Sampling interval in seconds")
+    parser.add_argument("--sample_sec", "--sample-rate", dest="sample_sec", type=float, default=2.0, help="Sampling interval in seconds")
 
     args = parser.parse_args()
-    run_pipeline(args.video_path, args.output_dir, target_lang=args.language, sample_sec=args.sample_sec)
+    v_path = args.video_path or args.video_flag
+    o_dir = args.output_dir or args.out_flag
+    if not v_path or not o_dir:
+        parser.error("Both video_path and output_dir are required.")
+
+    run_pipeline(v_path, o_dir, target_lang=args.language, sample_sec=args.sample_sec)

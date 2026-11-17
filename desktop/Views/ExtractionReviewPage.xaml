@@ -10,9 +10,11 @@
             <RowDefinition Height="Auto"/>
             <!-- 1. Live Algorithm & Telemetry HUD Bar -->
             <RowDefinition Height="Auto"/>
-            <!-- 2. Main Studio Workspace (Video & Vision on Left vs Modular Panels on Right) -->
+            <!-- 2. X-AnyLabeling Auto-Annotation Strip -->
+            <RowDefinition Height="Auto"/>
+            <!-- 3. Main Studio Workspace (Video & Vision on Left vs Modular Panels on Right) -->
             <RowDefinition Height="*"/>
-            <!-- 3. Bottom Detected Scenes Strip -->
+            <!-- 4. Bottom Detected Scenes Strip -->
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -152,8 +154,72 @@
             </Grid>
         </Border>
 
-        <!-- 2. Main Studio Workspace (Real Video & OpenCV on Left vs Multi-Pane Studio on Right) -->
-        <Grid Grid.Row="2" ColumnSpacing="14">
+        <!-- X-AnyLabeling Style Auto-Annotation & Model HUD Strip (Reference Image 1) -->
+        <Border Grid.Row="2"
+                Background="#0D1117"
+                Padding="10,6"
+                CornerRadius="10"
+                BorderThickness="1"
+                BorderBrush="#1E293B"
+                Margin="0,-4,0,4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Mode & Model Selector -->
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Text="Mode:" FontSize="11" FontWeight="Bold" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                    <Border Background="#1A5FD8C4" Padding="6,2" CornerRadius="4">
+                        <TextBlock Text="Auto-Labeling (AI)" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoCyanBrush}"/>
+                    </Border>
+                    <ComboBox SelectedIndex="0" MinWidth="175" Height="30" FontSize="11" VerticalAlignment="Center">
+                        <ComboBoxItem Content="YOLOE-11-S (Code Window)"/>
+                        <ComboBoxItem Content="OpenCV Canny Edge ROI"/>
+                        <ComboBoxItem Content="Dark-Theme Luma Inverter"/>
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- Confidence Threshold Slider -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="14,0,0,0">
+                    <TextBlock Text="Confidence:" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                    <Slider Value="25" Minimum="5" Maximum="95" Width="70" VerticalAlignment="Center"/>
+                    <Border Background="#1A38BDF8" Padding="4,2" CornerRadius="4">
+                        <TextBlock Text="0.25" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoBlueBrush}"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- IoU Slider -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="14,0,0,0">
+                    <TextBlock Text="IoU:" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}" VerticalAlignment="Center"/>
+                    <Slider Value="70" Minimum="10" Maximum="90" Width="70" VerticalAlignment="Center"/>
+                    <Border Background="#1AA78BFA" Padding="4,2" CornerRadius="4">
+                        <TextBlock Text="0.70" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoPurpleBrush}"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Annotation Quick Actions -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="14,0,0,0">
+                    <Border Background="#1A00E676" Padding="8,4" CornerRadius="5" BorderThickness="1" BorderBrush="{ThemeResource HalvoEmeraldBrush}">
+                        <TextBlock Text="+Rect (R)" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                    </Border>
+                    <Border Background="#1AFF5252" Padding="8,4" CornerRadius="5" BorderThickness="1" BorderBrush="{ThemeResource HalvoRoseBrush}">
+                        <TextBlock Text="Clear (B)" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoRoseBrush}"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Keyboard Shortcuts Reference -->
+                <TextBlock Grid.Column="5" Text="اختصارات: Auto(Ctrl+B) · Next(D) · Prev(A) · Rect(R) · Poly(P)" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}" Opacity="0.75" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- 3. Main Studio Workspace (Real Video & OpenCV on Left vs Multi-Pane Studio on Right) -->
+        <Grid Grid.Row="3" ColumnSpacing="14">
             <Grid.ColumnDefinitions>
                 <!-- Real Video Player & OpenCV Simulation View -->
                 <ColumnDefinition Width="1.3*"/>
@@ -508,8 +574,8 @@
             </Border>
         </Grid>
 
-        <!-- 3. Bottom Scenes Strip (شريط المشاهد المكتشفة) -->
-        <Border Grid.Row="3"
+        <!-- 4. Bottom Scenes Strip (شريط المشاهد المكتشفة) -->
+        <Border Grid.Row="4"
                 Background="{ThemeResource HalvoCardGlassBrush}"
                 Padding="12,8"
                 CornerRadius="14"

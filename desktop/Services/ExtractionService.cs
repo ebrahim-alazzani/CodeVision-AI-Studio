@@ -45,7 +45,7 @@ public sealed class ExtractionService
             _logger.Info($"Running Real Video Pipeline for '{video.FileName}' using script '{scriptPath}'");
 
             var safeLang = string.IsNullOrWhiteSpace(video.DetectedLanguage) ? "C#" : video.DetectedLanguage;
-            var cliArgs = $"--video \"{video.FilePath}\" --output-dir \"{outRoot}\" --language \"{safeLang}\" --sample-rate 2.0";
+            var cliArgs = $"\"{video.FilePath}\" \"{outRoot}\" --language \"{safeLang}\" --sample_sec 2.0";
 
             var exitCode = await _python.RunScriptAsync(scriptPath, cliArgs, line =>
             {

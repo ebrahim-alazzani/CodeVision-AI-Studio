@@ -13,4 +13,6 @@ public sealed class ModelInfo
     public string WeightsPath { get; set; } = string.Empty;
     public string CreatedDate { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
     public bool IsActiveInRuntime { get; set; }
+    public bool IsSimulated { get; set; } = false;
+    public string StatusLabel => IsSimulated ? "نموذج تجريبي (محاكاة)" : "نموذج مدرّب فعلياً";
 }
