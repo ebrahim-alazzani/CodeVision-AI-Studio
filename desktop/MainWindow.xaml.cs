@@ -38,6 +38,16 @@ public sealed partial class MainWindow : Window
 
         // Navigate to Dashboard initially
         NavigateToPage("dashboard");
+
+        if (Environment.GetCommandLineArgs().Any(a => a.Equals("--capture-screenshots", StringComparison.OrdinalIgnoreCase)))
+        {
+            this.DispatcherQueue.TryEnqueue(async () =>
+            {
+                await Task.Delay(2000);
+                await CaptureAllScreenshotsAsync();
+                Environment.Exit(0);
+            });
+        }
     }
 
     private void SetupTitleBar()
@@ -255,5 +265,91 @@ public sealed partial class MainWindow : Window
         UpdateTitleBarTheme(isDark);
 
         ThemeToggleBtn.Content = isDark ? "☀" : "◐";
+    }
+
+    private async void BtnCaptureScreenshots_Click(object sender, RoutedEventArgs e)
+    {
+        BtnCaptureScreenshots.IsEnabled = false;
+        try
+        {
+            var count = await CaptureAllScreenshotsAsync();
+            var dialog = new ContentDialog
+            {
+                XamlRoot = this.Content.XamlRoot,
+                Title = "✓ تم التقاط لقطات الواجهات الحية",
+                Content = $"تم التقاط {count} لقطات حية للواجهات وحفظها بنجاح في:\nE:\\New folder (3)\\CodeVisionPhase1\\docs\\images",
+                CloseButtonText = "إغلاق"
+            };
+            await dialog.ShowAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex);
+        }
+        finally
+        {
+            BtnCaptureScreenshots.IsEnabled = true;
+        }
+    }
+
+    public async Task<int> CaptureAllScreenshotsAsync()
+    {
+        var targetDir = @"E:\New folder (3)\CodeVisionPhase1\docs\images";
+        System.IO.Directory.CreateDirectory(targetDir);
+
+        var pages = new[]
+        {
+            ("dashboard", "live_ui_dashboard.png"),
+            ("review", "live_ui_simulation.png"),
+            ("reconstruct", "live_ui_reconstruction.png"),
+            ("training", "live_ui_training.png"),
+            ("models", "live_ui_models.png")
+        };
+
+        int count = 0;
+        foreach (var (tag, fileName) in pages)
+        {
+            NavigateToPage(tag);
+            await Task.Delay(1200);
+
+            try
+            {
+                var rtb = new RenderTargetBitmap();
+                await rtb.RenderAsync(this.Content);
+                var pixelBuffer = await rtb.GetPixelsAsync();
+                var width = (uint)rtb.PixelWidth;
+                var height = (uint)rtb.PixelHeight;
+
+                if (width > 0 && height > 0)
+                {
+                    var outPath = System.IO.Path.Combine(targetDir, fileName);
+                    using var fs = new System.IO.FileStream(outPath, System.IO.FileMode.Create);
+                    var ras = System.IO.WindowsRuntimeStreamExtensions.AsRandomAccessStream(fs);
+                    var encoder = await Windows.Graphics.Imaging.BitmapEncoder.CreateAsync(Windows.Graphics.Imaging.BitmapEncoder.PngEncoderId, ras);
+                    
+                    var reader = Windows.Storage.Streams.DataReader.FromBuffer(pixelBuffer);
+                    var bytes = new byte[pixelBuffer.Length];
+                    reader.ReadBytes(bytes);
+
+                    encoder.SetPixelData(
+                        Windows.Graphics.Imaging.BitmapPixelFormat.Bgra8,
+                        Windows.Graphics.Imaging.BitmapAlphaMode.Premultiplied,
+                        width,
+                        height,
+                        96,
+                        96,
+                        bytes);
+                    await encoder.FlushAsync();
+                    count++;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error capturing {tag}: {ex.Message}");
+            }
+        }
+
+        NavigateToPage("dashboard");
+        return count;
     }
 }

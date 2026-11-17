@@ -28,21 +28,25 @@
 
 ---
 
-## 📸 معارض وواجهات الاستوديو (Studio Previews)
+## 📸 معارض وواجهات الاستوديو أثناء التشغيل الحي (Live App Screenshots)
 
 <div align="center">
 
 ### 1. استوديو المحاكاة والتتبع البصري اللحظي (OpenCV Real-time Simulation Studio)
-<img src="docs/images/studio_simulation_preview.jpg" alt="Simulation Studio Preview" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
+<img src="docs/images/live_ui_simulation.png" alt="Simulation Studio Live" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
 <p><i>متابعة رصد OpenCV لمنطقة الكود مع الإطار المتوهج (Glowing Bounding Box)، المسار الصوتي، السجل الحي، وتفريغ Faster-Whisper.</i></p>
 
 ### 2. استوديو إعادة بناء وهندسة المشروع وتصديره (Project Architecture & Export Studio)
-<img src="docs/images/project_reconstruction_preview.png" alt="Project Reconstruction Preview" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
+<img src="docs/images/live_ui_reconstruction.png" alt="Project Reconstruction Live" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
 <p><i>شجرة ملفات المشروع المتكاملة، الترتيب الزمني للأدلة، معاينة وتحرير الأكواد، وتصدير حل فيجوال ستوديو (.sln / .csproj).</i></p>
 
 ### 3. لوحة التحكم والعمليات المجمعة (Dashboard & Batch Engine)
-<img src="docs/images/dashboard_preview.png" alt="Dashboard Preview" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
+<img src="docs/images/live_ui_dashboard.png" alt="Dashboard Live" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
 <p><i>إحصائيات المعالجة ومؤشرات الأداء ومراقبة تقدم التحليل المتوازي.</i></p>
+
+### 4. مختبر التدريب والبيانات (Training Lab & Vision Datasets)
+<img src="docs/images/live_ui_training.png" alt="Training Lab Live" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
+<p><i>إدارة حزم التدريب ومتابعة تدريب وتدقيق نماذج التعرف البصري OCR وROI.</i></p>
 
 </div>
 
