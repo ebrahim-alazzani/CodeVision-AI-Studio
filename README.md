@@ -2,6 +2,8 @@
 
 <div align="center">
 
+<img src="docs/images/codevision_hero_banner.jpg" alt="CodeVision Studio Banner" width="100%" style="border-radius: 12px; margin-bottom: 16px;" />
+
 ![CodeVision Studio](https://img.shields.io/badge/Platform-Windows_10%2F11-blue?style=for-the-badge&logo=windows)
 ![.NET 9](https://img.shields.io/badge/.NET-9.0_WinUI_3-purple?style=for-the-badge&logo=dotnet)
 ![Python 3.13](https://img.shields.io/badge/Python-3.13_Core-3776AB?style=for-the-badge&logo=python)
@@ -23,6 +25,26 @@
 **CodeVision Studio** هو منصة سطح مكتب متقدمة مبنية باستخدام **WinUI 3 و .NET 9**، متصلة بمحرك بايثون هجين فائق الأداء يعتمد على تقنيات الرؤية الحاسوبية (**OpenCV**) واستخراج النصوص (**Tesseract 5.4.0 AVX2**) ومعالجة الصوتيات وتفريغ الكلام اللحظي (**FFmpeg & Faster-Whisper**).
 
 يتفوق التطبيق في استخراج وتتبع الأكواد البرمجية من الفيديوهات التعليمية (مثل دورات تطوير الألعاب Unity C# وتطبيقات Python) وتحويل المشاهد المصورة إلى **مشروع برمجي حقيقي متكامل** يحتوي على ملفات الحل (`.sln`)، وملفات المشروع (`.csproj`)، وهيكلية مجلدات نظيفة ومطابقة لأفضل الممارسات المعمارية.
+
+---
+
+## 📸 معارض وواجهات الاستوديو (Studio Previews)
+
+<div align="center">
+
+### 1. استوديو المحاكاة والتتبع البصري اللحظي (OpenCV Real-time Simulation Studio)
+<img src="docs/images/studio_simulation_preview.jpg" alt="Simulation Studio Preview" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
+<p><i>متابعة رصد OpenCV لمنطقة الكود مع الإطار المتوهج (Glowing Bounding Box)، المسار الصوتي، السجل الحي، وتفريغ Faster-Whisper.</i></p>
+
+### 2. استوديو إعادة بناء وهندسة المشروع وتصديره (Project Architecture & Export Studio)
+<img src="docs/images/project_reconstruction_preview.png" alt="Project Reconstruction Preview" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
+<p><i>شجرة ملفات المشروع المتكاملة، الترتيب الزمني للأدلة، معاينة وتحرير الأكواد، وتصدير حل فيجوال ستوديو (.sln / .csproj).</i></p>
+
+### 3. لوحة التحكم والعمليات المجمعة (Dashboard & Batch Engine)
+<img src="docs/images/dashboard_preview.png" alt="Dashboard Preview" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
+<p><i>إحصائيات المعالجة ومؤشرات الأداء ومراقبة تقدم التحليل المتوازي.</i></p>
+
+</div>
 
 ---
 
