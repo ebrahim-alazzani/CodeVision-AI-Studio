@@ -91,7 +91,7 @@ def launch_app(app: str) -> dict:
     except Exception:
         pass
 
-    pyautogui.moveTo(glide_x, glide_y, duration=0.4, tween=pyautogui.easeInOutQuad)
+    pyautogui.moveTo(glide_x, glide_y, duration=0.15, tween=pyautogui.easeInOutQuad)
 
     # 2. Launch the application reliably
     try:
@@ -99,18 +99,18 @@ def launch_app(app: str) -> dict:
             subprocess.Popen(cmd, shell=True)
         else:
             subprocess.Popen([cmd], shell=True)
-        time.sleep(1.5)
+        time.sleep(0.8)
 
         # If launching Chrome or Browser: ensure focus and bypass profile chooser if present
         if app_key in ("chrome", "browser"):
             # Press enter in case Chrome opened profile selection
             pyautogui.press("enter")
-            time.sleep(0.8)
+            time.sleep(0.4)
             # Click near address bar location to guarantee focus for subsequent typing
             addr_x = screen_w // 2
             addr_y = 82
             pyautogui.click(addr_x, addr_y)
-            time.sleep(0.3)
+            time.sleep(0.15)
 
         return {"status": "success", "action": "launch_app", "app": app_key}
     except Exception as e:
@@ -118,11 +118,11 @@ def launch_app(app: str) -> dict:
 
 
 def click(x: int, y: int, button: str = "left") -> dict:
-    """Clicks at screen coordinate (x, y) with visible mouse glide and ripple."""
+    """Clicks at screen coordinate (x, y) with fast, responsive mouse glide and ripple."""
     target_x, target_y = scale_coordinates(x, y)
 
-    # Visually glide mouse to the target coordinate
-    pyautogui.moveTo(target_x, target_y, duration=0.4, tween=pyautogui.easeInOutQuad)
+    # Fast smooth glide mouse to target
+    pyautogui.moveTo(target_x, target_y, duration=0.12, tween=pyautogui.easeInOutQuad)
 
     # Trigger visual HUD click ripple
     try:
@@ -136,9 +136,9 @@ def click(x: int, y: int, button: str = "left") -> dict:
 
 
 def double_click(x: int, y: int) -> dict:
-    """Double clicks at screen coordinate (x, y) with visible mouse glide."""
+    """Double clicks at screen coordinate (x, y) with fast mouse glide."""
     target_x, target_y = scale_coordinates(x, y)
-    pyautogui.moveTo(target_x, target_y, duration=0.4, tween=pyautogui.easeInOutQuad)
+    pyautogui.moveTo(target_x, target_y, duration=0.12, tween=pyautogui.easeInOutQuad)
     try:
         from overlay import get_overlay
         get_overlay().show_click(target_x, target_y)
@@ -154,40 +154,36 @@ def right_click(x: int, y: int) -> dict:
 
 
 def move_to(x: int, y: int) -> dict:
-    """Moves mouse smoothly to coordinate (x, y)."""
+    """Moves mouse swiftly to coordinate (x, y)."""
     target_x, target_y = scale_coordinates(x, y)
-    pyautogui.moveTo(target_x, target_y, duration=0.2)
+    pyautogui.moveTo(target_x, target_y, duration=0.08)
     return {"status": "success", "action": "move_to", "x": target_x, "y": target_y}
 
 
 def type_text(text: str) -> dict:
     """
-    Types text into the active focused field.
-    Uses pyautogui.typewrite for ASCII text (required for Windows 11 Start Menu & Run dialog),
-    and clipboard paste for Arabic / Unicode characters.
+    Types text instantly into the active focused field using clipboard paste,
+    with ultra-fast typewrite fallback.
     """
     text_str = str(text)
-    is_ascii = all(ord(c) < 128 for c in text_str)
 
-    if is_ascii:
-        try:
-            # Direct keystrokes so Windows 11 Start Menu accepts input
-            pyautogui.typewrite(text_str, interval=0.03)
-            return {"status": "success", "action": "type_text", "method": "typewrite", "text": text_str}
-        except Exception:
-            pass
-
-    # Clipboard paste for Arabic or non-ASCII unicode
+    # 1. Instant Clipboard Paste (Super fast & works for Arabic + English + Symbols)
     try:
         import pyperclip
         pyperclip.copy(text_str)
-        time.sleep(0.1)
+        time.sleep(0.04)
         pyautogui.hotkey("ctrl", "v")
-        time.sleep(0.3)
-        return {"status": "success", "action": "type_text", "method": "clipboard", "text": text_str}
+        time.sleep(0.08)
+        return {"status": "success", "action": "type_text", "method": "instant_clipboard", "text": text_str}
+    except Exception:
+        pass
+
+    # 2. Fast direct keystrokes fallback
+    try:
+        pyautogui.typewrite(text_str, interval=0.005)
+        return {"status": "success", "action": "type_text", "method": "fast_typewrite", "text": text_str}
     except Exception as e:
-        pyautogui.typewrite(text_str, interval=0.03)
-        return {"status": "success", "action": "type_text", "method": "fallback", "text": text_str}
+        return {"status": "failed", "action": "type_text", "error": str(e)}
 
 
 def press_key(key: str) -> dict:

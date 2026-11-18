@@ -1,11 +1,12 @@
 """
-CyberPro AI - Dual-Pane Studio & Chat Operations Center v3.5
+CyberPro AI - Dual-Pane Studio & Chat Operations Center v4.0
 ===========================================================
 Professional Cyberpunk Desktop Control Center with:
-1. Left Pane:  Interactive Multimodal AI Chat (Text, File Attachments, Voice Notes)
+1. Left Pane:  Modern Chat App with Left/Right Message Bubbles (User on Right, AI on Left)
 2. Right Pane: Live Operations Telemetry, AI Reasoning Stream & Steps Feed
-3. Physical Agency: Visible cursor glides, target ripples, and Chrome bypass
-4. Auto-Pilot: Automatic initialization and welcoming on startup
+3. Speech Recognition: Whisper 'small' with Native Arabic language enforcement
+4. Speed: Turbo-fast mouse glide, instant clipboard typing in Notepad, snappy loop
+5. Voice: Natural speech synthesis in Arabic and English (Edge-TTS / SAPI5)
 """
 
 import sys
@@ -13,6 +14,7 @@ import os
 import time
 import json
 import threading
+import datetime
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import numpy as np
@@ -40,13 +42,13 @@ PRESETS = [
 class CyberProDualStudio:
     def __init__(self, root):
         self.root = root
-        self.root.title("🛡️ CyberPro AI - Dual-Pane Studio v3.5")
+        self.root.title("🛡️ CyberPro AI - Dual-Pane Studio v4.0")
 
         screen_w, screen_h = pyautogui.size()
-        win_w = min(1060, screen_w - 60)
-        win_h = min(680, screen_h - 90)
-        win_x = 30
-        win_y = 40
+        win_w = min(1120, screen_w - 50)
+        win_h = min(720, screen_h - 80)
+        win_x = 25
+        win_y = 35
         self.root.geometry(f"{win_w}x{win_h}+{win_x}+{win_y}")
         self.root.configure(bg="#040814")
         self.root.attributes("-topmost", False)
@@ -60,13 +62,14 @@ class CyberProDualStudio:
         self.is_recording = False
         self.audio_frames = []
         self.record_stream = None
+        self.speech_lang = "ar"  # Default to Arabic speech recognition
 
         self._init_theme()
         self._build_topbar()
         self._build_panes()
 
         # Auto-pilot initial greeting on startup
-        self.root.after(400, self._on_startup)
+        self.root.after(350, self._on_startup)
 
     def _init_theme(self):
         self.c_bg = "#040814"
@@ -81,6 +84,11 @@ class CyberProDualStudio:
         self.c_text = "#e0f7fa"
         self.c_dim = "#78909c"
         self.c_border = "#0d2847"
+
+        # Chat Bubble Colors
+        self.c_user_bubble = "#0b3954"
+        self.c_ai_bubble = "#071d36"
+        self.c_ai_border = "#133863"
 
     def _build_topbar(self):
         topbar = tk.Frame(self.root, bg=self.c_header, height=48, bd=1, relief="solid")
@@ -100,7 +108,7 @@ class CyberProDualStudio:
 
         title = tk.Label(
             left,
-            text=" DUAL STUDIO v3.5 (MULTIMODAL)",
+            text=" DUAL STUDIO v4.0",
             fg=self.c_cyan,
             bg=self.c_header,
             font=("Segoe UI", 9, "bold")
@@ -110,6 +118,7 @@ class CyberProDualStudio:
         right = tk.Frame(topbar, bg=self.c_header)
         right.pack(side="right", padx=14)
 
+        # Voice Speaker Toggle Button
         self.tts_btn = tk.Button(
             right,
             text="🔊 الصوت: مفعّل",
@@ -123,8 +132,25 @@ class CyberProDualStudio:
             pady=3,
             command=self.toggle_tts
         )
-        self.tts_btn.pack(side="left", padx=8)
+        self.tts_btn.pack(side="left", padx=6)
 
+        # Speech Recognition Language Toggle
+        self.lang_btn = tk.Button(
+            right,
+            text="🌐 التعرف: عربي (AR)",
+            fg=self.c_green,
+            bg="#0e284d",
+            activebackground=self.c_green,
+            activeforeground="#040812",
+            font=("Segoe UI", 8, "bold"),
+            bd=0,
+            padx=8,
+            pady=3,
+            command=self.toggle_speech_lang
+        )
+        self.lang_btn.pack(side="left", padx=6)
+
+        # Engine Status Box
         status_box = tk.Frame(right, bg="#0d2542", bd=1)
         status_box.pack(side="right", pady=8)
 
@@ -133,7 +159,7 @@ class CyberProDualStudio:
 
         self.engine_name = tk.Label(
             status_box,
-            text=f"LOCAL ENGINE: {OLLAMA_MODEL.upper()} ",
+            text=f"LOCAL QWEN ENGINE ",
             fg="#e0f7fa",
             bg="#0d2542",
             font=("Segoe UI", 8, "bold")
@@ -145,7 +171,7 @@ class CyberProDualStudio:
         main_container.pack(fill="both", expand=True, padx=12, pady=10)
 
         # ----------------------------------------------------
-        # 💬 LEFT PANE: Multimodal Chat & Mission Controller
+        # 💬 LEFT PANE: Modern Chat App (Left/Right Bubbles)
         # ----------------------------------------------------
         left_pane = tk.Frame(main_container, bg=self.c_card, bd=1, relief="solid")
         left_pane.pack(side="left", fill="both", expand=True, padx=(0, 6))
@@ -155,7 +181,7 @@ class CyberProDualStudio:
 
         tk.Label(
             pane_header_left,
-            text="💬 AI CHAT & MULTIMODAL CONTROLLER",
+            text="💬 AI CHAT & MISSION CONTROLLER",
             fg=self.c_cyan,
             bg="#0a1d38",
             font=("Segoe UI", 9, "bold")
@@ -209,33 +235,22 @@ class CyberProDualStudio:
             )
             btn.pack(side="left", padx=2, expand=True, fill="x")
 
-        # Chat Stream Area
+        # Scrollable Chat Bubbles Container
         chat_box = tk.Frame(left_pane, bg=self.c_terminal)
         chat_box.pack(fill="both", expand=True, padx=10, pady=6)
 
-        self.chat_text = tk.Text(
-            chat_box,
-            fg=self.c_text,
-            bg=self.c_terminal,
-            insertbackground=self.c_cyan,
-            font=("Segoe UI", 9),
-            bd=0,
-            padx=10,
-            pady=10,
-            wrap="word"
-        )
-        self.chat_text.pack(side="left", fill="both", expand=True)
+        self.chat_canvas = tk.Canvas(chat_box, bg=self.c_terminal, bd=0, highlightthickness=0)
+        chat_scroll = tk.Scrollbar(chat_box, orient="vertical", command=self.chat_canvas.yview)
+        self.chat_canvas.configure(yscrollcommand=chat_scroll.set)
 
-        chat_scroll = tk.Scrollbar(chat_box, command=self.chat_text.yview)
+        self.chat_inner = tk.Frame(self.chat_canvas, bg=self.c_terminal)
+        self.chat_canvas_window = self.chat_canvas.create_window((0, 0), window=self.chat_inner, anchor="nw")
+
+        self.chat_canvas.pack(side="left", fill="both", expand=True)
         chat_scroll.pack(side="right", fill="y")
-        self.chat_text.config(yscrollcommand=chat_scroll.set)
 
-        self.chat_text.tag_config("user_msg", foreground=self.c_cyan, font=("Segoe UI", 9, "bold"))
-        self.chat_text.tag_config("ai_msg", foreground="#ffffff", font=("Segoe UI", 9))
-        self.chat_text.tag_config("sys_msg", foreground=self.c_dim, font=("Segoe UI", 8, "italic"))
-        self.chat_text.tag_config("success", foreground=self.c_green, font=("Segoe UI", 9, "bold"))
-        self.chat_text.tag_config("attach_msg", foreground=self.c_purple, font=("Segoe UI", 8, "bold"))
-        self.chat_text.tag_config("welcome", foreground=self.c_yellow, font=("Segoe UI", 9))
+        self.chat_inner.bind("<Configure>", lambda e: self._on_chat_configure())
+        self.chat_canvas.bind("<Configure>", lambda e: self.chat_canvas.itemconfig(self.chat_canvas_window, width=e.width))
 
         # Attached File Chip Bar
         self.attach_bar = tk.Frame(left_pane, bg="#0d2542")
@@ -299,7 +314,7 @@ class CyberProDualStudio:
             relief="solid"
         )
         self.user_input.pack(side="left", fill="x", expand=True, padx=(0, 6), ipady=4)
-        self.user_input.insert(0, "open chrome and search for cyberpro ai agent")
+        self.user_input.insert(0, "open notepad and type Hello CyberPro!")
         self.user_input.bind("<Return>", lambda e: self.on_send())
 
         # ⚡ Send Button
@@ -349,7 +364,7 @@ class CyberProDualStudio:
 
         self.live_thought_lbl = tk.Label(
             thought_card,
-            text="المساعد مستعد لتلقي المهمة وتنفيذها على سطح المكتب...",
+            text="المساعد مستعد لتلقي المهمة وتنفيذها بسرعة فائقة على سطح المكتب...",
             fg="#ffffff",
             bg="#0b1e3b",
             font=("Segoe UI", 9),
@@ -406,24 +421,124 @@ class CyberProDualStudio:
         )
         self.stop_btn.pack(side="right", padx=8, pady=4)
 
+    def _on_chat_configure(self):
+        self.chat_canvas.configure(scrollregion=self.chat_canvas.bbox("all"))
+        self.chat_canvas.yview_moveto(1.0)
+
+    # ----------------------------------------------------
+    # 💬 Modern Chat Bubbles Rendering (Left AI, Right User)
+    # ----------------------------------------------------
+    def add_user_bubble(self, message: str, attachment: str = None):
+        """Renders user message bubble on the RIGHT side with User Avatar."""
+        row = tk.Frame(self.chat_inner, bg=self.c_terminal)
+        row.pack(fill="x", pady=5, padx=8)
+
+        card = tk.Frame(row, bg=self.c_user_bubble, bd=1, relief="solid")
+        card.pack(side="right", anchor="e", padx=(40, 4))
+
+        # Header with user avatar on the right
+        header = tk.Frame(card, bg=self.c_user_bubble)
+        header.pack(fill="x", padx=8, pady=(4, 2))
+
+        time_str = datetime.datetime.now().strftime("%H:%M")
+        tk.Label(header, text=time_str, fg=self.c_dim, bg=self.c_user_bubble, font=("Segoe UI", 7)).pack(side="left")
+        tk.Label(header, text="👤 أنت (المشغل)", fg=self.c_cyan, bg=self.c_user_bubble, font=("Segoe UI", 8, "bold")).pack(side="right")
+
+        # Attachment badge if present
+        if attachment:
+            fname = os.path.basename(attachment)
+            att_box = tk.Frame(card, bg="#082338", padx=6, pady=2)
+            att_box.pack(fill="x", padx=8, pady=2)
+            tk.Label(att_box, text=f"📎 {fname}", fg=self.c_purple, bg="#082338", font=("Segoe UI", 8, "bold")).pack(side="left")
+
+        # Message Text
+        msg_lbl = tk.Label(
+            card,
+            text=message,
+            fg="#ffffff",
+            bg=self.c_user_bubble,
+            font=("Segoe UI", 9, "bold"),
+            wraplength=380,
+            justify="right"
+        )
+        msg_lbl.pack(padx=8, pady=(2, 6), anchor="e")
+
+        self.root.after(10, self._on_chat_configure)
+
+    def add_ai_bubble(self, message: str, step_info: str = None):
+        """Renders AI message bubble on the LEFT side with Agent Avatar."""
+        row = tk.Frame(self.chat_inner, bg=self.c_terminal)
+        row.pack(fill="x", pady=5, padx=8)
+
+        card = tk.Frame(row, bg=self.c_ai_bubble, bd=1, relief="solid", highlightbackground=self.c_ai_border, highlightthickness=1)
+        card.pack(side="left", anchor="w", padx=(4, 40))
+
+        # Header with AI avatar on the left
+        header = tk.Frame(card, bg=self.c_ai_bubble)
+        header.pack(fill="x", padx=8, pady=(4, 2))
+
+        tk.Label(header, text="🛡️ CYBERPRO AI", fg=self.c_green, bg=self.c_ai_bubble, font=("Segoe UI", 8, "bold")).pack(side="left")
+        time_str = datetime.datetime.now().strftime("%H:%M")
+        tk.Label(header, text=time_str, fg=self.c_dim, bg=self.c_ai_bubble, font=("Segoe UI", 7)).pack(side="right")
+
+        # Step tag if present
+        if step_info:
+            step_box = tk.Frame(card, bg="#041224", padx=6, pady=2)
+            step_box.pack(fill="x", padx=8, pady=2)
+            tk.Label(step_box, text=step_info, fg=self.c_yellow, bg="#041224", font=("Segoe UI", 8)).pack(side="left")
+
+        # Message Text
+        msg_lbl = tk.Label(
+            card,
+            text=message,
+            fg=self.c_text,
+            bg=self.c_ai_bubble,
+            font=("Segoe UI", 9),
+            wraplength=380,
+            justify="left"
+        )
+        msg_lbl.pack(padx=8, pady=(2, 6), anchor="w")
+
+        self.root.after(10, self._on_chat_configure)
+
+    def add_system_pill(self, text: str, color: str = None):
+        """Renders centered system pill."""
+        row = tk.Frame(self.chat_inner, bg=self.c_terminal)
+        row.pack(fill="x", pady=4)
+
+        pill = tk.Frame(row, bg="#061224", bd=1, relief="solid")
+        pill.pack(anchor="center")
+
+        tk.Label(
+            pill,
+            text=text,
+            fg=color or self.c_dim,
+            bg="#061224",
+            font=("Segoe UI", 8),
+            padx=8,
+            pady=2
+        ).pack()
+
+        self.root.after(10, self._on_chat_configure)
+
     # ----------------------------------------------------
     # 🚀 Auto-Pilot Startup & Greetings
     # ----------------------------------------------------
     def _on_startup(self):
-        welcome_banner = (
-            "╔══════════════════════════════════════════════════════════════╗\n"
-            "║    🛡️ مرحباً بك في CyberPro AI - Dual Studio v3.5!           ║\n"
-            "║    ─────────────────────────────────────────────────────      ║\n"
-            "║    ● المحرك المحلي: Qwen 2.5 Coder متصل عبر Ollama           ║\n"
-            "║    ● الرد الصوتي (TTS): يتحدث معك بالصوت باللغتين            ║\n"
-            "║    ● التفريغ الصوتي: Faster-Whisper جاهز للتسجيل الصوتي      ║\n"
-            "║    ● الأدوات: الأوامر النصية، إرفاق الملفات، والتنقل الذكي   ║\n"
-            "╚══════════════════════════════════════════════════════════════╝\n"
+        self.add_system_pill("⚡ تم الاتصال بالمحرك المحلي Qwen 2.5 Coder بنجاح", self.c_green)
+        welcome_text = (
+            "مرحباً بك! أنا وكيلك الذكي CyberPro AI v4.0.\n"
+            "• المحرك: Qwen 2.5 Coder يعمل محلياً بدون إنترنت.\n"
+            "• التعرف الصوتي: Faster-Whisper باللغة العربية.\n"
+            "• النطق الصوتي: متحدث صوتي مدمج باللغتين.\n"
+            "• السرعة: كتابة فورية وحركة ماوس متطورة وسريعة."
         )
-        self._append_chat("welcome", welcome_banner)
-        self._append_chat("sys_msg", "✨ النظام في وضع الاستعداد الكامل (Ready) - يمكنك الضغط على مهمة سريعة أو البدء فوراً.")
-        speak("مرحباً بك! أنا وكيلك الذكي CyberPro AI، متصل ومستعد لتنفيذ أوامرك على سطح المكتب.")
+        self.add_ai_bubble(welcome_text)
+        speak("مرحباً بك! أنا وكيلك الذكي CyberPro AI، متصل ومستعد لتنفيذ أوامرك بسرعة فائقة.")
 
+    # ----------------------------------------------------
+    # 🔊 TTS & Speech Language Toggles
+    # ----------------------------------------------------
     def toggle_tts(self):
         curr = is_voice_enabled()
         set_voice_enabled(not curr)
@@ -432,6 +547,16 @@ class CyberProDualStudio:
             speak("تم تفعيل الصوت.")
         else:
             self.tts_btn.config(text="🔇 الصوت: مكتوم", fg=self.c_dim)
+
+    def toggle_speech_lang(self):
+        if self.speech_lang == "ar":
+            self.speech_lang = "auto"
+            self.lang_btn.config(text="🌐 التعرف: تلقائي (Auto)", fg=self.c_yellow)
+            self.add_system_pill("🌐 تم ضبط التعرف الصوتي على: تلقائي متعدد اللغات")
+        else:
+            self.speech_lang = "ar"
+            self.lang_btn.config(text="🌐 التعرف: عربي (AR)", fg=self.c_green)
+            self.add_system_pill("🌐 تم تثبيت التعرف الصوتي على: اللغة العربية")
 
     # ----------------------------------------------------
     # 📎 File Attachment Handler
@@ -447,14 +572,14 @@ class CyberProDualStudio:
             fsize_kb = os.path.getsize(fp) // 1024
             self.attach_lbl.config(text=f"📎 المرفق النشط: {fname} ({fsize_kb} KB)")
             self.attach_bar.pack(fill="x", padx=10, pady=(0, 4), before=self.user_input.master.master)
-            self._append_chat("attach_msg", f"📎 تم إرفاق الملف: {fname} ({fp})")
+            self.add_system_pill(f"📎 تم إرفاق الملف: {fname}", self.c_purple)
 
     def remove_attachment(self):
         self.attached_file = None
         self.attach_bar.pack_forget()
 
     # ----------------------------------------------------
-    # 🎙️ Voice Recording & Faster-Whisper Transcription
+    # 🎙️ Voice Recording & Faster-Whisper (Arabic-Optimized)
     # ----------------------------------------------------
     def toggle_voice_record(self):
         if not self.is_recording:
@@ -476,7 +601,7 @@ class CyberProDualStudio:
 
             self.record_stream = sd.InputStream(samplerate=16000, channels=1, dtype='float32', callback=audio_callback)
             self.record_stream.start()
-            self._append_chat("sys_msg", "🎙️ بدأ تسجيل الصوت... تحدث الآن بأمرك وسيقوم Whisper بتفريغه.")
+            self.add_system_pill("🎙️ بدأ تسجيل الصوت... تحدث الآن باللغة العربية بوضوح", self.c_cyan)
         except Exception as e:
             messagebox.showwarning("Voice Recording", f"تعذر فتح الميكروفون: {e}")
             self.is_recording = False
@@ -496,43 +621,50 @@ class CyberProDualStudio:
         if not self.audio_frames:
             return
 
-        self._append_chat("sys_msg", "⏳ جارٍ معالجة الصوت وتفريغه بواسطة Faster-Whisper...")
-
-        # Transcribe in a thread to keep GUI responsive
+        self.add_system_pill("⏳ جارٍ معالجة الصوت باللغة العربية بواسطة Whisper...", self.c_yellow)
         threading.Thread(target=self._transcribe_audio_thread, daemon=True).start()
 
     def _transcribe_audio_thread(self):
         try:
             audio_data = np.concatenate(self.audio_frames, axis=0).flatten()
             if len(audio_data) < 8000:
-                self.root.after(0, lambda: self._append_chat("sys_msg", "⚠️ مدة التسجيل قصيرة جداً."))
+                self.root.after(0, lambda: self.add_system_pill("⚠️ مدة التسجيل قصيرة جداً.", self.c_yellow))
                 return
 
             from faster_whisper import WhisperModel
-            model = WhisperModel("tiny", device="cpu", compute_type="int8")
-            segments, info = model.transcribe(audio_data, vad_filter=True)
+            # Prefer locally cached 'small' model for superior Arabic recognition
+            try:
+                model = WhisperModel("small", device="cpu", compute_type="int8", local_files_only=True)
+            except Exception:
+                model = WhisperModel("tiny", device="cpu", compute_type="int8")
+
+            # Force Arabic language if selected, and provide Arabic prompt to prevent transliteration
+            target_lang = "ar" if self.speech_lang == "ar" else None
+            segments, info = model.transcribe(
+                audio_data,
+                language=target_lang,
+                initial_prompt="مرحباً، اكتب باللغة العربية الفصحى أو العامية بدقة كاملة.",
+                vad_filter=True
+            )
             text_result = " ".join([s.text.strip() for s in segments if s.text.strip()]).strip()
 
             if text_result:
                 def _apply():
                     self.user_input.delete(0, tk.END)
                     self.user_input.insert(0, text_result)
-                    self._append_chat("user_msg", f"🎙️ الصوت المسجل: \"{text_result}\"")
+                    self.add_user_bubble(f"🎙️ [أمر صوتي]: {text_result}")
                 self.root.after(0, _apply)
             else:
-                self.root.after(0, lambda: self._append_chat("sys_msg", "⚠️ لم يتم التعرف على كلمات واضحة."))
+                self.root.after(0, lambda: self.add_system_pill("⚠️ لم يتم التعرف على كلمات واضحة.", self.c_red))
         except Exception as ex:
-            self.root.after(0, lambda: self._append_chat("sys_msg", f"⚠️ تعذر التفريغ: {ex}"))
+            self.root.after(0, lambda: self.add_system_pill(f"⚠️ خطأ في التفريغ: {ex}", self.c_red))
 
     # ----------------------------------------------------
     # 💬 Chat Utilities
     # ----------------------------------------------------
-    def _append_chat(self, tag: str, text: str):
-        self.chat_text.insert(tk.END, f"{text}\n", tag)
-        self.chat_text.see(tk.END)
-
     def clear_chat(self):
-        self.chat_text.delete("1.0", tk.END)
+        for widget in self.chat_inner.winfo_children():
+            widget.destroy()
         self.steps_list.delete(0, tk.END)
         self._on_startup()
 
@@ -542,15 +674,18 @@ class CyberProDualStudio:
             self.send_task(text)
 
     # ----------------------------------------------------
-    # 🎯 Mission Execution Loop
+    # 🎯 Mission Execution Loop (Turbo Speed)
     # ----------------------------------------------------
     def send_task(self, task_text: str):
         if self.is_running:
             return
 
+        att = self.attached_file
+        self.add_user_bubble(task_text, attachment=att)
+
         full_task = task_text
-        if self.attached_file:
-            full_task += f" [Attached file: {self.attached_file}]"
+        if att:
+            full_task += f" [Attached file: {att}]"
 
         self.is_running = True
         self.abort_flag = False
@@ -558,8 +693,6 @@ class CyberProDualStudio:
         self.stop_btn.config(state="normal")
         self.status_text_lbl.config(text="STATUS: EXECUTING MISSION ●", fg=self.c_cyan)
 
-        # Log in Chat
-        self._append_chat("user_msg", f"\n🎯 MISSION: {full_task}")
         self.steps_list.delete(0, tk.END)
         self.steps_list.insert(tk.END, f"🎯 STARTING: {task_text[:35]}...")
         self.steps_list.insert(tk.END, "─" * 40)
@@ -575,7 +708,7 @@ class CyberProDualStudio:
 
     def abort_task(self):
         self.abort_flag = True
-        self._append_chat("sys_msg", "🛑 Mission aborted by operator.")
+        self.add_system_pill("🛑 تم إيقاف المهمة بواسطة المشغل.", self.c_red)
         self.status_text_lbl.config(text="STATUS: ABORTED", fg=self.c_red)
         speak("تم إيقاف المهمة.")
 
@@ -590,7 +723,7 @@ class CyberProDualStudio:
         try:
             engine_mode = init_brain()
         except Exception as e:
-            self._append_chat("sys_msg", f"Engine connection error: {e}")
+            self.root.after(0, lambda: self.add_ai_bubble(f"خطأ في الاتصال بالمحرك: {e}"))
             self._finish_task("Engine Error")
             return
 
@@ -598,8 +731,8 @@ class CyberProDualStudio:
         log_entries = []
         summary = "Completed"
 
-        # Brief settle delay
-        time.sleep(0.4)
+        # Snappy settle delay
+        time.sleep(0.2)
 
         for step in range(1, MAX_STEPS + 1):
             if self.abort_flag:
@@ -627,10 +760,10 @@ class CyberProDualStudio:
                 summary = decision.get("summary", "Mission Completed Successfully.")
                 self._update_completion(summary)
                 hud.update_status(step, MAX_STEPS, "MISSION ACCOMPLISHED ✅", summary)
-                time.sleep(1.2)
+                time.sleep(0.8)
                 break
 
-            # 3. Act
+            # 3. Act (Turbo Speed Execution)
             param_summary = {k: v for k, v in decision.items() if k not in ("action", "thought")}
             result = execute_action(decision)
             status_text = result.get("status", "unknown")
@@ -640,7 +773,8 @@ class CyberProDualStudio:
             history.append(f"{action} {param_summary} -> {status_text}")
 
             self._add_step_log(f"   ✔ Status: {status_text}")
-            time.sleep(1.0)
+            # Snappy delay between steps (0.2s instead of 1.0s)
+            time.sleep(0.2)
 
         self._finish_task(summary)
 
@@ -649,7 +783,7 @@ class CyberProDualStudio:
             self.live_thought_lbl.config(text=thought)
             self.steps_list.insert(tk.END, f"▶ Step {step}: {action.upper()}")
             self.steps_list.yview_moveto(1.0)
-            self._append_chat("sys_msg", f"  ⚡ Step {step}: {action.upper()} ({thought[:60]}...)")
+            self.add_ai_bubble(thought, step_info=f"Step {step}: {action.upper()}")
         self.root.after(0, _apply)
 
     def _add_step_log(self, log_msg: str):
@@ -660,10 +794,10 @@ class CyberProDualStudio:
 
     def _update_completion(self, summary: str):
         def _apply():
-            self._append_chat("success", f"✅ MISSION ACCOMPLISHED: {summary}")
+            self.add_ai_bubble(f"✅ تم إنجاز المهمة بنجاح!\nالنتيجة: {summary}")
             self.steps_list.insert(tk.END, f"✅ FINISHED: {summary}")
             self.steps_list.yview_moveto(1.0)
-            speak(f"تم إنجاز المهمة بنجاح! {summary[:40]}")
+            speak(f"تم إنجاز المهمة بنجاح! {summary[:35]}")
         self.root.after(0, _apply)
 
     def _finish_task(self, summary: str):
@@ -672,7 +806,7 @@ class CyberProDualStudio:
             self.send_btn.config(state="normal", text="⚡ إرسال المهمة")
             self.stop_btn.config(state="disabled")
             self.status_text_lbl.config(text="STATUS: READY ● Finished", fg=self.c_green)
-            self._append_chat("sys_msg", "✨ Ready for the next mission!\n")
+            self.add_system_pill("✨ جاهز للمهمة التالية!", self.c_green)
         self.root.after(0, _apply)
 
 
