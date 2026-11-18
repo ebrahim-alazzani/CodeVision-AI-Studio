@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-CodeVision Core Video Extraction Pipeline (Cyber AI Edition v5.2)
-Performs real video frame analysis via OpenCV, audio extraction via FFmpeg,
-speech-to-text transcription via Faster-Whisper, Tesseract OCR with C# syntax
-scoring, chronological SequenceMatcher diff reconstruction, and Unity script categorization.
+CodeVision Core Video Extraction Pipeline (Multi-Language Architecture Phase 2)
+Performs video frame analysis via OpenCV, audio extraction via FFmpeg,
+speech-to-text transcription via Faster-Whisper, Tesseract OCR with multi-language
+syntax scoring, chronological SequenceMatcher diff reconstruction, and architecture
+categorization across Python, TypeScript, JavaScript, C++, C#, Rust, Go, Java, PHP,
+Dart, Swift, Kotlin, and SQL.
 """
 
 import os
@@ -11,6 +13,7 @@ import sys
 import json
 import time
 import re
+import math
 import argparse
 import subprocess
 from pathlib import Path
@@ -27,10 +30,14 @@ from core.ocr.noise_filter import NoiseFilter
 from core.ocr.tesseract_engine import TesseractEngine
 from core.reconstruction.script_builder import ScriptBuilder
 from core.reconstruction.script_categorizer import ScriptCategorizer
-from core.reconstruction.class_detector import ClassDetector
+from core.reconstruction.code_detector import CodeDetector, CodeStructure
+from core.evidence import Observation, Evidence, EvidenceModality, BoundingBox
+from languages.builtin import create_default_registry
+from languages.registry import LanguageRegistry
+
 
 def extract_real_audio(video_path: Path, output_wav: Path) -> bool:
-    """Extract 16kHz mono audio from video using bundled imageio-ffmpeg."""
+    """Extract 16kHz mono audio from video using bundled imageio-ffmpeg or system ffmpeg."""
     try:
         import imageio_ffmpeg
         ffmpeg_exe = imageio_ffmpeg.get_ffmpeg_exe()
@@ -49,8 +56,9 @@ def extract_real_audio(video_path: Path, output_wav: Path) -> bool:
         print(f"PROGRESS: 22 | [WARN] Audio extraction notice: {e}", flush=True)
         return False
 
+
 def transcribe_with_whisper(audio_path: Path, language: str = None) -> list:
-    """Transcribe audio using Faster-Whisper if cached locally, else fallback cleanly."""
+    """Transcribe audio using Faster-Whisper if available; calculates confidence mathematically from avg_logprob."""
     segments = []
     try:
         from faster_whisper import WhisperModel
@@ -59,17 +67,21 @@ def transcribe_with_whisper(audio_path: Path, language: str = None) -> list:
         for s in raw_segments:
             t = s.text.strip()
             if t:
+                # Mathematically convert avg_logprob to probability in [0, 1]: P = exp(avg_logprob)
+                avg_lp = float(getattr(s, 'avg_logprob', -0.5))
+                whisper_prob = max(0.01, min(1.0, math.exp(avg_lp)))
                 segments.append({
                     "start_sec": round(float(s.start), 2),
                     "end_sec": round(float(s.end), 2),
                     "text": t,
-                    "confidence": round(float(getattr(s, 'avg_logprob', -0.2)), 3)
+                    "confidence": round(whisper_prob, 3)
                 })
     except Exception as e:
         print(f"PROGRESS: 82 | [AUDIO] توليد المقاطع الصوتية ومزامنتها مع الخط الزمني", flush=True)
     return segments
 
-def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", sample_sec: float = 2.0):
+
+def run_pipeline(video_path: str, output_dir: str, target_lang: str = "auto", sample_sec: float = 2.0) -> str:
     video_file = Path(video_path)
     if not video_file.exists():
         print(f"ERROR: Video file not found: {video_path}", file=sys.stderr)
@@ -91,6 +103,10 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
     results_dir.mkdir(exist_ok=True)
 
     print(f"PROGRESS: 5 | [INIT] فتح ملف الفيديو: {video_file.name}", flush=True)
+
+    # Initialize Multi-Language Registry & Code Detector
+    registry = create_default_registry()
+    code_detector = CodeDetector(registry=registry)
 
     # 1. Video analysis via OpenCV
     try:
@@ -157,7 +173,7 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
                     diff = cv2.absdiff(gray, prev_gray)
                     diff_score = float(diff.mean())
 
-                # Canny edge density & dark theme ratio
+                # Edge density & dark theme ratio
                 edges = cv2.Canny(gray, 50, 150)
                 edge_density = float((edges > 0).mean())
                 dark_ratio = float((gray < 110).mean())
@@ -197,7 +213,6 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
                         is_code_candidate=(code_score > 0.40)
                     )
 
-                    ocr_res = None
                     cleaned_text = ""
                     if tesseract_engine.is_available() and code_score > 0.35:
                         try:
@@ -206,7 +221,7 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
                                 ocr_results.append(ocr_res)
                                 cleaned_text = "\n".join(ocr_res.cleaned_lines)
                                 all_candidate_lines.extend(ocr_res.cleaned_lines)
-                        except Exception as ocr_err:
+                        except Exception:
                             pass
 
                     scene_info = {
@@ -218,8 +233,8 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
                         "code_likelihood": round(code_score, 3),
                         "diff_score": round(diff_score, 2),
                         "bounding_box": {"x": roi_x, "y": roi_y, "width": roi_w, "height": roi_h},
-                        "extracted_text": cleaned_text,
-                        "summary": f"مشهد كود #{detected_scene_idx} عند {sec:.1f} ثانية (ثقة: {int(code_score*100)}%)"
+                        "extracted_text": cleaned_text if cleaned_text else "[UNEXTRACTED]",
+                        "summary": f"مشهد كود #{detected_scene_idx} عند {sec:.1f} ثانية (احتمالية الكود: {int(code_score*100)}%)"
                     }
                     scenes.append(scene_info)
 
@@ -231,18 +246,19 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
 
         cap.release()
 
+    # If no scenes were captured, report clearly as unextracted without synthetic code or fake confidence
     if not scenes:
         scenes = [{
             "scene_index": 1,
-            "timestamp_sec": 5.0,
-            "frame_index": 150,
+            "timestamp_sec": 0.0,
+            "frame_index": 0,
             "keyframe_path": "",
             "annotated_path": "",
-            "code_likelihood": 0.94,
-            "diff_score": 15.0,
-            "bounding_box": {"x": 30, "y": 25, "width": 420, "height": 260},
-            "extracted_text": "// Initialized Entry Point\npublic class Controller : MonoBehaviour {}",
-            "summary": "تهيئة الشيفرة ونقطة الدخول"
+            "code_likelihood": 0.0,
+            "diff_score": 0.0,
+            "bounding_box": {"x": 0, "y": 0, "width": 0, "height": 0},
+            "extracted_text": "[UNEXTRACTED]",
+            "summary": "[UNEXTRACTED] لم يتم التقاط مشاهد برمجية في هذا الفيديو"
         }]
 
     # Save scenes.json
@@ -250,7 +266,25 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
     scenes_file.write_text(json.dumps(scenes, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"PROGRESS: 72 | [SCENES] تم حفظ {len(scenes)} مشهد برمجـي في scenes.json", flush=True)
 
-    # 4. Speech-to-Text Transcription via Whisper
+    # 4. Multi-Language Detection and Structure Identification
+    print(f"PROGRESS: 74 | [LANGUAGE] تحليل اللغة المستهدفة وفحص البنية البرمجية عبر LanguageRegistry...", flush=True)
+    structure = code_detector.detect_structure(
+        all_candidate_lines,
+        language=target_lang,
+        filename=video_file.name
+    )
+    resolved_lang_id = structure.language
+    profile = registry.get(resolved_lang_id)
+    if profile:
+        resolved_lang_name = profile.display_name
+        file_ext = f".{profile.extensions[0].lstrip('.')}"
+    else:
+        resolved_lang_name = resolved_lang_id.capitalize()
+        file_ext = ".txt"
+
+    print(f"PROGRESS: 75 | [LANGUAGE] اللغة المكتشفة: {resolved_lang_name} ({resolved_lang_id}) · الامتداد: {file_ext} · الثقة: {structure.confidence*100:.1f}%", flush=True)
+
+    # 5. Speech-to-Text Transcription via Whisper
     print(f"PROGRESS: 76 | [WHISPER] تشغيل تفريغ الكلام ومزامنته مع الخط الزمني...", flush=True)
     transcript_segments = []
     if has_audio:
@@ -258,12 +292,14 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
 
     if not transcript_segments:
         for s in scenes:
+            if s.get("extracted_text") == "[UNEXTRACTED]":
+                continue
             t_sec = s["timestamp_sec"]
             transcript_segments.append({
                 "start_sec": max(0.0, t_sec - 1.0),
-                "end_sec": min(duration_sec, t_sec + 12.0),
-                "text": f"في هذا المقطع عند الدقيقة {int(t_sec//60):02d}:{int(t_sec%60):02d}، يتم استعراض شيفرة {target_lang} وتنفيذ دوال المعالجة.",
-                "confidence": 0.95
+                "end_sec": min(duration_sec, t_sec + 10.0),
+                "text": f"مقطع عند {int(t_sec//60):02d}:{int(t_sec%60):02d} - استعراض شيفرة {resolved_lang_name}",
+                "confidence": 0.0
             })
 
     transcript_data = {
@@ -277,8 +313,8 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
     transcript_file.write_text(json.dumps(transcript_data, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"PROGRESS: 84 | [TRANSCRIPT] تم حفظ التفريغ الصوتي في transcript.json ({len(transcript_segments)} مقطع)", flush=True)
 
-    # 5. Full C# / Python Chronological Code Reconstruction
-    print(f"PROGRESS: 88 | [RECONSTRUCT] تشغيل محرك إعادة بناء الشفرات (ScriptBuilder & SequenceMatcher)...", flush=True)
+    # 6. Chronological Code Reconstruction
+    print(f"PROGRESS: 88 | [RECONSTRUCT] تشغيل محرك إعادة بناء الشفرات متعدد اللغات...", flush=True)
 
     script_builder = ScriptBuilder()
     reconstructed_scripts = []
@@ -286,14 +322,13 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
     if ocr_results:
         reconstructed_scripts = script_builder.reconstruct_many(ocr_results, video_name=video_file.stem)
 
-    # If no classes were detected from OCR, report cleanly without fabricating synthetic code
+    # If no classes were detected from OCR, use actual candidate lines without synthetic templates
     if not reconstructed_scripts:
-        detector = ClassDetector()
-        class_name = detector.normalize_class_name(video_file.stem) or "ExtractedController"
         if all_candidate_lines:
+            primary_name = structure.primary_name or code_detector.normalize_name(video_file.stem) or "ExtractedScript"
             reconstructed_scripts = [
                 ReconstructedScript(
-                    class_name=class_name,
+                    class_name=primary_name,
                     final_lines=all_candidate_lines,
                     history=[CodeSnapshot(index=1, source_frame="scene_001", lines=all_candidate_lines)],
                     source_video=video_file.stem
@@ -302,6 +337,14 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
         else:
             print(f"PROGRESS: 90 | [RECONSTRUCT] لم يتم رصد أسطر شيفرة صالحة للاستخراج في هذا المقطع.", flush=True)
             reconstructed_scripts = []
+
+    # Determine comment prefix based on language extension
+    if file_ext in (".py", ".pyw", ".rb"):
+        comment_prefix = "#"
+    elif file_ext == ".sql":
+        comment_prefix = "--"
+    else:
+        comment_prefix = "//"
 
     # Save reconstructed scripts to Scripts/ and ScriptHistory/
     scripts_map = {}
@@ -312,44 +355,83 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
         code_str = "\n".join(scr.final_lines)
         scripts_map[c_name] = code_str
 
-        # 1. Save in Scripts/<ClassName>.cs
-        script_file = scripts_dir / f"{c_name}.cs"
-        script_file.write_text(f"// ============================================================\n"
-                               f"// RECONSTRUCTED C# SCRIPT · CodeVision Studio Cyber Edition\n"
-                               f"// Class: {c_name}\n"
-                               f"// Source Video: {video_file.name}\n"
-                               f"// Reconstructed At: {time.strftime('%Y-%m-%d %H:%M:%S')}\n"
-                               f"// ============================================================\n\n" + code_str, encoding="utf-8")
-        extracted_file_names.append(f"{c_name}.cs")
+        script_filename = f"{c_name}{file_ext}" if not c_name.endswith(file_ext) else c_name
+        script_file = scripts_dir / script_filename
+        script_file.write_text(
+            f"{comment_prefix} ============================================================\n"
+            f"{comment_prefix} RECONSTRUCTED {resolved_lang_name.upper()} SCRIPT · CodeVision Multi-Language\n"
+            f"{comment_prefix} Entity: {c_name}\n"
+            f"{comment_prefix} Source Video: {video_file.name}\n"
+            f"{comment_prefix} Reconstructed At: {time.strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f"{comment_prefix} Language: {resolved_lang_name} ({resolved_lang_id})\n"
+            f"{comment_prefix} ============================================================\n\n" + code_str,
+            encoding="utf-8"
+        )
+        extracted_file_names.append(script_filename)
 
-        # 2. Save history snapshots in ScriptHistory/
+        # Save history snapshots in ScriptHistory/
         for snap in scr.history:
-            snap_file = history_dir / f"{c_name}_{snap.index:03d}.cs"
-            snap_file.write_text(f"// Snapshot #{snap.index:03d} from {snap.source_frame}\n" + "\n".join(snap.lines), encoding="utf-8")
+            snap_file = history_dir / f"{c_name}_{snap.index:03d}{file_ext}"
+            snap_file.write_text(
+                f"{comment_prefix} Snapshot #{snap.index:03d} from {snap.source_frame}\n" + "\n".join(snap.lines),
+                encoding="utf-8"
+            )
 
         # Final snapshot
-        final_hist = history_dir / f"{c_name}_FINAL.cs"
-        final_hist.write_text(f"// FINAL RECONSTRUCTED CODE FOR {c_name}\n\n" + code_str, encoding="utf-8")
+        final_hist = history_dir / f"{c_name}_FINAL{file_ext}"
+        final_hist.write_text(f"{comment_prefix} FINAL RECONSTRUCTED CODE FOR {c_name}\n\n" + code_str, encoding="utf-8")
 
-    # 3. Organize into standardized Unity Architecture hierarchy via ScriptCategorizer
-    categorized_files = ScriptCategorizer.organize_export(scripts_map, results_dir)
-    print(f"PROGRESS: 94 | [CATEGORIZE] تم تنظيم وتصنيف {len(scripts_map)} ملف برمجي في results/ProjectScripts/ حسب الهندسة البرمجية", flush=True)
+    # 7. Organize into standardized Architecture hierarchy via ScriptCategorizer
+    categorized_files = ScriptCategorizer.organize_export(scripts_map, results_dir, extension=file_ext)
+    print(f"PROGRESS: 94 | [CATEGORIZE] تم تنظيم وتصنيف {len(scripts_map)} ملف برمجي في results/ProjectScripts/", flush=True)
 
-    # 4. Save ALL_CANDIDATE_CODE.txt
+    # 8. Save ALL_CANDIDATE_CODE or UNEXTRACTED notice
     if all_candidate_lines:
         all_code_file = results_dir / "ALL_CANDIDATE_CODE.txt"
         all_code_file.write_text("\n".join(all_candidate_lines), encoding="utf-8")
+    else:
+        unextracted_file = results_dir / "UNEXTRACTED.txt"
+        unextracted_file.write_text("[UNEXTRACTED] لم يتم رصد أسطر شيفرة صالحة للاستخراج في هذا الفيديو.\n", encoding="utf-8")
 
-    # 6. Save manifest.json and observations.json
+    # 9. Compute Overall Confidence Mathematically across modalities
+    c_code = float(structure.confidence) if all_candidate_lines else 0.0
+
+    valid_likelihoods = [
+        s.get("code_likelihood", 0.0)
+        for s in scenes
+        if s.get("extracted_text") != "[UNEXTRACTED]"
+    ]
+    c_visual = float(sum(valid_likelihoods) / len(valid_likelihoods)) if valid_likelihoods else 0.0
+
+    valid_audio_confs = [
+        s.get("confidence", 0.0)
+        for s in transcript_segments
+        if s.get("confidence", 0.0) > 0.0
+    ]
+    c_audio = float(sum(valid_audio_confs) / len(valid_audio_confs)) if valid_audio_confs else 0.0
+
+    if all_candidate_lines:
+        if valid_audio_confs:
+            overall_confidence = round(0.50 * c_code + 0.35 * c_visual + 0.15 * c_audio, 3)
+        else:
+            overall_confidence = round(0.60 * c_code + 0.40 * c_visual, 3)
+    else:
+        overall_confidence = 0.0
+
+    # 10. Save manifest.json and observations.json
     manifest = {
         "video_file": str(video_file),
         "extracted_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "language": target_lang,
+        "language": resolved_lang_name,
+        "language_id": resolved_lang_id,
+        "file_extension": file_ext,
         "duration_sec": duration_sec,
         "scenes_count": len(scenes),
         "transcript_segments_count": len(transcript_segments),
         "extracted_classes": [s.class_name for s in reconstructed_scripts],
         "extracted_files": extracted_file_names,
+        "entry_points": structure.entry_points,
+        "confidence": overall_confidence,
         "scripts_directory": str(scripts_dir),
         "categorized_directory": str(results_dir / "ProjectScripts"),
         "history_directory": str(history_dir),
@@ -360,29 +442,36 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "C#", samp
     observations = {
         "video_id": video_file.stem,
         "extracted_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "language": target_lang,
-        "confidence": 0.962,
+        "language": resolved_lang_name,
+        "language_id": resolved_lang_id,
+        "confidence": overall_confidence,
+        "confidence_breakdown": {
+            "code_structure": c_code,
+            "visual_roi": round(c_visual, 3),
+            "audio_speech": round(c_audio, 3)
+        },
         "scenes_count": len(scenes),
         "classes_count": len(reconstructed_scripts),
         "classes": [s.class_name for s in reconstructed_scripts],
+        "entry_points": structure.entry_points,
         "audio_present": has_audio,
-        "ocr_engine": "Tesseract 5.4.0 (Portable AVX2)",
-        "noise_filter": "CodeVision Unity NoiseFilter v5.0",
-        "reconstruction_engine": "SequenceMatcher Incremental ScriptBuilder",
+        "ocr_engine": "Tesseract OCR",
+        "reconstruction_engine": "CodeVision Universal Multi-Language Engine",
         "output_dir": str(job_dir)
     }
     (job_dir / "observations.json").write_text(json.dumps(observations, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print(f"PROGRESS: 100 | [COMPLETE] اكتملت عملية الاستخراج وإعادة بناء المشروع بالكامل: {len(reconstructed_scripts)} كلاسات مستعادة بنجاح!", flush=True)
+    print(f"PROGRESS: 100 | [COMPLETE] اكتملت عملية الاستخراج وإعادة بناء المشروع بالكامل: {len(reconstructed_scripts)} ملفات مستعادة بنجاح (الثقة: {overall_confidence*100:.1f}%)!", flush=True)
     return str(job_dir)
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="CodeVision Core Video Extraction Pipeline")
+    parser = argparse.ArgumentParser(description="CodeVision Universal Multi-Language Extraction Pipeline")
     parser.add_argument("video_path", nargs="?", default=None, help="Path to input video file")
     parser.add_argument("output_dir", nargs="?", default=None, help="Path to output directory")
     parser.add_argument("--video", dest="video_flag", default=None, help="Alternative flag for video path")
     parser.add_argument("--output-dir", "--output_dir", dest="out_flag", default=None, help="Alternative flag for output directory")
-    parser.add_argument("--language", default="C#", help="Target programming language (C#, Python, TypeScript)")
+    parser.add_argument("--language", default="auto", help="Target programming language (e.g. auto, Python, TypeScript, C++, Rust, Go, C#)")
     parser.add_argument("--sample_sec", "--sample-rate", dest="sample_sec", type=float, default=2.0, help="Sampling interval in seconds")
 
     args = parser.parse_args()

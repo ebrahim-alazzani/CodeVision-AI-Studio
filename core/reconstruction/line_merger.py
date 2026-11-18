@@ -6,11 +6,32 @@ video frames and merge only new/changed lines, preventing duplication.
 """
 
 import difflib
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 
 class LineMerger:
     """Merges code lines chronologically across multiple video frames."""
+
+    def merge_ace(self, frames: List[List[str]],
+                  timestamps: Optional[List[float]] = None,
+                  default_indent_size: int = 4) -> List[str]:
+        """
+        Consolidate multi-frame chronological code lines using ACE Needleman-Wunsch DP.
+        
+        Args:
+            frames: Chronological list of frame line arrays.
+            timestamps: Optional list of frame timestamps.
+            default_indent_size: Standard indentation unit.
+
+        Returns:
+            Consolidated document lines.
+        """
+        from core.reconstruction.ace_aligner import ACEAligner
+        aligner = ACEAligner(default_indent_size=default_indent_size)
+        for idx, frame_lines in enumerate(frames):
+            t = timestamps[idx] if timestamps and idx < len(timestamps) else float(idx)
+            aligner.add_frame(frame_lines, timestamp=t)
+        return aligner.get_document_lines()
 
     def merge_incremental(self, master: List[str],
                           new_lines: List[str]) -> List[str]:

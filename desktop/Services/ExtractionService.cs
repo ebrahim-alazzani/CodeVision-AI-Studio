@@ -44,7 +44,7 @@ public sealed class ExtractionService
         {
             _logger.Info($"Running Real Video Pipeline for '{video.FileName}' using script '{scriptPath}'");
 
-            var safeLang = string.IsNullOrWhiteSpace(video.DetectedLanguage) ? "C#" : video.DetectedLanguage;
+            var safeLang = string.IsNullOrWhiteSpace(video.DetectedLanguage) ? "auto" : video.DetectedLanguage;
             var cliArgs = $"\"{video.FilePath}\" \"{outRoot}\" --language \"{safeLang}\" --sample_sec 2.0";
 
             var exitCode = await _python.RunScriptAsync(scriptPath, cliArgs, line =>
@@ -97,6 +97,21 @@ public sealed class ExtractionService
                     extractedFiles = Directory.GetFiles(resultsDir).Length;
                 }
 
+                double avgConfidence = 0.0;
+                var manifestFile = Path.Combine(jobFolder, "manifest.json");
+                if (File.Exists(manifestFile))
+                {
+                    try
+                    {
+                        using var mDoc = JsonDocument.Parse(File.ReadAllText(manifestFile));
+                        if (mDoc.RootElement.TryGetProperty("average_confidence", out var confProp))
+                        {
+                            avgConfidence = confProp.GetDouble();
+                        }
+                    }
+                    catch { }
+                }
+
                 App.RunOnUIThread(() =>
                 {
                     video.OutputDirectory = jobFolder;
@@ -104,8 +119,8 @@ public sealed class ExtractionService
                     video.ExtractedFilesCount = extractedFiles;
                     video.ProgressPercentage = 100;
                     video.Status = "مكتمل";
-                    video.AverageConfidence = 0.945;
-                    onProgress?.Invoke(100, $"اكتمل استخراج {video.FileName} بنجاح ({extractedFiles} ملفات مستعادة).");
+                    video.AverageConfidence = avgConfidence;
+                    onProgress?.Invoke(100, $"اكتمل استخراج {video.FileName} بنجاح ({extractedFiles} ملفات مستعادة · الثقة: {(avgConfidence * 100):F1}%).");
                 });
 
                 _logger.Info($"Successfully completed extraction for {video.FileName}: {detectedScenes} scenes, {extractedFiles} files.");

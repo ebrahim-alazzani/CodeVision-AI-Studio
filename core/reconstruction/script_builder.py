@@ -15,17 +15,25 @@ import difflib
 
 from core.models import OcrResult, CodeSnapshot, ReconstructedScript
 from core.interfaces import ICodeReconstructor
-from reconstruction.class_detector import ClassDetector
-from reconstruction.line_merger import LineMerger
-from reconstruction.syntax_fixer import SyntaxFixer
-from reconstruction.script_categorizer import ScriptCategorizer
+try:
+    from core.reconstruction.code_detector import CodeDetector
+    from core.reconstruction.class_detector import ClassDetector
+    from core.reconstruction.line_merger import LineMerger
+    from core.reconstruction.syntax_fixer import SyntaxFixer
+    from core.reconstruction.script_categorizer import ScriptCategorizer
+except ImportError:
+    from reconstruction.code_detector import CodeDetector
+    from reconstruction.class_detector import ClassDetector
+    from reconstruction.line_merger import LineMerger
+    from reconstruction.syntax_fixer import SyntaxFixer
+    from reconstruction.script_categorizer import ScriptCategorizer
 
 
 class ScriptBuilder(ICodeReconstructor):
-    """Builds reconstructed C# scripts from chronological OCR results."""
+    """Builds reconstructed scripts from chronological OCR results across languages."""
 
-    def __init__(self):
-        self._detector = ClassDetector()
+    def __init__(self, detector=None):
+        self._detector = detector or CodeDetector()
         self._merger = LineMerger()
         self._fixer = SyntaxFixer()
         self._project_lines: Dict[str, List[str]] = {}
@@ -225,55 +233,64 @@ class ScriptBuilder(ICodeReconstructor):
 
             code_body.append(line)
 
-        # Standard C# usings fallback if empty
-        if not usings:
-            usings = {"using System.Collections;", "using System.Collections.Generic;", "using UnityEngine;"}
-        else:
-            usings.add("using UnityEngine;")
-
+        # Format usings/imports if any were present
         formatted: List[str] = []
-        for u in sorted(usings):
-            formatted.append(u)
-        formatted.append("")
+        if usings:
+            for u in sorted(usings):
+                formatted.append(u)
+            formatted.append("")
 
         if has_class_decl:
             formatted.extend(code_body)
+        elif code_body:
+            # Only wrap if lines are method/field members without outer class
+            has_other_decl = any(re.search(r'\b(class|struct|interface|def|func|function|package|namespace)\b', l) for l in code_body)
+            if has_other_decl:
+                formatted.extend(code_body)
+            else:
+                formatted.append(f"public class {class_name}")
+                formatted.append("{")
+                for body_line in code_body:
+                    if body_line.startswith("    "):
+                        formatted.append(body_line)
+                    else:
+                        formatted.append(f"    {body_line}")
+                formatted.append("}")
         else:
-            formatted.append(f"public class {class_name} : MonoBehaviour")
-            formatted.append("{")
-            for body_line in code_body:
-                # Indent lines inside class body
-                if body_line.startswith("    "):
-                    formatted.append(body_line)
-                else:
-                    formatted.append(f"    {body_line}")
-            formatted.append("}")
+            formatted.append(f"// [UNEXTRACTED] No code extracted for {class_name}")
 
         formatted = self._fixer.fix_script(formatted)
         return formatted
 
     def _write_script(self, script: ReconstructedScript, output_dir: Path,
-                      source_name: str = "") -> None:
+                      source_name: str = "", extension: str = ".cs") -> None:
         cn = script.class_name
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        ext = extension if extension.startswith(".") else f".{extension}"
+        comment = "#" if ext in (".py", ".pyw", ".rb") else ("--" if ext == ".sql" else "//")
         header = [
-            "// ============================================================",
-            "// RECONSTRUCTED C# SCRIPT - CodeVision Extractor v4.0 Engine",
-            f"// Class: {cn}",
-            f"// Source: {source_name}" if source_name else "",
-            f"// Generated: {now}",
-            f"// Snapshots merged: {len(script.history)}",
-            "// CyberPro for Technical & Engineering Works",
-            "// Eng. Ibrahim Anas Al-Azzani",
-            "// ============================================================",
+            f"{comment} ============================================================",
+            f"{comment} RECONSTRUCTED CODE FILE - CodeVision Multi-Language Engine",
+            f"{comment} Entity: {cn}",
+            f"{comment} Source: {source_name}" if source_name else "",
+            f"{comment} Generated: {now}",
+            f"{comment} Snapshots merged: {len(script.history)}",
+            f"{comment} CyberPro for Technical & Engineering Works",
+            f"{comment} Eng. Ibrahim Anas Al-Azzani",
+            f"{comment} ============================================================",
             "",
         ]
 
-        formatted_lines = self._format_clean_csharp_script(cn, script.final_lines)
+        if ext == ".cs":
+            formatted_lines = self._format_clean_csharp_script(cn, script.final_lines)
+        else:
+            formatted_lines = script.final_lines if script.final_lines else [f"{comment} [UNEXTRACTED]"]
 
-        final_path = output_dir / f"{cn}.cs"
+        final_filename = cn if "." in cn else f"{cn}{ext}"
+        final_path = output_dir / final_filename
         with open(final_path, "w", encoding="utf-8") as f:
             f.write("\n".join(h for h in header if h or h == ""))
+            f.write("\n")
             f.write("\n".join(formatted_lines))
             f.write("\n")
 

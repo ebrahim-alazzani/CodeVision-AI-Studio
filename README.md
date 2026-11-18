@@ -1,154 +1,89 @@
-# ⚡ CodeVision Studio · Cyber AI Edition
+# CodeVision AI Studio
 
-<div align="center">
+استوديو سطح مكتب تجريبي لاستخراج الشيفرة الظاهرة في فيديوهات البرمجة ومراجعة نتائج OCR. يجمع المشروع واجهة Windows مبنية بـ WinUI 3 مع خط معالجة Python يستخدم OpenCV وTesseract، ويحاول استخراج الصوت والتفريغ عند توفر اعتماديات Whisper.
 
-<img src="docs/images/codevision_hero_banner.jpg" alt="CodeVision Studio Banner" width="100%" style="border-radius: 12px; margin-bottom: 16px;" />
+> **حالة المشروع:** قيد التطوير. نجاح بناء واجهة .NET لا يعني أن خط استخراج الفيديو يعمل على كل جهاز. لم يثبت بعد تشغيل متكامل موثق على فيديو مرجعي أو اكتمال مقارنة المحركات. اقرأ [تقرير التحقق](docs/requirements/GEMINI_CLAIMS_VERIFICATION_AR.md) و[سجل المراحل](docs/PROJECT_PHASES_LOG.md) قبل الاعتماد على النتائج.
 
-![CodeVision Studio](https://img.shields.io/badge/Platform-Windows_10%2F11-blue?style=for-the-badge&logo=windows)
-![.NET 9](https://img.shields.io/badge/.NET-9.0_WinUI_3-purple?style=for-the-badge&logo=dotnet)
-![Python 3.13](https://img.shields.io/badge/Python-3.13_Core-3776AB?style=for-the-badge&logo=python)
-![OpenCV](https://img.shields.io/badge/Computer_Vision-OpenCV_ROI-5C3EE8?style=for-the-badge&logo=opencv)
-![Whisper](https://img.shields.io/badge/Speech_To_Text-Faster--Whisper-teal?style=for-the-badge)
-![Tesseract](https://img.shields.io/badge/OCR-Tesseract_5.4_AVX2-green?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-orange?style=for-the-badge)
+## ما يعمل وما هو تجريبي
 
-**استوديو الذكاء الاصطناعي المتطور لاستخراج وتتبع الأكواد وإعادة بناء مشاريع البرمجة والألعاب من مقاطع الفيديو التعليمية.**
+| الجزء | الحالة الحالية |
+|---|---|
+| تطبيق Windows المبني بـ WinUI 3 و.NET 9 | ينجح بناؤه محليًا؛ لم يُتحقق في هذا المستودع من كل وظائف الواجهة أثناء التشغيل. |
+| تحليل الفيديو | خط Python يحتوي قراءة الإطارات عبر OpenCV واستخراج OCR وحفظ مخرجات لكل مهمة. يلزم تثبيت الأدوات الخارجية وتشغيل اختبار متكامل للتحقق من النتيجة على جهازك. |
+| OCR | يستخدم Tesseract، وكواشف النص والفلترة الحالية موجهة أساسًا إلى أمثلة C# وUnity. |
+| الصوت والتفريغ | يوجد مسار لاستخراج الصوت ومحاولة استخدام Faster-Whisper؛ التفريغ يعتمد توفر الحزمة والنموذج محليًا، وقد يُتخطى عند غيابهما. |
+| التدريب | **محاكاة معلنة وليست تدريبًا فعليًا**. لا تستخدم أرقامها كمقاييس نموذج حقيقي. |
+| لوحة العتاد | تتضمن حاليًا قيَم عرض ثابتة، وليست مراقبة حية لمكونات جهازك. |
+| أدوات الوسم وROI | الواجهة أولية؛ لا تفترض أن جميع عناصر الوسم تحفظ بيانات أو تشغل نموذج كشف فعلي. |
+| سجل اللغات | يحتوي تعريفات لعدة لغات، لكن خط الاستخراج الحالي لم يُثبت دعمًا end-to-end لكل لغة. التركيز الحالي على C# وUnity. |
 
-*Next-Generation AI Desktop Studio for automated code extraction, visual ROI tracking, and complete C# / Unity architecture reconstruction from programming video tutorials.*
+الصور في `docs/images/` صور توضيحية/معاينات للواجهة، وليست إثباتًا على أن كل الميزات المصورة تعمل حاليًا.
 
-</div>
+## المتطلبات
 
----
+- Windows 10/11 بنظام x64.
+- .NET SDK 9 وWindows App SDK اللازمان لمشروع WinUI 3.
+- Python 3.11 أو 3.12 موصى بهما. توافق Python 3.13 مع كل الاعتماديات لم يُتحقق منه هنا.
+- Tesseract OCR مثبت على الجهاز ومضاف إلى `PATH`، أو إعداد مساره في التطبيق. **تنبيه:** يوجد حاليًا مسار افتراضي خاص بجهاز المطور إلى مجلد على D:؛ تشغيله على جهاز آخر يتطلب إعداد المسارات أولًا.
+- FFmpeg أو حزمة `imageio-ffmpeg` لاستخراج الصوت.
 
-## 🌟 نبذة عن المشروع (Overview)
+## إعداد Python
 
-**CodeVision Studio** هو منصة سطح مكتب متقدمة مبنية باستخدام **WinUI 3 و .NET 9**، متصلة بمحرك بايثون هجين فائق الأداء يعتمد على تقنيات الرؤية الحاسوبية (**OpenCV**) واستخراج النصوص (**Tesseract 5.4.0 AVX2**) ومعالجة الصوتيات وتفريغ الكلام اللحظي (**FFmpeg & Faster-Whisper**).
+من مجلد المستودع:
 
-يتفوق التطبيق في استخراج وتتبع الأكواد البرمجية من الفيديوهات التعليمية (مثل دورات تطوير الألعاب Unity C# وتطبيقات Python) وتحويل المشاهد المصورة إلى **مشروع برمجي حقيقي متكامل** يحتوي على ملفات الحل (`.sln`)، وملفات المشروع (`.csproj`)، وهيكلية مجلدات نظيفة ومطابقة لأفضل الممارسات المعمارية.
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install opencv-python-headless pillow imageio imageio-ffmpeg faster-whisper pytesseract
+```
 
----
+تحتاج وظائف التفريغ الصوتي إلى تنزيل نموذج Faster-Whisper مسبقًا؛ الكود الحالي يطلب النموذج `tiny` باستخدام `local_files_only=True`، لذلك لن ينزله تلقائيًا عند أول تشغيل. كما يجب تثبيت Tesseract كتطبيق منفصل؛ `pytesseract` وحده لا يتضمن محرك OCR.
 
-## 📸 معارض وواجهات الاستوديو أثناء التشغيل الحي (Live App Screenshots)
+## تشغيل خط Python مباشرة
 
-<div align="center">
+```powershell
+python .\core\video_pipeline.py "C:\path\to\sample.mp4" "C:\path\to\codevision-output" --language "C#" --sample_sec 2
+```
 
-### 1. استوديو المحاكاة والتتبع البصري اللحظي (OpenCV Real-time Simulation Studio)
-<img src="docs/images/live_ui_simulation.png" alt="Simulation Studio Live" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
-<p><i>متابعة رصد OpenCV لمنطقة الكود مع الإطار المتوهج (Glowing Bounding Box)، المسار الصوتي، السجل الحي، وتفريغ Faster-Whisper.</i></p>
+يمكن استخدام `--video` و`--output-dir` بدل الوسيطين الموضعيين. تحفظ النتائج في مجلد `job_<اسم-الفيديو>` داخل مجلد الإخراج.
 
-### 2. استوديو إعادة بناء وهندسة المشروع وتصديره (Project Architecture & Export Studio)
-<img src="docs/images/live_ui_reconstruction.png" alt="Project Reconstruction Live" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
-<p><i>شجرة ملفات المشروع المتكاملة، الترتيب الزمني للأدلة، معاينة وتحرير الأكواد، وتصدير حل فيجوال ستوديو (.sln / .csproj).</i></p>
+## بناء وتشغيل تطبيق سطح المكتب
 
-### 3. لوحة التحكم والعمليات المجمعة (Dashboard & Batch Engine)
-<img src="docs/images/live_ui_dashboard.png" alt="Dashboard Live" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
-<p><i>إحصائيات المعالجة ومؤشرات الأداء ومراقبة تقدم التحليل المتوازي.</i></p>
+```powershell
+dotnet build .\desktop\CodeVision.Desktop.csproj -p:Platform=x64
+```
 
-### 4. مختبر التدريب والبيانات (Training Lab & Vision Datasets)
-<img src="docs/images/live_ui_training.png" alt="Training Lab Live" width="95%" style="border-radius: 10px; border: 1px solid #1E293B;" />
-<p><i>إدارة حزم التدريب ومتابعة تدريب وتدقيق نماذج التعرف البصري OCR وROI.</i></p>
+أو تشغيل سكربت المشروع:
 
-</div>
+```powershell
+.\run_desktop.bat
+```
 
----
+**إعداد مطلوب قبل تجربة الاستخراج على جهاز آخر:** ملف الإعدادات يُنشأ في `%LOCALAPPDATA%\CodeVision\appsettings.json`. حدّث `PythonPath` و`EngineScriptPath` إلى المسارات الصحيحة على جهازك، وثبّت Tesseract واضبطه في `PATH`. الإعدادات الافتراضية الحالية تتضمن مسارات محلية خاصة بجهاز المطور؛ لذلك قد يفتح التطبيق بينما يفشل استخراج الفيديو حتى تُصحح هذه المسارات.
 
-## 🚀 المميزات الرئيسية (Key Features)
-
-### 1. 👁️ تتبع بصري مباشر لمنطقة الشيفرة (OpenCV Code ROI Tracking)
-* تحليل الإطارات وتتبع التغيرات الحركية والبصرية (`Frame Differencing` و `Canny Edge Detection`).
-* عزل تلقائي لنافذة محرر الأكواد وتجاهل شاشات المحاضر وكاميرا الويب ومناطق العرض الجانبية.
-* رسم إطار توجيهي متوهج ديناميكي (`Glowing Bounding Box`) يوضح نسبة الثقة ودقة الكود لكل مشهد.
-* تجاوز الإطارات المكررة (`SSIM / Diff Score Fast Skip`) لتوفير الوقت واستهلاك المعالج.
-
-### 2. 🧠 خوارزمية الدمج والتطور الزمني للكود (`SequenceMatcher Chronological Reconstruction`)
-* استخدام خوارزمية مطابقة السلاسل (`difflib.SequenceMatcher`) عبر الإطارات المتعاقبة لدمج التعديلات التراكمية التي يكتبها المحاضر سطرًا بسطر.
-* الاحتفاظ بسجل لقطات التطور البرمجي (`ScriptHistory`) لكل كلاس من أول إطار وحتى النسخة النهائية (`FINAL`).
-
-### 3. 🛡️ فلتر تنقية الشوشرة والتصحيح اللغوي الذكي (`NoiseFilter`)
-* إزالة عناصر واجهة بيئات التطوير (Visual Studio / VS Code UI Chrome) مثل أرقام الأسطر، القوائم العلوية، شريط الحالة، ونوافذ الإكمال التلقائي.
-* تصحيح تلقائي للأخطاء الإملائية الشائعة الناتجة عن الـ OCR لكلمات C# و Unity (مثل `MonoBehaviour`, `FindObjectOfType<T>`, `GetComponent`, `Transform`, `GameObject`).
-
-### 4. 🏗️ المصنف المعماري التلقائي لمشاريع Unity (`ScriptCategorizer`)
-* توزيع وتنظيم الكلاسات المستعادة تلقائياً ضمن مجلدات معمارية معيارية:
-  * 🎯 `Shooting/` (مثل: `ShootingController.cs`)
-  * 🚗 `Vehicles/` (مثل: `CarController.cs`, `CarInteraction.cs`)
-  * 🤖 `AI/` (كلاسات الأعداء والشرطة والمسارات `Waypoint`)
-  * 🎮 `Player/` (التحكم بالحركة والقفز والتفاعل)
-  * 🎥 `Camera/`, 🖥️ `UI/`, 💾 `Data/`
-
-### 5. 🎙️ استخراج وتفريغ الصوت المتزامن (Faster-Whisper & FFmpeg)
-* استخراج المسار الصوتي للفيديو وتحويله إلى صيغة `16 kHz Mono WAV` عبر FFmpeg.
-* تفريغ الكلام المسموع ومزامنته بدقة مع التوقيت الزمني للمشاهد البرمجية (`Timed Commentary`).
-
-### 6. 💻 استوديو إعادة البناء والتصدير بنقرة واحدة (Project Reconstruction Studio)
-* شجرة مشروع تفاعلية مع إحصاء دقيق لعدد الملفات والأسطر البرمجية.
-* شاشة معاينة فورية وتحرير للكود مع إمكانية نسخ الشيفرات بنقرة واحدة.
-* تصدير بنية المشروع الكاملة مع توليد تلقائي لملفات `.sln` و `.csproj` وتقرير التحقق `RECONSTRUCTION_REPORT.md`.
-
----
-
-## 🏛️ الهيكلية المعمارية (Architecture)
+## هيكل المجلدات
 
 ```text
-CodeVisionPhase1/
-├── desktop/                         # WinUI 3 + C# .NET 9 Desktop Client
-│   ├── Views/                      # واجهات الاستوديو العصرية (Halvo Glassmorphism)
-│   │   ├── DashboardPage.xaml      # لوحة التحكم ومؤشرات الأداء
-│   │   ├── LibraryPage.xaml        # مكتبة حزم الفيديوهات
-│   │   ├── ExtractionReviewPage.xaml # استوديو المحاكاة والتتبع اللحظي
-│   │   ├── ProjectReconstructionPage.xaml # استوديو إعادة بناء وتصدير المشاريع
-│   │   └── TrainingLabPage.xaml    # مختبر التدريب والبيانات
-│   ├── ViewModels/                 # MVVM Toolkit Controllers
-│   ├── Services/                   # تكامل بايثون، استخراج الصوت، وتصدير المشاريع
-│   └── Models/                     # نماذج البيانات والمشاهد
-│
-├── core/                            # محرك الاستخراج والمعالجة (Python 3.13)
-│   ├── video_pipeline.py           # خط أنابيب الاستخراج والتحليل الرئيسي
-│   ├── ocr/                        # محرك Tesseract AVX2 وفلتر التنقية
-│   │   ├── tesseract_engine.py
-│   │   └── noise_filter.py
-│   └── reconstruction/             # محركات التجميع والتصنيف الزمني
-│       ├── script_builder.py
-│       ├── line_merger.py
-│       ├── class_detector.py
-│       └── script_categorizer.py
-└── CodeVision.sln                   # حل فيجوال ستوديو الرئيسي
+desktop/       تطبيق WinUI 3 وخدماته
+core/          خط معالجة الفيديو وOCR وإعادة بناء النص
+languages/     تعريفات وسجل اللغات (ليس دليلًا على دعم كامل لكل لغة)
+vision/        مكونات الرؤية الحاسوبية
+transcription/ مكونات الصوت والتفريغ
+tools/         نسخة عمل من أداة Unity؛ راجع manifest وحالة النسخة قبل الاعتماد عليها
+tests/         اختبارات Python الموجودة
+docs/          التوثيق وسجل المراحل والتقارير
 ```
 
----
+## التحقق وحالة التطوير
 
-## ⚙️ متطلبات التشغيل (Prerequisites & Installation)
+آخر تحقق موثق في بيئة التطوير: نجح أمر بناء .NET مع صفر تحذيرات وصفر أخطاء. لم يُشغّل ذلك اختبار استخراج متكامل، ولا يثبت نجاح التدريب أو قياسات العتاد أو دعم كل اللغات.
 
-### 1. بيئة التطوير (Desktop)
-* **Windows 10 / 11** (x64)
-* **.NET 9.0 SDK**
-* **Windows App SDK 1.6+**
+- [مراجعة ادعاءات تقرير Gemini](docs/requirements/GEMINI_CLAIMS_VERIFICATION_AR.md)
+- [سجل المراحل](docs/PROJECT_PHASES_LOG.md)
+- [تدقيق خط الأساس](docs/requirements/BASELINE_AND_REPOSITORY_AUDIT_AR.md)
+- [تقرير مقارنة المحركات](docs/requirements/PHASE1_ENGINE_COMPARISON_AR.md) — اعتبر أرقام المقارنة غير معتمدة حتى تُرفق سجلات التشغيل الخام ويعاد إنتاجها.
 
-### 2. محرك البايثون (Python Engine)
-* **Python 3.11 - 3.13**
-* تثبيت الحزم المطلوبة:
-```bash
-pip install opencv-python-headless pillow imageio imageio-ffmpeg faster-whisper pytesseract
-```
+## المساهمة
 
-### 3. بناء وتشغيل المشروع
-```bash
-# بناء التطبيق عبر الـ CLI
-dotnet build CodeVision.sln -p:Platform=x64
-
-# أو التشغيل المباشر
-cd desktop
-dotnet run -p:Platform=x64
-```
-
----
-
-## 👨‍💻 المطور (Author)
-* **م. إبراهيم أنس العزاني** (Eng. Ibrahim Anas Al-Azzani)
-* *CyberPro for Technical & Engineering Works*
-
----
-
-<div align="center">
-  <b>CodeVision Studio · Empowering Code Extraction from Motion to Source</b>
-</div>
+قبل إعلان أي ميزة مكتملة، أضف طريقة تشغيلها ودليلًا قابلًا لإعادة الإنتاج، وميّز بوضوح بين القياس الحقيقي والمحاكاة. لا ترفع فيديوهات كبيرة أو أوزان نماذج أو بيانات شخصية إلى Git.

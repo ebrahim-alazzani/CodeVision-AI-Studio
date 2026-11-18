@@ -52,14 +52,17 @@ Output/
 # Tesseract / OCR temp
 *.tmp
 *.temp
-OCR/
+/OCR/
 CandidateFrames/
 Frames/
 keyframes/
+!core/ocr/**
 
 # Large portable binaries & benchmark outputs
 tools/**/tesseract/
 tools/**/benchmark_test/
+tools/**/screenshots/
+tools/**/logs/
 *.dll
 *.exe
 

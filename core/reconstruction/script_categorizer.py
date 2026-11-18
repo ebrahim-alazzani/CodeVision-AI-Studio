@@ -14,33 +14,39 @@ from typing import Dict, List, Optional
 
 
 class ScriptCategorizer:
-    """Categorizes C# scripts into Unity project directory structures."""
+    """Categorizes code scripts into project directory structures across languages."""
 
-    # Default category mapping rules (Keyword regex -> Folder Name)
+    # Multi-language & generic architecture category mapping rules (Keyword regex -> Folder Name)
     CATEGORY_RULES = [
+        (r'Controller|Handler|Router|Endpoint|Api', 'Controllers'),
+        (r'Model|Entity|Schema|Type|Interface|Dto', 'Models'),
+        (r'Service|Repository|Provider|Client|Manager', 'Services'),
+        (r'UI|Menu|HUD|Canvas|MiniMap|Map|HealthBar|Score|Wanted|View|Component|Widget|Page', 'UI'),
+        (r'Util|Helper|Common|Tool|Lib|Extension', 'Utils'),
+        (r'Config|Setting|Env|Constant|Option', 'Config'),
+        (r'Test|Spec|Mock|Fixture', 'Tests'),
         (r'Player|Locomotion|Movement|Character|Sprint|Stance', 'Player'),
         (r'Camera|Cinemachine|Orbit|Follow', 'Camera'),
         (r'AI|Spawner|Police|Officer|Enemy|NPC|Waypoint|Navigator', 'AI'),
-        (r'UI|Menu|HUD|Canvas|MiniMap|Map|HealthBar|Score|Wanted', 'UI'),
         (r'Car|Vehicle|Drive|Wheel|Steering|Traffic', 'Vehicles'),
         (r'Shoot|Gun|Weapon|Bullet|Ammo|Rifle|Combat|Attack', 'Shooting'),
         (r'Audio|Sound|Music|SFX', 'Audio'),
-        (r'Save|Data|Database|Storage|Config|Setting', 'Data'),
+        (r'Save|Data|Database|Storage', 'Data'),
     ]
 
     @classmethod
     def get_category(cls, class_name: str, code_content: str = "") -> str:
         """
-        Determine the folder category for a given class name and optional code content.
+        Determine the folder category for a given class/module name and optional code content.
 
         Args:
-            class_name: The name of the C# class (e.g., 'PlayerMovement').
-            code_content: Full source code text of the class.
+            class_name: The name of the class or module (e.g., 'PlayerMovement', 'AuthService').
+            code_content: Full source code text.
 
         Returns:
-            Folder name string (e.g., 'Player', 'Camera', 'General').
+            Folder name string (e.g., 'Controllers', 'Services', 'Player', 'General').
         """
-        # 1. Match against Class Name first
+        # 1. Match against Class / File Name first
         for pattern, folder in cls.CATEGORY_RULES:
             if re.search(pattern, class_name, re.IGNORECASE):
                 return folder
@@ -54,13 +60,14 @@ class ScriptCategorizer:
         return 'General'
 
     @classmethod
-    def organize_export(cls, scripts_dict: Dict[str, str], output_dir: Path) -> Dict[str, Path]:
+    def organize_export(cls, scripts_dict: Dict[str, str], output_dir: Path, extension: str = ".cs") -> Dict[str, Path]:
         """
         Export scripts into categorized subdirectories under output_dir/ProjectScripts.
 
         Args:
-            scripts_dict: Dictionary mapping class_name -> formatted_code.
+            scripts_dict: Dictionary mapping class_name/file_name -> formatted_code.
             output_dir: Base output directory Path.
+            extension: File extension to apply if filename has none (e.g. '.py', '.ts', '.cs').
 
         Returns:
             Dict mapping class_name -> file_path where written.
@@ -69,12 +76,20 @@ class ScriptCategorizer:
         base_dir = output_dir / "ProjectScripts"
         base_dir.mkdir(parents=True, exist_ok=True)
 
+        ext = extension if extension.startswith(".") else f".{extension}"
+
         for class_name, code in scripts_dict.items():
             category = cls.get_category(class_name, code)
             cat_dir = base_dir / category
             cat_dir.mkdir(parents=True, exist_ok=True)
 
-            file_path = cat_dir / f"{class_name}.cs"
+            # Avoid double extension
+            if "." in class_name:
+                filename = class_name
+            else:
+                filename = f"{class_name}{ext}"
+
+            file_path = cat_dir / filename
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(code)
 
