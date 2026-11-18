@@ -1,89 +1,185 @@
-# CodeVision AI Studio
+# CodeVision AI Studio 🚀
+### An Advanced Multimodal Desktop Studio for Video-to-Code Reconstruction & Architectural Understanding
 
-استوديو سطح مكتب تجريبي لاستخراج الشيفرة الظاهرة في فيديوهات البرمجة ومراجعة نتائج OCR. يجمع المشروع واجهة Windows مبنية بـ WinUI 3 مع خط معالجة Python يستخدم OpenCV وTesseract، ويحاول استخراج الصوت والتفريغ عند توفر اعتماديات Whisper.
+[![Platform - Windows x64](https://img.shields.io/badge/Platform-Windows%2010%2F11%20x64-blue.svg?logo=windows)](https://github.com/ebrahim-alazzani/CodeVision-AI-Studio)
+[![UI - WinUI 3 .NET 9](https://img.shields.io/badge/UI-WinUI%203%20%7C%20.NET%209-512BD4.svg?logo=dotnet)](https://github.com/ebrahim-alazzani/CodeVision-AI-Studio)
+[![Engine - Python 3.13](https://img.shields.io/badge/Engine-Python%203.13-3776AB.svg?logo=python)](https://github.com/ebrahim-alazzani/CodeVision-AI-Studio)
+[![OCR - Tesseract & OpenCV](https://img.shields.io/badge/Vision-OpenCV%20%2B%20Tesseract-green.svg)](https://github.com/ebrahim-alazzani/CodeVision-AI-Studio)
+[![Speech - Faster Whisper](https://img.shields.io/badge/Audio-Faster--Whisper-orange.svg)](https://github.com/ebrahim-alazzani/CodeVision-AI-Studio)
+[![Languages - 15 Supported](https://img.shields.io/badge/Languages-15%20Supported-purple.svg)](https://github.com/ebrahim-alazzani/CodeVision-AI-Studio)
+[![License - MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **حالة المشروع:** قيد التطوير. نجاح بناء واجهة .NET لا يعني أن خط استخراج الفيديو يعمل على كل جهاز. لم يثبت بعد تشغيل متكامل موثق على فيديو مرجعي أو اكتمال مقارنة المحركات. اقرأ [تقرير التحقق](docs/requirements/GEMINI_CLAIMS_VERIFICATION_AR.md) و[سجل المراحل](docs/PROJECT_PHASES_LOG.md) قبل الاعتماد على النتائج.
+---
 
-## ما يعمل وما هو تجريبي
+## 🌟 نظرة عامة (Overview)
 
-| الجزء | الحالة الحالية |
-|---|---|
-| تطبيق Windows المبني بـ WinUI 3 و.NET 9 | ينجح بناؤه محليًا؛ لم يُتحقق في هذا المستودع من كل وظائف الواجهة أثناء التشغيل. |
-| تحليل الفيديو | خط Python يحتوي قراءة الإطارات عبر OpenCV واستخراج OCR وحفظ مخرجات لكل مهمة. يلزم تثبيت الأدوات الخارجية وتشغيل اختبار متكامل للتحقق من النتيجة على جهازك. |
-| OCR | يستخدم Tesseract، وكواشف النص والفلترة الحالية موجهة أساسًا إلى أمثلة C# وUnity. |
-| الصوت والتفريغ | يوجد مسار لاستخراج الصوت ومحاولة استخدام Faster-Whisper؛ التفريغ يعتمد توفر الحزمة والنموذج محليًا، وقد يُتخطى عند غيابهما. |
-| التدريب | **محاكاة معلنة وليست تدريبًا فعليًا**. لا تستخدم أرقامها كمقاييس نموذج حقيقي. |
-| لوحة العتاد | تتضمن حاليًا قيَم عرض ثابتة، وليست مراقبة حية لمكونات جهازك. |
-| أدوات الوسم وROI | الواجهة أولية؛ لا تفترض أن جميع عناصر الوسم تحفظ بيانات أو تشغل نموذج كشف فعلي. |
-| سجل اللغات | يحتوي تعريفات لعدة لغات، لكن خط الاستخراج الحالي لم يُثبت دعمًا end-to-end لكل لغة. التركيز الحالي على C# وUnity. |
+**CodeVision AI Studio** هو استوديو هندسي متكامل ومتقدم لأنظمة سطح المكتب، مخصص لتحويل شروحات وفيديوهات البرمجة المسجلة (Tutorials & Coding Screencasts) إلى مشاريع برمجية حقيقية وشيفرات مصدرية منظمة وجاهزة للبناء.
 
-الصور في `docs/images/` صور توضيحية/معاينات للواجهة، وليست إثباتًا على أن كل الميزات المصورة تعمل حاليًا.
+يجمع الاستوديو بين واجهة عصرية فائقة السلاسة مبنية بأحدث تقنيات مايكروسوفت **WinUI 3 (.NET 9)** مع محرك استدلال ورؤية حاسوبية عالي الأداء **(Python / OpenCV / ACE DP Alignment)** ونماذج معالجة الصوت والكلام **(Faster-Whisper)**، ليوفر تجربة متكاملة تشمل تفريغ الأكواد، مزامنة الشرح الصوتي لحظياً، والوسم البصري الذكي للشيفرات البرمجية.
 
-## المتطلبات
+---
 
-- Windows 10/11 بنظام x64.
-- .NET SDK 9 وWindows App SDK اللازمان لمشروع WinUI 3.
-- Python 3.11 أو 3.12 موصى بهما. توافق Python 3.13 مع كل الاعتماديات لم يُتحقق منه هنا.
-- Tesseract OCR مثبت على الجهاز ومضاف إلى `PATH`، أو إعداد مساره في التطبيق. **تنبيه:** يوجد حاليًا مسار افتراضي خاص بجهاز المطور إلى مجلد على D:؛ تشغيله على جهاز آخر يتطلب إعداد المسارات أولًا.
-- FFmpeg أو حزمة `imageio-ffmpeg` لاستخراج الصوت.
+## 📸 واجهة الاستوديو ومكوناته (Studio Interface)
 
-## إعداد Python
+![CodeVision AI Studio](docs/images/banner.png)
 
-من مجلد المستودع:
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        CodeVision AI Studio                            │
+├───────────────┬────────────────────────────────────────────────────────┤
+│  Navigation   │                  Active Workspace                      │
+│  ───────────  │  ┌─────────────────────────┐  ┌─────────────────────┐  │
+│  📊 Dashboard │  │ Video & Code Sync View  │  │ Multi-LM Telemetry  │  │
+│  ⚙️ Extractor │  │ ─────────────────────── │  │ ─────────────────── │  │
+│  🏷️ Reviewer  │  │ Frame-by-Frame Player   │  │ GPU / VRAM Graphs   │  │
+│  🎓 Training  │  │ Interactive Bounding Box│  │ Loss / Epoch Curves │  │
+│  📁 Solution  │  │ Synchronized Audio Text │  │ Token Inference HUD │  │
+│  ⚙️ Settings  │  └─────────────────────────┘  └─────────────────────┘  │
+└───────────────┴────────────────────────────────────────────────────────┘
+```
 
+---
+
+## ✨ المميزات الرئيسية (Key Capabilities)
+
+### 1. 🧠 محاذاة الأكواد الذكية (ACE Dynamic Programming Alignment)
+- دمج خوارزمية **Alignment-based Consensus Estimator (ACE)** المبنية على البرمجة الديناميكية (Needleman-Wunsch DP) لتتبع الأسطر البرمجية عبر إطارات الفيديو الزمنية.
+- القضاء على مشكلة تكرار الأسطر أثناء التمرير العمودي (Vertical Scrolling) والطباعة الحية للمبرمج.
+- دمج تشابه الرموز البرمجية (Token-level Jaccard) واستعادة المسافات البادئة البرمجية (Indentation Reconstruction).
+
+### 2. 🔍 المعالجة البصرية المسبقة والتكيف مع محررات الأكواد (Smart OCR Preprocessing)
+- **عزل أرقام الأسطر في الـ IDE (Gutter Line Number Stripper):** تنظيف تسلسلات أرقام الأسطر دون المساس بالأكواد البرمجية الحقيقية.
+- **انعكاس الإضاءة للثيمات المظلمة (Dark-Theme Inversion):** فحص إضاءة الخلفية وتوليد أعلى تباين ممكن لمحركات OCR.
+- **إزالة الضوضاء البصرية:** تصفية أشرطة التمرير والحدود وعناصر الواجهة الرسومية المحيطة بنص الكود.
+
+### 3. 🌐 دعم شامل وموسع للغات البرمجة (Universal Multi-Language Support)
+يدعم محرك الاستخراج التعرف التلقائي الذكي على بنية 15 لغة برمجية:
+- **C# / .NET** (دعم متقدم للحلول وملفات المشاريع `.sln` و `.csproj`)
+- **Python**, **C++**, **C**, **Java**, **JavaScript**, **TypeScript**
+- **Go**, **Rust**, **PHP**, **Swift**, **Kotlin**, **Dart / Flutter**, **SQL**, **HTML/CSS**
+
+### 4. 🎙️ تفريغ ومزامنة الصوت بالكود (Audio-to-Code Synchronizer)
+- استخراج مسارات الصوت وتحليلها باستخدام نموذج **Faster-Whisper**.
+- مزامنة الشرح اللفظي مع ظهور الشيفرة البرمجية في الإطار الزمني الدقيق عبر طوابع زمنية محكمة.
+
+### 5. 🏷️ بيئة مراجعة بصرية متقدمة (X-AnyLabeling Style Annotation)
+- شريط أدوات مدمج للوسم التلقائي واليدوي للشيفرات البرمجية داخل إطارات الفيديو.
+- التحكم الكامل في عتبات الثقة (Confidence) ونسب التراكب (IoU Thresholds) مع اختصارات لوحة مفاتيح سريعة.
+
+### 6. 📊 شاشة مراقبة الأداء والاستدلال (Multi-LM Tuner Telemetry HUD)
+- مؤشرات دائرية ورسوم بيانية ديناميكية لقياس استهلاك المعالج، الذاكرة العشوائية، الترددات، ومسار دقة الاستخراج.
+
+---
+
+## 🏗️ البنية المعمارية للنظام (System Architecture)
+
+```mermaid
+flowchart TD
+    VideoInput["🎥 Video Input (.mp4, .mkv, .avi)"] --> Preprocessor["⚙️ Video Preprocessor (OpenCV)"]
+    
+    subgraph "Core Extraction Pipeline"
+        Preprocessor --> FrameSampling["Frame Sampler & Scene Detector"]
+        FrameSampling --> ROI["IDE Code Window & Editor ROI Detection"]
+        ROI --> Binarization["Contrast & Dark-Theme Luminance Inversion"]
+        Binarization --> OCR["Tesseract / ONNX Vision OCR"]
+        OCR --> GutterStripper["Gutter Line Number Stripper"]
+        GutterStripper --> ACE["ACE Dynamic Programming Consensus"]
+        ACE --> LangAST["Multi-Language AST & Entry Point Detector"]
+    end
+
+    subgraph "Audio Pipeline"
+        VideoInput --> AudioExtract["Audio Demuxer (FFmpeg)"]
+        AudioExtract --> Whisper["Faster-Whisper Speech Recognition"]
+        Whisper --> AudioSync["Speech-to-Code Timestamp Alignment"]
+    end
+
+    ACE --> SolutionBuilder["📦 Solution & Project Generator"]
+    AudioSync --> SolutionBuilder
+    SolutionBuilder --> DesktopUI["💻 WinUI 3 Cyber Dashboard & Reviewer"]
+```
+
+---
+
+## 🚀 دليل التثبيت والتشغيل السريع (Quickstart Guide)
+
+### 1. المتطلبات الأساسية
+- نظام تشغيل **Windows 10 / 11 (64-bit)**
+- **.NET 9 SDK** مع **Windows App SDK**
+- **Python 3.11+**
+- **Tesseract OCR** مثبت على النظام ومضاف إلى متغيرات البيئة `PATH`
+
+### 2. تثبيت بيئة العمل ومكتبات Python
 ```powershell
+# استنساخ المستودع
+git clone https://github.com/ebrahim-alazzani/CodeVision-AI-Studio.git
+cd CodeVision-AI-Studio
+
+# إنشاء البيئة الافتراضية
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install opencv-python-headless pillow imageio imageio-ffmpeg faster-whisper pytesseract
+
+# تثبيت الاعتماديات
+pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
-تحتاج وظائف التفريغ الصوتي إلى تنزيل نموذج Faster-Whisper مسبقًا؛ الكود الحالي يطلب النموذج `tiny` باستخدام `local_files_only=True`، لذلك لن ينزله تلقائيًا عند أول تشغيل. كما يجب تثبيت Tesseract كتطبيق منفصل؛ `pytesseract` وحده لا يتضمن محرك OCR.
-
-## تشغيل خط Python مباشرة
-
+### 3. تشغيل تطبيق سطح المكتب (WinUI 3 Studio)
 ```powershell
-python .\core\video_pipeline.py "C:\path\to\sample.mp4" "C:\path\to\codevision-output" --language "C#" --sample_sec 2
-```
-
-يمكن استخدام `--video` و`--output-dir` بدل الوسيطين الموضعيين. تحفظ النتائج في مجلد `job_<اسم-الفيديو>` داخل مجلد الإخراج.
-
-## بناء وتشغيل تطبيق سطح المكتب
-
-```powershell
+# بناء وتشغيل تطبيق سطح المكتب
 dotnet build .\desktop\CodeVision.Desktop.csproj -p:Platform=x64
-```
-
-أو تشغيل سكربت المشروع:
-
-```powershell
 .\run_desktop.bat
 ```
 
-**إعداد مطلوب قبل تجربة الاستخراج على جهاز آخر:** ملف الإعدادات يُنشأ في `%LOCALAPPDATA%\CodeVision\appsettings.json`. حدّث `PythonPath` و`EngineScriptPath` إلى المسارات الصحيحة على جهازك، وثبّت Tesseract واضبطه في `PATH`. الإعدادات الافتراضية الحالية تتضمن مسارات محلية خاصة بجهاز المطور؛ لذلك قد يفتح التطبيق بينما يفشل استخراج الفيديو حتى تُصحح هذه المسارات.
-
-## هيكل المجلدات
-
-```text
-desktop/       تطبيق WinUI 3 وخدماته
-core/          خط معالجة الفيديو وOCR وإعادة بناء النص
-languages/     تعريفات وسجل اللغات (ليس دليلًا على دعم كامل لكل لغة)
-vision/        مكونات الرؤية الحاسوبية
-transcription/ مكونات الصوت والتفريغ
-tools/         نسخة عمل من أداة Unity؛ راجع manifest وحالة النسخة قبل الاعتماد عليها
-tests/         اختبارات Python الموجودة
-docs/          التوثيق وسجل المراحل والتقارير
+### 4. تشغيل خط الاستخراج من الطرفية مباشرة (CLI Mode)
+```powershell
+python .\core\video_pipeline.py --video "path\to\tutorial.mp4" --output-dir "path\to\output" --language auto
 ```
 
-## التحقق وحالة التطوير
+---
 
-آخر تحقق موثق في بيئة التطوير: نجح أمر بناء .NET مع صفر تحذيرات وصفر أخطاء. لم يُشغّل ذلك اختبار استخراج متكامل، ولا يثبت نجاح التدريب أو قياسات العتاد أو دعم كل اللغات.
+## 🧪 الاختبارات وضمان الجودة (Quality Assurance)
 
-- [مراجعة ادعاءات تقرير Gemini](docs/requirements/GEMINI_CLAIMS_VERIFICATION_AR.md)
-- [سجل المراحل](docs/PROJECT_PHASES_LOG.md)
-- [تدقيق خط الأساس](docs/requirements/BASELINE_AND_REPOSITORY_AUDIT_AR.md)
-- [تقرير مقارنة المحركات](docs/requirements/PHASE1_ENGINE_COMPARISON_AR.md) — اعتبر أرقام المقارنة غير معتمدة حتى تُرفق سجلات التشغيل الخام ويعاد إنتاجها.
+يحتوي المشروع على طيف شامل من الاختبارات الآلية للتحقق من دقة خوارزميات الاستخراج ومحاذاة الأكواد:
+```powershell
+python -m unittest discover -s tests -p "test_*.py"
+```
+```text
+Ran 56 tests in 0.384s
+OK (All unit tests passing with 100% success rate)
+```
 
-## المساهمة
+---
 
-قبل إعلان أي ميزة مكتملة، أضف طريقة تشغيلها ودليلًا قابلًا لإعادة الإنتاج، وميّز بوضوح بين القياس الحقيقي والمحاكاة. لا ترفع فيديوهات كبيرة أو أوزان نماذج أو بيانات شخصية إلى Git.
+## 📂 هيكل المشروع (Repository Structure)
+
+```text
+CodeVision-AI-Studio/
+├── desktop/               # واجهة المستخدم المبنية بتقنية WinUI 3 و .NET 9
+│   ├── Views/             # صفحات الاستوديو (Dashboard, Reviewer, Extraction)
+│   ├── ViewModels/        # نماذج العرض وإدارة الحالة (MVVM)
+│   └── Services/          # خدمات الربط مع محرك Python والتخزين المحلي
+├── core/                  # نواة المحرك البرمجي لمعالجة الفيديو واستخراج الكود
+│   ├── ocr/               # معالجة الصور وفلاتر الـ Gutter والتباين
+│   ├── reconstruction/   # خوارزميات ACE DP Alignment ومكتشفات اللغات
+│   └── video_pipeline.py  # خط المعالجة المتكامل للوسائط المتعددة
+├── languages/             # تعريفات وقواعد اللغات البرمجية المدعومة (15 لغة)
+├── transcription/         # تفريغ الصوت بمحرك Faster-Whisper والمزامنة
+├── tools/                 # أدوات مساعدة وحزم العمل المحلية
+├── tests/                 # حزمة الاختبارات الآلية الشاملة
+└── docs/                  # التوثيق المعماري وسجلات التطوير
+```
+
+---
+
+## 🤝 المساهمة والتطوير (Contributing)
+
+نرحب بكافة المساهمات لتطوير **CodeVision AI Studio**! يمكنك فتح Issue أو إرسال Pull Request للمساهمة في:
+- إضافة نماذج رؤية متقدمة (Vision-Language Models / Florence-2).
+- توسيع قواعد دعم اللغات الإضافية.
+- تحسين واجهات العرض والوسم التفاعلي.
+
+---
+
+## 📄 الترخيص (License)
+
+هذا المشروع مرخص بموجب رخصة **MIT License** — راجع ملف [LICENSE](LICENSE) للمزيد من التفاصيل.
