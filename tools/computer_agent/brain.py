@@ -1,19 +1,19 @@
 """
-وحدة التفكير - Brain Module (Gemini VLM)
-==========================================
-إرسال لقطة الشاشة مع المهمة إلى نموذج Gemini 
-والحصول على الإجراء التالي بصيغة JSON.
-
-يستخدم مكتبة google-genai الجديدة (بديل google-generativeai المُهملة).
+وحدة التفكير - Brain Module (Gemini Direct REST)
+=================================================
+إرسال لقطة الشاشة مع المهمة إلى Google Gemini API
+مباشرة عبر بروتوكول HTTP القياسي (فائق السرعة وبدون مشاكل مكتبات).
 """
 
 import json
 import re
+import io
+import base64
+import urllib.request
+import urllib.error
 from PIL import Image
-from google import genai
-from google.genai import types
 
-from config import GEMINI_API_KEY, GEMINI_MODEL
+from config import GEMINI_API_KEY, GEMINI_MODELS, SCREENSHOT_QUALITY
 
 # ──────────────────────────────────────────────
 # برومبت النظام الذي يوجّه النموذج
@@ -26,88 +26,106 @@ SYSTEM_PROMPT = """أنت وكيل ذكي تتحكم بكمبيوتر يعمل �
 2. `double_click` - نقر مزدوج: {"action": "double_click", "x": <int>, "y": <int>}
 3. `type_text` - كتابة نص: {"action": "type_text", "text": "<string>"}
 4. `press_key` - ضغط مفتاح: {"action": "press_key", "key": "<key_name>"}
-   مفاتيح: enter, tab, escape, backspace, delete, up, down, left, right, space, f1-f12
-5. `hotkey` - مفاتيح مركبة: {"action": "hotkey", "keys": ["ctrl", "c"]}
+   مفاتيح شائعة: win, enter, tab, escape, backspace, delete, up, down, left, right, space
+5. `hotkey` - اختصارات مركبة: {"action": "hotkey", "keys": ["ctrl", "c"]} أو ["win", "r"]
 6. `scroll` - تمرير: {"action": "scroll", "amount": <int>, "x": <int>, "y": <int>}
-   amount موجب=أعلى، سالب=أسفل
 7. `wait` - انتظار: {"action": "wait", "seconds": <float>}
-8. `done` - انتهاء المهمة: {"action": "done", "summary": "<ملخص ما تم>"}
+8. `done` - انتهاء المهمة بنجاح: {"action": "done", "summary": "<ملخص ما تم>"}
 
-## قواعد مهمة:
-- أعد إجراء واحد فقط في كل مرة.
-- الإحداثيات (x, y) تشير لمكان النقر على الشاشة بالبكسل.
-- انظر بعناية للقطة الشاشة لتحديد الإحداثيات بدقة.
-- إذا كنت تريد الكتابة في حقل، انقر عليه أولاً ثم اكتب في الخطوة التالية.
-- عندما تنتهي من المهمة بالكامل، أعد action: "done".
-- إذا حصل خطأ أو لم تستطع الاستمرار، أعد done مع شرح.
+## نصائح ذكية:
+- لفتح أي برنامج (مثل المفكرة Notepad أو الآلة الحاسبة Calculator):
+  1. اضغط مفتاح `win` (أو اختصار `["win", "r"]`).
+  2. في الخطوة التالية اكتب اسم البرنامج واضغط enter.
+- إذا كنت تريد الكتابة في حقل أو نافذة، انقر عليه أولاً لتفعيله ثم اكتب في الخطوة التالية.
+- عندما تنتهي المهمة تماماً، أعد action: "done".
 
-## صيغة الإخراج:
-أعد JSON فقط بالشكل:
+## صيغة الإخراج الإلزامية:
+أعد كائن JSON فقط بدون أي مقدمات:
 ```json
-{"thought": "تفكيرك المختصر", "action": "...", ...}
+{"thought": "تفكيرك وخطتك للخطوة", "action": "click", "x": 100, "y": 200}
 ```"""
 
 
 def init_model(api_key: str = None):
-    """تهيئة عميل Gemini باستخدام google-genai الجديدة."""
+    """التحقق من توفر المفتاح وإرجاعه."""
     key = api_key or GEMINI_API_KEY
     if not key:
-        raise ValueError(
-            "❌ مفتاح Gemini API غير موجود!\n"
-            "   ➡️  عيّنه في config.py أو كمتغير بيئة:\n"
-            '   set GEMINI_API_KEY=your_key_here'
-        )
-    client = genai.Client(api_key=key)
-    return client
+        raise ValueError("❌ مفتاح Gemini API غير موجود في config.py!")
+    return key
 
 
-def think(client, screenshot: Image.Image, task: str, history: list = None) -> dict:
+def think(api_key: str, screenshot: Image.Image, task: str, history: list = None) -> dict:
     """
-    إرسال لقطة الشاشة والمهمة للنموذج والحصول على الإجراء التالي.
-    
-    Args:
-        client: عميل genai.Client
-        screenshot: صورة PIL للشاشة
-        task: وصف المهمة
-        history: قائمة الإجراءات السابقة
-    
-    Returns:
-        dict مع مفاتيح: thought, action, وأي معاملات إضافية
+    إرسال لقطة الشاشة والمهمة عبر REST API والحصول على الإجراء التالي.
     """
-    # بناء الرسالة
-    parts = []
+    # تحويل الصورة إلى Base64
+    buf = io.BytesIO()
+    screenshot.save(buf, format="JPEG", quality=SCREENSHOT_QUALITY)
+    b64_image = base64.b64encode(buf.getvalue()).decode("utf-8")
 
-    # إضافة السجل السابق إن وُجد
+    # صياغة محتوى الطلب
+    prompt_text = f"المهمة المطلوبة: {task}\n"
     if history:
-        history_text = "الإجراءات السابقة في هذه المهمة:\n"
+        prompt_text += "الخطوات السابقة التي قمت بها:\n"
         for i, h in enumerate(history, 1):
-            history_text += f"  {i}. {h}\n"
-        parts.append(history_text)
+            prompt_text += f"  {i}. {h}\n"
+    prompt_text += "\nهذه هي لقطة الشاشة الحالية بعد الإجراءات السابقة. ما هو الإجراء التالي؟ أعد JSON فقط."
 
-    parts.append(f"المهمة المطلوبة: {task}")
-    parts.append("لقطة الشاشة الحالية:")
-    parts.append(screenshot)
-    parts.append("ما هو الإجراء التالي؟ أعد JSON فقط.")
+    parts = [
+        {"text": prompt_text},
+        {
+            "inline_data": {
+                "mime_type": "image/jpeg",
+                "data": b64_image
+            }
+        }
+    ]
 
-    # استدعاء النموذج
-    response = client.models.generate_content(
-        model=GEMINI_MODEL,
-        contents=parts,
-        config=types.GenerateContentConfig(
-            system_instruction=SYSTEM_PROMPT,
-            temperature=0.1,
-            max_output_tokens=512,
-        ),
-    )
-    raw_text = response.text.strip()
+    payload = {
+        "contents": [{"parts": parts}],
+        "system_instruction": {
+            "parts": [{"text": SYSTEM_PROMPT}]
+        },
+        "generationConfig": {
+            "temperature": 0.1,
+            "maxOutputTokens": 512,
+        }
+    }
+    data_bytes = json.dumps(payload).encode("utf-8")
 
-    # استخراج JSON من الإخراج
-    return parse_response(raw_text)
+    # تجربة النماذج المتاحة بالتسلسل
+    last_error = None
+    for model_name in GEMINI_MODELS:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+        req = urllib.request.Request(
+            url,
+            data=data_bytes,
+            headers={"Content-Type": "application/json"}
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=20) as resp:
+                res_json = json.loads(resp.read().decode("utf-8"))
+                candidate = res_json.get("candidates", [{}])[0]
+                text = candidate.get("content", {}).get("parts", [{}])[0].get("text", "")
+                return parse_response(text)
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8", errors="ignore")
+            last_error = f"{model_name} HTTP {e.code}: {err_body}"
+            # إذا كان النموذج غير متاح أو مضغوط (503/404)، نجرب الذي يليه
+            continue
+        except Exception as e:
+            last_error = f"{model_name}: {str(e)}"
+            continue
+
+    return {
+        "thought": f"خطأ في الاتصال بالنموذج: {last_error}",
+        "action": "done",
+        "summary": "فشل الاتصال بالنموذج"
+    }
 
 
 def parse_response(raw: str) -> dict:
-    """استخراج JSON من إخراج النموذج (قد يكون مغلفاً بـ ```json)."""
-    # محاولة 1: استخراج من كتلة كود
+    """استخراج JSON من إخراج النموذج."""
     match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", raw, re.DOTALL)
     if match:
         try:
@@ -115,7 +133,6 @@ def parse_response(raw: str) -> dict:
         except json.JSONDecodeError:
             pass
 
-    # محاولة 2: البحث عن أول { ... }
     match = re.search(r"\{[^{}]*\}", raw, re.DOTALL)
     if match:
         try:
@@ -123,19 +140,11 @@ def parse_response(raw: str) -> dict:
         except json.JSONDecodeError:
             pass
 
-    # محاولة 3: النص الكامل كـ JSON
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
         return {
-            "thought": f"فشل تحليل الإخراج: {raw[:200]}",
+            "thought": f"تعذر قراءة الرد: {raw[:150]}",
             "action": "done",
-            "summary": "خطأ في فهم إخراج النموذج",
+            "summary": "استجابة غير مهيكلة"
         }
-
-
-if __name__ == "__main__":
-    print("🧠 اختبار وحدة التفكير...")
-    test_json = '```json\n{"thought": "أرى سطح المكتب", "action": "click", "x": 100, "y": 200}\n```'
-    result = parse_response(test_json)
-    print(f"✅ تحليل JSON: {result}")
