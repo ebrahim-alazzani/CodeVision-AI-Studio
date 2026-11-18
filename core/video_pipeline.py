@@ -44,6 +44,7 @@ from core.reconstruction.code_detector import CodeDetector, CodeStructure
 from core.evidence import Observation, Evidence, EvidenceModality, BoundingBox
 from languages.builtin import create_default_registry
 from languages.registry import LanguageRegistry
+from vision.roi_detector import CodeROIDetector
 
 
 def extract_real_audio(video_path: Path, output_wav: Path) -> bool:
@@ -175,9 +176,10 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "auto", sa
     curr_frame_idx = 0
     detected_scene_idx = 0
 
-    # Initialize Tesseract OCR Engine & Denoising Filter
+    # Initialize Tesseract OCR Engine & Denoising Filter & ROI Detector
     tesseract_engine = TesseractEngine()
     noise_filter = NoiseFilter()
+    roi_detector = CodeROIDetector()
     ocr_results = []
     all_candidate_lines = []
 
@@ -199,22 +201,16 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "auto", sa
                     diff = cv2.absdiff(gray, prev_gray)
                     diff_score = float(diff.mean())
 
-                # Edge density & dark theme ratio
-                edges = cv2.Canny(gray, 50, 150)
-                edge_density = float((edges > 0).mean())
-                dark_ratio = float((gray < 110).mean())
-                code_score = min(1.0, 0.65 * min(edge_density / 0.12, 1.0) + 0.35 * dark_ratio)
-
                 # Skip duplicates if difference is minuscule
                 if prev_gray is not None and diff_score < 2.2:
                     print(f"PROGRESS: {pct} | [SKIPPED] إطار عند {sec:.1f}s تم تجاوزه (تطابق الإطار السابق · diff: {diff_score:.1f}%)", flush=True)
                 else:
                     detected_scene_idx += 1
-                    # Isolated Code Window ROI (Bounding Box)
-                    roi_x = int(width * 0.05)
-                    roi_y = int(height * 0.08)
-                    roi_w = int(width * 0.75)
-                    roi_h = int(height * 0.82)
+                    
+                    # Automated Dynamic Code ROI & WebCam Masking Detection
+                    roi_report = roi_detector.detect(frame)
+                    roi_x, roi_y, roi_w, roi_h = roi_report.primary_code_roi
+                    code_score = roi_report.confidence
 
                     kf_path = keyframes_dir / f"scene_{detected_scene_idx:03d}_{sec:.1f}s.png"
                     cv2.imwrite(str(kf_path), frame)
@@ -222,13 +218,21 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "auto", sa
                     # Create annotated frame with glowing OpenCV bounding box
                     annotated = frame.copy()
                     cv2.rectangle(annotated, (roi_x, roi_y), (roi_x + roi_w, roi_y + roi_h), (196, 216, 95), 2)
-                    cv2.putText(annotated, f"CODE ROI: {code_score*100:.1f}%", (roi_x, roi_y - 8),
+                    tag_text = f"{roi_report.category.upper()} ROI: {code_score*100:.1f}%"
+                    cv2.putText(annotated, tag_text, (roi_x, max(22, roi_y - 8)),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.6, (196, 216, 95), 2)
+
+                    if roi_report.webcam_roi:
+                        wx, wy, ww, wh = roi_report.webcam_roi
+                        cv2.rectangle(annotated, (wx, wy), (wx + ww, wy + wh), (50, 70, 240), 2)
+                        cv2.putText(annotated, "WEBCAM (MASKED)", (wx, max(22, wy - 8)),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (50, 70, 240), 2)
+
                     ann_path = keyframes_dir / f"annotated_{detected_scene_idx:03d}.png"
                     cv2.imwrite(str(ann_path), annotated)
 
-                    # Perform Tesseract OCR on isolated code window ROI
-                    cropped_code_region = frame[roi_y:roi_y+roi_h, roi_x:roi_x+roi_w]
+                    # Perform Tesseract OCR on isolated code window ROI (with webcam masked)
+                    cropped_code_region = roi_detector.crop_editor_roi(frame, roi_report, mask_webcam=True)
                     crop_path = keyframes_dir / f"crop_{detected_scene_idx:03d}.png"
                     cv2.imwrite(str(crop_path), cropped_code_region)
 
@@ -259,8 +263,11 @@ def run_pipeline(video_path: str, output_dir: str, target_lang: str = "auto", sa
                         "code_likelihood": round(code_score, 3),
                         "diff_score": round(diff_score, 2),
                         "bounding_box": {"x": roi_x, "y": roi_y, "width": roi_w, "height": roi_h},
+                        "category": roi_report.category,
+                        "is_dark_theme": roi_report.is_dark_theme,
+                        "webcam_roi": {"x": roi_report.webcam_roi[0], "y": roi_report.webcam_roi[1], "width": roi_report.webcam_roi[2], "height": roi_report.webcam_roi[3]} if roi_report.webcam_roi else None,
                         "extracted_text": cleaned_text if cleaned_text else "[UNEXTRACTED]",
-                        "summary": f"مشهد كود #{detected_scene_idx} عند {sec:.1f} ثانية (احتمالية الكود: {int(code_score*100)}%)"
+                        "summary": f"مشهد {roi_report.category} #{detected_scene_idx} عند {sec:.1f} ثانية (احتمالية الكود: {int(code_score*100)}%)"
                     }
                     scenes.append(scene_info)
 
