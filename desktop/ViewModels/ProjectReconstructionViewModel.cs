@@ -71,31 +71,7 @@ public partial class ProjectReconstructionViewModel : ObservableObject
     {
         AvailableJobs.Clear();
 
-        // 1. Check Course Scripts Clean Final
-        var coursePath = @"D:\Programming\New folder\Mobile Game Development Tutorial 2025\Course_Scripts_Clean_Final";
-        if (Directory.Exists(coursePath))
-        {
-            AvailableJobs.Add(new AvailableJobItem
-            {
-                DisplayName = "🎮 Unity GTA Vice City Clone (كورس كامل - 11 مجلد)",
-                Path = coursePath,
-                Description = "مشروع كامل يحتوي على AI, Vehicles, Shooting, Player, UI, Camera"
-            });
-        }
-
-        // 2. Check Test Video 26 (Shop System)
-        var vid26Path = @"D:\Programming\New folder\Mobile Game Development Tutorial 2025\Test_Video_26\_Extracted_CSharp\26 - Unity Shop System Tutorial Mobile Game Development Full Course GTA Vice City Game Clone(720P_60FPS)";
-        if (Directory.Exists(vid26Path))
-        {
-            AvailableJobs.Add(new AvailableJobItem
-            {
-                DisplayName = "🛒 Video 26: Unity Shop System (Script & History)",
-                Path = vid26Path,
-                Description = "استخراج الدرس 26 بنظام الحفظ والمحاكاة التزامنية"
-            });
-        }
-
-        // 3. Scan Output Directory for jobs
+        // 1. Scan Output Directory for real extraction jobs first
         var outDir = _settings.Current.OutputDirectory;
         if (string.IsNullOrWhiteSpace(outDir) || !Directory.Exists(outDir))
             outDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CodeVision", "output");
@@ -104,18 +80,46 @@ public partial class ProjectReconstructionViewModel : ObservableObject
         {
             var jobDirs = Directory.GetDirectories(outDir)
                 .OrderByDescending(Directory.GetLastWriteTime)
-                .Take(10);
+                .Take(15);
 
             foreach (var jd in jobDirs)
             {
                 var dirName = Path.GetFileName(jd);
+                var isFlutter = dirName.Contains("Flutter", StringComparison.OrdinalIgnoreCase);
+                var isUnity = dirName.Contains("Unity", StringComparison.OrdinalIgnoreCase);
+                var icon = isFlutter ? "📱" : isUnity ? "🎮" : "📦";
+
                 AvailableJobs.Add(new AvailableJobItem
                 {
-                    DisplayName = $"📁 {dirName}",
+                    DisplayName = $"{icon} {dirName}",
                     Path = jd,
-                    Description = $"مخرجات استخراج: {dirName}"
+                    Description = $"مخرجات استخراج حقيقية: {dirName}"
                 });
             }
+        }
+
+        // 2. Check Course Scripts Clean Final as reference/demo
+        var coursePath = @"D:\Programming\New folder\Mobile Game Development Tutorial 2025\Course_Scripts_Clean_Final";
+        if (Directory.Exists(coursePath))
+        {
+            AvailableJobs.Add(new AvailableJobItem
+            {
+                DisplayName = "🎮 Unity GTA Vice City Clone (مرجع تجريبي - 11 مجلد)",
+                Path = coursePath,
+                Description = "مشروع مرجعي يحتوي على AI, Vehicles, Shooting, Player, UI, Camera"
+            });
+        }
+
+        // 3. Check Test Video 26 (Shop System) as reference/demo
+        var vid26Path = @"D:\Programming\New folder\Mobile Game Development Tutorial 2025\Test_Video_26\_Extracted_CSharp\26 - Unity Shop System Tutorial Mobile Game Development Full Course GTA Vice City Game Clone(720P_60FPS)";
+        if (Directory.Exists(vid26Path))
+        {
+            AvailableJobs.Add(new AvailableJobItem
+            {
+                DisplayName = "🛒 Video 26: Unity Shop System (مرجع تجريبي)",
+                Path = vid26Path,
+                Description = "استخراج الدرس 26 بنظام الحفظ والمحاكاة التزامنية"
+            });
         }
 
         if (AvailableJobs.Count > 0)
@@ -214,7 +218,7 @@ public partial class ProjectReconstructionViewModel : ObservableObject
             foreach (var filePath in Directory.GetFiles(dirPath))
             {
                 var ext = Path.GetExtension(filePath).ToLowerInvariant();
-                if (ext is not (".cs" or ".py" or ".ts" or ".js" or ".txt" or ".json" or ".md"))
+                if (ext is not (".cs" or ".dart" or ".py" or ".ts" or ".js" or ".cpp" or ".h" or ".txt" or ".json" or ".yaml" or ".xml"))
                     continue;
 
                 var fileName = Path.GetFileName(filePath);
@@ -239,16 +243,27 @@ public partial class ProjectReconstructionViewModel : ObservableObject
 
                 parentItem.Children.Add(fileItem);
 
+                var lang = ext switch
+                {
+                    ".dart" => "Dart / Flutter",
+                    ".cs" => "C# (.NET 9)",
+                    ".py" => "Python",
+                    ".ts" => "TypeScript",
+                    ".js" => "JavaScript",
+                    ".cpp" or ".h" => "C++",
+                    _ => content.Contains("StatelessWidget") ? "Dart / Flutter" : "Source Code"
+                };
+
                 var snip = new ExtractedCodeSnippet
                 {
                     TargetFilePath = Path.Combine(parentItem.Name, fileName),
-                    Language = ext == ".cs" ? "C#" : ext == ".py" ? "Python" : "Text",
+                    Language = lang,
                     TimestampSec = fileCount * 12.0,
                     Confidence = 0.96,
                     CodeContent = content
                 };
 
-                if (firstSnippet == null && ext == ".cs")
+                if (firstSnippet == null && ext != ".json")
                 {
                     firstSnippet = snip;
                 }
@@ -263,7 +278,8 @@ public partial class ProjectReconstructionViewModel : ObservableObject
         var histDir = Path.Combine(jobDirPath, "ScriptHistory");
         if (Directory.Exists(histDir))
         {
-            var histFiles = Directory.GetFiles(histDir, "*.cs")
+            var histFiles = Directory.GetFiles(histDir, "*.*")
+                .Where(f => !f.EndsWith(".meta", StringComparison.OrdinalIgnoreCase))
                 .OrderBy(f => f)
                 .Take(25);
 
@@ -274,10 +290,20 @@ public partial class ProjectReconstructionViewModel : ObservableObject
                 string content = "";
                 try { content = File.ReadAllText(hf); } catch { }
 
+                var ext = Path.GetExtension(fname).ToLowerInvariant();
+                var lang = ext switch
+                {
+                    ".dart" => "Dart",
+                    ".cs" => "C#",
+                    ".py" => "Python",
+                    ".ts" => "TypeScript",
+                    _ => "Code"
+                };
+
                 OrderedSnippets.Add(new ExtractedCodeSnippet
                 {
                     TargetFilePath = $"ScriptHistory/{fname}",
-                    Language = "C#",
+                    Language = lang,
                     TimestampSec = timeAcc,
                     Confidence = 0.95,
                     CodeContent = content
@@ -299,10 +325,18 @@ public partial class ProjectReconstructionViewModel : ObservableObject
         {
             if (!item.IsDirectory && !string.IsNullOrWhiteSpace(item.Content))
             {
+                var ext = Path.GetExtension(item.Name).ToLowerInvariant();
+                var lang = ext switch
+                {
+                    ".dart" => "Dart",
+                    ".cs" => "C#",
+                    ".py" => "Python",
+                    _ => "Code"
+                };
                 OrderedSnippets.Add(new ExtractedCodeSnippet
                 {
                     TargetFilePath = item.Name,
-                    Language = item.Name.EndsWith(".cs") ? "C#" : "Text",
+                    Language = lang,
                     TimestampSec = (OrderedSnippets.Count + 1) * 20.0,
                     Confidence = item.Confidence,
                     CodeContent = item.Content

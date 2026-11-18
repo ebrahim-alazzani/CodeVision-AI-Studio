@@ -27,6 +27,8 @@ public sealed partial class ExtractionReviewPage : Page
         ScenesList.ItemsSource = _viewModel.DetectedScenes;
         LiveLogsList.ItemsSource = _viewModel.LiveExecutionLogs;
         TranscriptsListView.ItemsSource = _viewModel.TranscriptSegments;
+        TimelineSlider.Maximum = Math.Max(10, _viewModel.TotalDurationSeconds);
+        TimeLabel.Text = _viewModel.TimeDisplay;
 
         if (_viewModel.HasRealVideo && File.Exists(_viewModel.RealVideoPath))
         {
@@ -40,6 +42,10 @@ public sealed partial class ExtractionReviewPage : Page
                 if (e.PropertyName == nameof(ExtractionReviewViewModel.TimeDisplay))
                 {
                     TimeLabel.Text = _viewModel.TimeDisplay;
+                }
+                else if (e.PropertyName == nameof(ExtractionReviewViewModel.TotalDurationSeconds))
+                {
+                    TimelineSlider.Maximum = Math.Max(10, _viewModel.TotalDurationSeconds);
                 }
                 else if (e.PropertyName == nameof(ExtractionReviewViewModel.CurrentFrameIndex))
                 {
@@ -131,6 +137,15 @@ public sealed partial class ExtractionReviewPage : Page
         catch { }
     }
 
+    private void SnippetFileCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (SnippetFileCombo?.SelectedItem is ExtractedCodeSnippet snippet && _viewModel != null)
+        {
+            _viewModel.SelectedSnippet = snippet;
+            UpdateSnippetDisplay();
+        }
+    }
+
     private void UpdateSnippetDisplay()
     {
         if (_viewModel?.SelectedSnippet != null)
@@ -140,6 +155,10 @@ public sealed partial class ExtractionReviewPage : Page
             SnippetConfidenceLabel.Text = $"درجة الثقة: {_viewModel.SelectedSnippet.Confidence:P0} · التوقيت: {_viewModel.SelectedSnippet.TimestampFormatted}";
             CodePreviewBox.Text = _viewModel.SelectedSnippet.CodeContent;
             SnippetExplanationLabel.Text = _viewModel.SelectedSnippet.Explanation;
+            if (SnippetFileCombo != null && SnippetFileCombo.SelectedItem != _viewModel.SelectedSnippet)
+            {
+                SnippetFileCombo.SelectedItem = _viewModel.SelectedSnippet;
+            }
         }
     }
 

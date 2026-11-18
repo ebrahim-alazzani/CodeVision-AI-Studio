@@ -179,6 +179,26 @@ public partial class ExtractionReviewViewModel : ObservableObject
 
     private void LoadRealJobData(string jobFolder)
     {
+        // 0. Load manifest.json for duration and metadata
+        var manifestFile = Path.Combine(jobFolder, "manifest.json");
+        if (File.Exists(manifestFile))
+        {
+            try
+            {
+                using var mDoc = JsonDocument.Parse(File.ReadAllText(manifestFile));
+                if (mDoc.RootElement.TryGetProperty("duration_sec", out var durProp))
+                {
+                    var dur = durProp.GetDouble();
+                    if (dur > 0)
+                    {
+                        TotalDurationSeconds = dur;
+                        TotalFramesCount = (int)(dur * 30);
+                    }
+                }
+            }
+            catch { }
+        }
+
         // 1. Audio track
         var audioWav = Path.Combine(jobFolder, "audio.wav");
         if (File.Exists(audioWav))
@@ -204,25 +224,35 @@ public partial class ExtractionReviewViewModel : ObservableObject
                 var json = File.ReadAllText(scenesFile);
                 using var doc = JsonDocument.Parse(json);
                 DetectedScenes.Clear();
+                double maxSceneSec = 0;
                 foreach (var el in doc.RootElement.EnumerateArray())
                 {
+                    var ts = el.TryGetProperty("timestamp_sec", out var tsp) ? tsp.GetDouble() : 0;
+                    if (ts > maxSceneSec) maxSceneSec = ts;
                     var scene = new DetectedScene
                     {
                         SceneIndex = el.TryGetProperty("scene_index", out var si) ? si.GetInt32() : DetectedScenes.Count + 1,
-                        TimestampSec = el.TryGetProperty("timestamp_sec", out var ts) ? ts.GetDouble() : 0,
+                        TimestampSec = ts,
                         CodeLikelihood = el.TryGetProperty("code_likelihood", out var cl) ? cl.GetDouble() : 0.9,
                         IsCodeScene = true,
                         SummaryText = el.TryGetProperty("summary", out var sm) ? sm.GetString() ?? "" : $"مشهد كود #{DetectedScenes.Count + 1}"
                     };
                     DetectedScenes.Add(scene);
                 }
-                LogEvent($"🎬 تم تحميل {DetectedScenes.Count} مشهد برمجـي من scenes.json");
+                if (TotalDurationSeconds <= 120 && maxSceneSec > 0)
+                {
+                    TotalDurationSeconds = maxSceneSec + 5.0;
+                    TotalFramesCount = (int)(TotalDurationSeconds * 30);
+                }
+                LogEvent($"🎬 تم تحميل {DetectedScenes.Count} مشهد برمجـي من scenes.json (المدة الكلية: {TotalDurationSeconds:F0}s)");
             }
             catch (Exception ex)
             {
                 LogEvent($"⚠️ تعذر قراءة scenes.json: {ex.Message}");
             }
         }
+
+        UpdateTimeDisplay();
 
         // 3. Load transcript.json
         var transcriptFile = Path.Combine(jobFolder, "transcript.json");
@@ -255,27 +285,48 @@ public partial class ExtractionReviewViewModel : ObservableObject
             }
         }
 
-        // 4. Load results/ code files
+        // 4. Load results/ code files recursively (including ProjectScripts/)
         var resultsDir = Path.Combine(jobFolder, "results");
         if (Directory.Exists(resultsDir))
         {
-            var files = Directory.GetFiles(resultsDir);
+            var files = Directory.GetFiles(resultsDir, "*.*", SearchOption.AllDirectories)
+                .Where(f => !f.EndsWith(".json", StringComparison.OrdinalIgnoreCase) &&
+                            !f.EndsWith(".wav", StringComparison.OrdinalIgnoreCase) &&
+                            !f.EndsWith(".mp4", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+
             if (files.Length > 0)
             {
                 ExtractedSnippets.Clear();
                 foreach (var f in files)
                 {
-                    var content = File.ReadAllText(f);
-                    var snip = new ExtractedCodeSnippet
+                    try
                     {
-                        TargetFilePath = Path.GetFileName(f),
-                        Language = Path.GetExtension(f) == ".cs" ? "C# (.NET 9)" : Path.GetExtension(f) == ".py" ? "Python 3" : "TypeScript",
-                        TimestampSec = 0.0,
-                        Confidence = 0.96,
-                        CodeContent = content,
-                        Explanation = $"ملف مسترجع من إطارات الفيديو: {Path.GetFileName(f)}"
-                    };
-                    ExtractedSnippets.Add(snip);
+                        var relName = Path.GetRelativePath(resultsDir, f);
+                        var content = File.ReadAllText(f);
+                        var ext = Path.GetExtension(f).ToLowerInvariant();
+                        var lang = ext switch
+                        {
+                            ".dart" => "Dart / Flutter",
+                            ".cs" => "C# (.NET 9)",
+                            ".py" => "Python 3",
+                            ".ts" => "TypeScript",
+                            ".js" => "JavaScript",
+                            ".cpp" or ".h" => "C++",
+                            _ => relName.Contains("Flutter", StringComparison.OrdinalIgnoreCase) || content.Contains("StatelessWidget") ? "Dart / Flutter" : "Source Code"
+                        };
+                        var snip = new ExtractedCodeSnippet
+                        {
+                            TargetFilePath = relName,
+                            Language = lang,
+                            TimestampSec = 0.0,
+                            Confidence = 0.95,
+                            CodeContent = content,
+                            Explanation = $"ملف مسترجع من إطارات الفيديو ومصنف معمارياً: {relName}"
+                        };
+                        ExtractedSnippets.Add(snip);
+                    }
+                    catch { }
                 }
                 LogEvent($"💻 تم تحميل {ExtractedSnippets.Count} ملفات كود مستعادة من results/");
             }

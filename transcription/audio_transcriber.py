@@ -59,11 +59,14 @@ class AudioTranscriber:
         for name in candidates:
             try:
                 if name == "faster-whisper":
+                    import wave
+                    import numpy as np
                     from faster_whisper import WhisperModel
+                    with wave.open(str(audio_path), "rb") as wf:
+                        audio_data = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
                     model = WhisperModel(model_name, device=device,
                                          compute_type="int8" if device == "cpu" else "float16")
-                    segments, info = model.transcribe(str(audio_path), language=language,
-                                                      vad_filter=True)
+                    segments, info = model.transcribe(audio_data, language=language, vad_filter=True)
                     output = [TranscriptSegment(float(s.start), float(s.end), s.text.strip())
                               for s in segments if s.text.strip()]
                     return TranscriptionResult(audio_path, output,

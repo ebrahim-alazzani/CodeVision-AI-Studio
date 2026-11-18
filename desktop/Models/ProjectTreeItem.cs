@@ -22,5 +22,9 @@ public partial class ProjectTreeItem : ObservableObject
 
     public string ConfidencePercent => $"{Math.Round(Confidence * 100, 1)}%";
 
+    public string IconGlyph => IsDirectory ? "\uE8B7" : "\uE943";
+
+    public override string ToString() => Name;
+
     public ObservableCollection<ProjectTreeItem> Children { get; } = new();
 }

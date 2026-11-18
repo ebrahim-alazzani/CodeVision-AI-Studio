@@ -89,14 +89,14 @@
                         <TextBlock Text="🌳 شجرة مجلدات وملفات المشروع" FontWeight="Bold" FontSize="13" Foreground="{ThemeResource CyberPrimaryBrush}"/>
                     </StackPanel>
 
-                    <!-- TreeView with standard non-compiled Binding to avoid Xaml casting exception -->
+                    <!-- TreeView with Content.Name binding for WinUI 3 TreeViewNode -->
                     <Border Grid.Row="1" Background="#0AFFFFFF" CornerRadius="8" Padding="6" BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
                         <TreeView x:Name="ProjectTreeView" ItemInvoked="ProjectTreeView_ItemInvoked">
                             <TreeView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,2">
                                         <FontIcon Glyph="&#xE8B7;" FontSize="13" Foreground="{ThemeResource CyberWarningBrush}"/>
-                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="12"/>
+                                        <TextBlock Text="{Binding Content.Name}" FontWeight="SemiBold" FontSize="12"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </TreeView.ItemTemplate>

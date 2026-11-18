@@ -68,12 +68,28 @@ def extract_real_audio(video_path: Path, output_wav: Path) -> bool:
 
 
 def transcribe_with_whisper(audio_path: Path, language: str = None) -> list:
-    """Transcribe audio using Faster-Whisper if available; calculates confidence mathematically from avg_logprob."""
+    """Transcribe audio using Faster-Whisper via direct numpy audio loading, bypassing PyAV metadata_errors bug."""
     segments = []
     try:
+        import wave
+        import numpy as np
         from faster_whisper import WhisperModel
-        model = WhisperModel("tiny", device="cpu", compute_type="int8", local_files_only=True)
-        raw_segments, info = model.transcribe(str(audio_path), language=language, vad_filter=True)
+
+        # Read 16kHz WAV into float32 array
+        with wave.open(str(audio_path), "rb") as wf:
+            n_frames = wf.getnframes()
+            sampwidth = wf.getsampwidth()
+            n_channels = wf.getnchannels()
+            raw_bytes = wf.readframes(n_frames)
+            if sampwidth == 2:
+                audio_data = np.frombuffer(raw_bytes, dtype=np.int16).astype(np.float32) / 32768.0
+            else:
+                audio_data = np.frombuffer(raw_bytes, dtype=np.float32)
+            if n_channels > 1:
+                audio_data = audio_data.reshape(-1, n_channels).mean(axis=1)
+
+        model = WhisperModel("tiny", device="cpu", compute_type="int8")
+        raw_segments, info = model.transcribe(audio_data, language=language, vad_filter=True)
         for s in raw_segments:
             t = s.text.strip()
             if t:
@@ -87,7 +103,7 @@ def transcribe_with_whisper(audio_path: Path, language: str = None) -> list:
                     "confidence": round(whisper_prob, 3)
                 })
     except Exception as e:
-        print(f"PROGRESS: 82 | [AUDIO] توليد المقاطع الصوتية ومزامنتها مع الخط الزمني", flush=True)
+        print(f"PROGRESS: 82 | [AUDIO NOTICE] Whisper notice: {e}", flush=True)
     return segments
 
 

@@ -462,13 +462,23 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <StackPanel Spacing="2">
+                            <StackPanel Spacing="4">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <Border Background="#2677D6A0" Padding="6,2" CornerRadius="6" BorderThickness="1" BorderBrush="{ThemeResource HalvoEmeraldBrush}">
-                                        <TextBlock x:Name="SnippetLangBadge" Text="C# (.NET 9)" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
+                                        <TextBlock x:Name="SnippetLangBadge" Text="Dart / Flutter" FontSize="10" FontWeight="Bold" Foreground="{ThemeResource HalvoEmeraldBrush}"/>
                                     </Border>
-                                    <TextBlock x:Name="SnippetFileLabel" Text="Program.cs" FontWeight="Black" FontSize="13" Foreground="{ThemeResource HalvoCyanBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="SnippetFileLabel" Text="ResponsiveDesignScreen.txt" FontWeight="Black" FontSize="13" Foreground="{ThemeResource HalvoCyanBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
+                                <ComboBox x:Name="SnippetFileCombo"
+                                          ItemsSource="{Binding ExtractedSnippets}"
+                                          SelectedItem="{Binding SelectedSnippet, Mode=TwoWay}"
+                                          DisplayMemberPath="TargetFilePath"
+                                          SelectionChanged="SnippetFileCombo_SelectionChanged"
+                                          PlaceholderText="اختر ملف الشيفرة المستعادة..."
+                                          MinWidth="220"
+                                          FontSize="11"
+                                          Padding="8,4"
+                                          CornerRadius="6"/>
                                 <TextBlock x:Name="SnippetConfidenceLabel" Text="درجة الثقة: 95% · التوقيت: 00:00" FontSize="10" Foreground="{ThemeResource HalvoTextSecondaryBrush}"/>
                             </StackPanel>
 
