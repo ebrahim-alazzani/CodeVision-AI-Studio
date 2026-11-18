@@ -23,10 +23,10 @@ public sealed class PythonEngineService
 
         var candidates = new[]
         {
-            @"C:\Users\ibral\anaconda3\python.exe",
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "anaconda3", "python.exe"),
             @"C:\Python313\python.exe",
             @"C:\Python312\python.exe",
+            @"C:\Users\ibral\anaconda3\python.exe",
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "anaconda3", "python.exe"),
             "python.exe"
         };
 
@@ -63,10 +63,14 @@ public sealed class PythonEngineService
         var root = FindEngineRoot();
         var fullScript = Path.Combine(root, scriptNameOrCommand);
 
+        var scriptArg = File.Exists(fullScript)
+            ? $"\"{fullScript}\""
+            : (scriptNameOrCommand.StartsWith("\"") ? scriptNameOrCommand : $"\"{scriptNameOrCommand}\"");
+
         var psi = new ProcessStartInfo
         {
             FileName = python,
-            Arguments = File.Exists(fullScript) ? $"\"{fullScript}\" {arguments}" : $"{scriptNameOrCommand} {arguments}",
+            Arguments = $"{scriptArg} {arguments}",
             WorkingDirectory = root,
             UseShellExecute = false,
             RedirectStandardOutput = true,
@@ -77,6 +81,8 @@ public sealed class PythonEngineService
         };
 
         psi.Environment["PYTHONPATH"] = root;
+        psi.Environment["PYTHONIOENCODING"] = "utf-8";
+        psi.Environment["PYTHONUTF8"] = "1";
         _logger.Info($"Running: {psi.FileName} {psi.Arguments} in {psi.WorkingDirectory}");
 
         using var process = new Process { StartInfo = psi, EnableRaisingEvents = true };

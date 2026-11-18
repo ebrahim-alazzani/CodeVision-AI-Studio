@@ -72,8 +72,10 @@ class TesseractEngine(IOcrEngine):
         if system_tess:
             return system_tess
 
-        # Check common Windows install locations
+        # Check common Windows install locations and bundled tools
+        tools_portable = str(Path(__file__).resolve().parent.parent.parent / "tools" / "extract_unity_local" / "tesseract" / "tesseract.exe")
         candidates = [
+            tools_portable,
             r"D:\Programming\New folder\Mobile Game Development Tutorial 2025\extract_unity_local\tesseract\tesseract.exe",
             r"C:\Program Files\Tesseract-OCR\tesseract.exe",
             r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",

@@ -18,6 +18,16 @@ import argparse
 import subprocess
 from pathlib import Path
 
+# Force UTF-8 on Windows stdout/stderr to prevent cp1252 charmap encoding errors
+if sys.platform.startswith("win"):
+    try:
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        if hasattr(sys.stderr, "reconfigure"):
+            sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 # Ensure core and parent root are in sys.path
 _CORE_DIR = Path(__file__).resolve().parent
 _ROOT_DIR = _CORE_DIR.parent
