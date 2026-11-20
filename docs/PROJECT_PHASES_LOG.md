@@ -16,9 +16,9 @@
 | **المرحلة 1** | مقارنة المحركات ونسخ أداة Unity كنسخة عمل | 🟢 مكتملة بنجاح | 2026-11-18 | 2026-11-18 | `PHASE1_ENGINE_COMPARISON_AR.md` | تم الرفع (Commit `5193acf`) |
 | **المرحلة 2** | سلامة خط المعالجة وإزالة المحاكاة ودعم اللغات و ACE | 🟢 مكتملة بنجاح | 2026-11-18 | 2026-11-18 | `PHASE2_DATA_INTEGRITY_AR.md` | تم الرفع (Commit `07fa86d`) |
 | **المرحلة 3** | اكتشاف محرر الأكواد والرؤية الحاسوبية وتتبع ROI | 🟢 مكتملة بنجاح | 2026-11-18 | 2026-11-18 | `PHASE3_CODE_ROI_VISION_AR.md` | تم الرفع (Commit `e36a6fa`) |
-| **المرحلة 4** | OCR مخصص للكود وتقييم CER/WER وتدريب حقيقي | 🟢 مكتملة بنجاح | 2026-11-20 | 2026-11-20 | `PHASE4_CODE_OCR_BENCHMARK_AR.md` | جاهز للرفع (Commit جاهز) |
-| **المرحلة 5** | إعادة البناء الزمني والتصدير لـ Flutter و C# | 🟡 جارية الآن | 2026-11-20 | - | `PHASE5_TEMPORAL_RECONSTRUCTION_AR.md` | جاري التنفيذ |
-| **المرحلة 6** | الصوت المتزامن وإعادة تنظيم الواجهات الرسومية | ⚪ قيد الانتظار | - | - | `PHASE6_MULTIMODAL_STUDIO_UI_AR.md` | - |
+| **المرحلة 4** | OCR مخصص للكود وتقييم CER/WER وتدريب حقيقي | 🟢 مكتملة بنجاح | 2026-11-20 | 2026-11-20 | `PHASE4_CODE_OCR_BENCHMARK_AR.md` | تم الرفع (Commit `6a6d9a8`) |
+| **المرحلة 5** | إعادة البناء الزمني والتصدير لـ Flutter و C# | 🟢 مكتملة بنجاح | 2026-11-21 | 2026-11-21 | `PHASE5_TEMPORAL_RECONSTRUCTION_AR.md` | جاهز للرفع (Commit جاهز) |
+| **المرحلة 6** | الصوت المتزامن وإعادة تنظيم الواجهات الرسومية | 🟡 جارية الآن | 2026-11-21 | - | `PHASE6_MULTIMODAL_STUDIO_UI_AR.md` | جاري التحضير |
 
 ---
 
@@ -190,9 +190,32 @@
 
 ---
 
-### 🟡 المرحلة 5 — إعادة البناء الزمني والتصدير لـ Flutter و C# (Temporal Reconstruction & Exporter)
+### 🟢 المرحلة 5 — إعادة البناء الزمني والتصدير لـ Flutter و C# (Temporal Reconstruction & Multi-Framework Exporter)
 
 #### 1. المطلوب في هذه المرحلة:
-- [ ] تصدير ملفات فلاتر المستعادة في هيكل مشروع فلاتر كامل قابل للتشغيل (`flutter run`).
-- [ ] دمج خوارزميات ترتيب التطور الزمني للشفرة عبر الدروس المتتالية.
-- [ ] توثيق واختبار ورفع المرحلة 5.
+- [x] تصدير ملفات فلاتر المستعادة في هيكل مشروع فلاتر كامل قابل للتشغيل (`pubspec.yaml`, `lib/main.dart`, `lib/screens/`, `lib/widgets/`).
+- [x] دعم تصدير مشاريع Unity / C# المتكاملة (`ReconstructedApp.csproj`, `ReconstructedApp.sln`, `Assets/Scripts/`).
+- [x] دعم تصدير مشاريع بايثون (`pyproject.toml`, `requirements.txt`, `src/`) ومشاريع الويب (`package.json`).
+- [x] دمج خوارزميات ترتيب التطور الزمني للشفرة عبر الدروس وحفظ السجلات في `ScriptHistory/`.
+- [x] توثيق واختبار ورفع المرحلة 5.
+
+#### 2. ما تم تنفيذه في المرحلة 5:
+- [x] ترقية `core/reconstruction/script_categorizer.py` بمولدات الهياكل البرمجية التلقائية للمنصات الأربع (Flutter, Unity, Python, TypeScript).
+- [x] إضافة تصنيفات الكلمات الدلالية لشاشات وتخطيطات فلاتر (`Screen|Layout|Template`).
+- [x] تحديث `desktop/Services/ProjectExportService.cs` لإنشاء ملفات المشروع وحلول Visual Studio وملف `pubspec.yaml` وملف الانطلاق `main.dart` فور النقر على زر التصدير.
+- [x] كتابة اختبارات الوحدة في `tests/test_script_categorizer.py` واجتياز كافة اختبارات التصدير بنجاح 100%.
+
+#### 3. نتائج الفحص والاختبار:
+- **اختبارات Python:** `Ran 72 tests in 1.015s, OK` (72/72 اختباراً ناجحاً).
+- **بناء C# WinUI 3:** `Build succeeded. 0 Warning(s), 0 Error(s)`.
+- **تقرير المرحلة المعتمد:** `docs/requirements/PHASE5_TEMPORAL_RECONSTRUCTION_AR.md`.
+
+---
+
+### 🟡 المرحلة 6 — الصوت المتزامن وإعادة تنظيم الواجهات الرسومية (Multimodal Studio UI & Audio Sync)
+
+#### 1. المطلوب في هذه المرحلة:
+- [ ] مزامنة مشغل الفيديو مع مسار الصوت (Waveform Audio Track) ومقاطع التفريغ الصوتي (Whisper Sync).
+- [ ] عرض الشفرة البرمجية المقتطعة المتزامنة مع اللحظة الزمنية في مشغل الفيديو.
+- [ ] تحسين شريط التنقل والتصميم المظلم التفاعلي على غرار لوحة تحكم Multi-LM Tuner و X-AnyLabeling.
+- [ ] التوثيق النهائي والرفع إلى GitHub.
